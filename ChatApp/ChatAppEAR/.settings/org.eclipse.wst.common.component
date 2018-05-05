@@ -5,5 +5,12 @@
             <dependent-object/>
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="ChatAppJar.jar" deploy-path="/" handle="module:/resource/ChatAppJar/ChatAppJar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="ChatAppJAR.jar" deploy-path="/" handle="module:/resource/ChatAppJAR/ChatAppJAR">
+            <dependent-object/>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
     </wb-module>
 </project-modules>
