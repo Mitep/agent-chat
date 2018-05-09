@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
 submitForm(data){
       this.msg = "{\"type\":\"login\","
                + " \"data\":{"
-               + " \"email\":\"" + data.email + "\","
+               + " \"username\":\"" + data.username + "\","
                + " \"password\":\"" + data.password +"\"}"
                + "}";
       console.log(this.msg);

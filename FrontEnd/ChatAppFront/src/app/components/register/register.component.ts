@@ -9,6 +9,7 @@ import { WebsocketService } from '../../services/websocket.service';
 export class RegisterComponent implements OnInit {
 
   private msg; 
+  private date: Date;
 
   constructor(private wsService:WebsocketService) { }
 
@@ -16,13 +17,20 @@ export class RegisterComponent implements OnInit {
   }
 
   submitForm(data){
+    
+    this.date = new Date();
+   // console.log(this.date.valueOf());
+
     this.msg = "{\"type\":\"register\","
              + " \"data\":{"
+             + " \"timestamp\":" + this.date.valueOf() + ","
              + " \"username\":\"" + data.username + "\","
-             + " \"email\":\"" + data.email + "\","
+             + " \"firstName\":\"" + data.firstname + "\","
+             + " \"lastName\":\"" + data.lastname + "\","                    
              + " \"password\":\"" + data.password +"\"}"
              + "}";
     console.log(this.msg);
+
     this.wsService.sendMsg(this.msg);
   }
 }
