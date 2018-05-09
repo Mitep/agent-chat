@@ -1,7 +1,5 @@
 package com.userapp.model;
 
-import java.util.ArrayList;
-
 import javax.persistence.Id;
 
 import org.bson.types.ObjectId;
@@ -18,7 +16,6 @@ public class User {
 	private String password;
 	private String name;
 	private String surname;
-	private ArrayList<ObjectId> friendships;
 	
 	public ObjectId getId() {
 		return id;
@@ -60,26 +57,16 @@ public class User {
 		this.surname = surname;
 	}
 
-	public ArrayList<ObjectId> getFriendships() {
-		return friendships;
-	}
-
-	public void setFriendships(ArrayList<ObjectId> friendships) {
-		this.friendships = friendships;
-	}
-
 	public User() {
 	}
 
-	public User(ObjectId id, String username, String password, String name, String surname,
-			ArrayList<ObjectId> friendships) {
+	public User(ObjectId id, String username, String password, String name, String surname) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.name = name;
 		this.surname = surname;
-		this.friendships = friendships;
 	}
 
 }
