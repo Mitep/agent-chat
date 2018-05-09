@@ -13,6 +13,17 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+import org.json.JSONObject;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+
+import dto.LoginRequest;
+import dto.RegisterRequest;
+
+
 @ServerEndpoint("/websocket/echo")
 public class WS {
 
@@ -33,15 +44,56 @@ public class WS {
 	}
 	
 	@OnMessage
-	public void echoTextMessage(Session session, String msg, boolean last) {
+	public void echoTextMessage(Session session, String msg, boolean last) throws JsonParseException, JsonMappingException, IOException {		
 		try {
 			if (session.isOpen()) {
-				log.info("Websocket endpoint: " + this.hashCode() + " primio: " + msg + " u sesiji: " + session.getId());
-				log.info(msg);
-		        for (Session s : sessions) {
-		        	
-		        	s.getBasicRemote().sendText(msg, last);
-		        				       
+				
+				JSONObject obj = new JSONObject(msg);
+				String type = (String)obj.get("type");
+				String data = obj.getJSONObject("data").toString();
+				
+				ObjectMapper mapper = new ObjectMapper();
+				
+				if(type.equals("register")){	
+					log.info(type);
+					log.info(data);
+					RegisterRequest rr = mapper.readValue(data, RegisterRequest.class);
+					log.info("--------------**************--------------");
+//					log.info("timestamp: " + rr.getTimestamp());
+//					
+//					Calendar calendar = Calendar.getInstance();
+//					calendar.setTimeInMillis(rr.getTimestamp());
+//
+//					int year = calendar.get(Calendar.YEAR);
+//					int month = calendar.get(Calendar.MONTH) + 1;
+//					int day = calendar.get(Calendar.DAY_OF_MONTH);
+//					int hour = calendar.get(Calendar.HOUR_OF_DAY);
+//					int minutes = calendar.get(Calendar.MINUTE);
+//					int seconds = calendar.get(Calendar.SECOND);
+//					
+//					log.info(day + "." + month + "." + year + " " + hour + ":" + minutes + ":" + seconds);
+					log.info("username: " + rr.getUsername());
+					log.info("first name: " + rr.getFirstName());
+					log.info("last name: " + rr.getLastName());
+					log.info("password: " + rr.getPassword());
+					log.info("--------------**************--------------");
+				} else if(type.equals("login")){
+					log.info(type);
+					log.info(data);				
+					LoginRequest lr = mapper.readValue(data, LoginRequest.class);
+					log.info("--------------**************--------------");
+					log.info("username: " + lr.getUsername());
+					log.info("password: " + lr.getPassword());
+					log.info("--------------**************--------------");
+				}				
+				
+			
+//			 	log.info("Websocket endpoint: " + this.hashCode() + " primio: " + msg + " u sesiji: " + session.getId());
+//			 	log.info(msg);
+//			 
+				
+		        for (Session s : sessions) {	        	
+		        	s.getBasicRemote().sendText(msg, last);     				       
 		        }
 			}
 		} catch (IOException e) {
