@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>ChatAppEAR</name>
+	<name>UserAppEAR</name>
 	<comment></comment>
 	<projects>
-		<project>ChatAppWAR</project>
-		<project>ChatAppJar</project>
-		<project>ChatAppJAR</project>
+		<project>UserAppEJB</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
