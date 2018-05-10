@@ -1,14 +1,17 @@
-package com.userapp.model;
-
-import javax.persistence.Id;
+/**
+ * 
+ */
+package model;
 
 import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Id;
 
 /**
  * @author Nikola
  *
  */
 public class Friendship {
+
 
 	public static final char FRIENDS = 'F';
 	public static final char PENDING = 'P';
@@ -60,6 +63,6 @@ public class Friendship {
 
 	public void setStatus(char status) {
 		this.status = status;
-	}
+}
 
 }

@@ -1,10 +1,9 @@
-package com.userapp.model;
+package model;
 
 import java.util.ArrayList;
 
-import javax.persistence.Id;
-
 import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Id;
 
 /**
  * @author Nikola
@@ -49,6 +48,6 @@ public class Group {
 
 	public void setMembers(ArrayList<ObjectId> members) {
 		this.members = members;
-	}
+}
 
 }

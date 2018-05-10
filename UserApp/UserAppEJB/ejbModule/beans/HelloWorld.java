@@ -1,4 +1,4 @@
-package com.userapp.ejb;
+package beans;
 
 import javax.ejb.Remote;
 

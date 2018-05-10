@@ -1,8 +1,7 @@
-package com.userapp.model;
-
-import javax.persistence.Id;
+package model;
 
 import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Id;
 
 /**
  * @author Nikola
@@ -89,6 +88,6 @@ public class Message {
 		this.receiver = receiver;
 		this.timestamp = timestamp;
 		this.content = content;
-	}
+}
 
 }
