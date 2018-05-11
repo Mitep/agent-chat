@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
@@ -22,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dto.LoginRequest;
 import dto.RegisterRequest;
+import jms.ChatMsgSender;
 
 
 @ServerEndpoint("/websocket/echo")
@@ -85,6 +89,24 @@ public class WS {
 					log.info("username: " + lr.getUsername());
 					log.info("password: " + lr.getPassword());
 					log.info("--------------**************--------------");
+					
+					
+					//odavde brisemo	
+					
+						log.info("hipiti hipiti hop");
+						System.out.println("uso u try");
+						Context context = new InitialContext();
+						//java:app[/module name]/enterprise bean name[/interface name]
+						
+						ChatMsgSender msgSender = (ChatMsgSender) context.lookup("java:app/ChatAppJAR/ChatMsgSenderBean!jms.ChatMsgSender");
+						System.out.println("ovo nece da raadi");
+						msgSender.sendMsg("Da li radi ovo aaasfasfdsafsesdsggs");
+						System.out.println("kraj u try");
+					
+					
+					
+					
+					//kraj
 				}				
 				
 			
@@ -102,6 +124,9 @@ public class WS {
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
+		} catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
