@@ -23,30 +23,27 @@ public class UserMsgSenderBean implements UserMsgSender {
 		// TODO Auto-generated method stub
 		try {
 			Context context = new InitialContext();
-			ConnectionFactory cf = (ConnectionFactory) context
-					.lookup("jms/RemoteConnectionFactory");
-			final Queue queue = (Queue) context
-					//.lookup("jms/queue/mojQueue");
-					.lookup("jms/queue/chatAppQueue");
+			ConnectionFactory cf = (ConnectionFactory) context.lookup("jms/RemoteConnectionFactory");
+			final Queue queue = (Queue) context.lookup("jms/queue/chatAppQueue");
 			context.close();
 			Connection connection = cf.createConnection();
 			final Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
 			connection.start();
 
-			//MessageConsumer consumer = session.createConsumer(queue);
-			//consumer.setMessageListener(this);
+			// MessageConsumer consumer = session.createConsumer(queue);
+			// consumer.setMessageListener(this);
 
-		    TextMessage msg = session.createTextMessage(msgContent);
-		    // The sent timestamp acts as the message's ID
-		    long sent = System.currentTimeMillis();
-		    msg.setLongProperty("sent", sent);
-		    
+			TextMessage msg = session.createTextMessage(msgContent);
+			// The sent timestamp acts as the message's ID
+			long sent = System.currentTimeMillis();
+			msg.setLongProperty("sent", sent);
+
 			MessageProducer producer = session.createProducer(queue);
 			producer.send(msg);
-			//Thread.sleep(1000);
+			// Thread.sleep(1000);
 			producer.close();
-			//consumer.close();
+			// consumer.close();
 			connection.stop();
 		} catch (Exception ex) {
 			ex.printStackTrace();

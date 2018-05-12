@@ -1,19 +1,16 @@
 package jms;
 
+import java.util.Properties;
+
+import javax.ejb.Stateless;
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageConsumer;
-import javax.jms.MessageListener;
 import javax.jms.MessageProducer;
 import javax.jms.Queue;
-import javax.jms.QueueReceiver;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.ejb.Stateless;
 
 @Stateless
 public class ChatMsgSenderBean implements ChatMsgSender {
@@ -23,11 +20,13 @@ public class ChatMsgSenderBean implements ChatMsgSender {
 		// TODO Auto-generated method stub
 		System.out.println("ovde smo bratko. nemas frke za sad.");
 		try {
-			Context context = new InitialContext();
+			final Properties env = new Properties();
+			
+			Context context = new InitialContext(env);
 			ConnectionFactory cf = (ConnectionFactory) context
-					.lookup("jms/RemoteConnectionFactory");
+					.lookup("java:jboss/exported/jms/RemoteConnectionFactory");
 			System.out.println("da li ovde baca xml?");
-			final Queue queue = (Queue) context.lookup("jms/queue/userAppQueue");
+			final Queue queue = (Queue) context.lookup("java:jboss/exported/jms/queue/userAppQueue");
 			context.close();
 			Connection connection = cf.createConnection();
 			final Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
@@ -48,6 +47,7 @@ public class ChatMsgSenderBean implements ChatMsgSender {
 			producer.close();
 			//consumer.close();
 			connection.stop();
+			connection.close();
 			System.out.println("hip hop");
 		} catch (Exception ex) {
 			ex.printStackTrace();

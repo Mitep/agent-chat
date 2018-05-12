@@ -1,13 +1,19 @@
 package model;
 
-import org.mongodb.morphia.annotations.Id;
-
 import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Field;
+import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Index;
+import org.mongodb.morphia.annotations.IndexOptions;
+import org.mongodb.morphia.annotations.Indexes;
 
 /**
  * @author Nikola
  *
  */
+@Entity
+@Indexes(@Index(fields = { @Field("username") }, options = @IndexOptions(unique = true)))
 public class User {
 
 	@Id
@@ -16,7 +22,7 @@ public class User {
 	private String password;
 	private String name;
 	private String surname;
-	
+
 	public ObjectId getId() {
 		return id;
 	}
@@ -66,6 +72,6 @@ public class User {
 		this.password = password;
 		this.name = name;
 		this.surname = surname;
-}
+	}
 
 }
