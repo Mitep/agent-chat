@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
@@ -15,52 +16,33 @@ import javax.ejb.Startup;
 @Startup
 public class ChatAppNodeBean implements ChatAppNode {
 
+	// key - hostname, value - ip_addr
 	private HashMap<String, String> activeNodes;
 
 	private ArrayList<String> activeUsers;
 	
-	public ChatAppNodeBean() throws SocketException {
-		//proverimo da li je node master
-		//ukoliko jeste
-		if(isMasterNode()){
-			
-		} else {
-		//ukoliko nije
-			
-		}
+	public ChatAppNodeBean() {
+		//activeNodes = new HashMap<String, String>();
+		
+	}
+	@PostConstruct
+	public void initNode() {
+		//if(!getMasterIp().equals(getMyIp())) {
+			//salji zahteve i kaci se na nodove
+		//}
 	}
 	
-	private boolean isMasterNode() throws SocketException{
-		String addr = getIpAddr();
-		
-		return false;
-	}
+	public String getMasterIp(){
+		//vraca ip adresu master nodea iz configuracionog fajla
 	
-	private String getIpAddr() throws SocketException{
-		try {
-			InetAddress addr = InetAddress.getLocalHost();
-			System.out.println(addr.toString());
-			System.out.println(addr.getHostName());
-			System.out.println(addr.getAddress().toString());
-			System.out.println(addr.getHostAddress());
-			System.out.println(addr);
-			
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-		
 		return null;
 	}
 	
-	private String readMasterAddr(){
-		//cita ip adresu master nodea iz konfiguracioniog fajla
+	public String getMyIp(){
+		//vraca adresu na kojoj se nalazi aplikacija
 		
 		return null;
 	}
-	
 	
 	
 }
