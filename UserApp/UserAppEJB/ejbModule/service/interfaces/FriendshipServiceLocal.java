@@ -1,6 +1,6 @@
 package service.interfaces;
 
-import java.util.Collection;
+import java.util.List;
 
 import javax.ejb.Local;
 
@@ -11,6 +11,7 @@ public interface FriendshipServiceLocal {
 
 	public boolean createFriendship(String str);
 	public Friendship getFriendship(String id);
-	public Collection<Friendship> readAll();
+	public List<Friendship> readAll();
 	public boolean deleteFriendship(String id);
+	public boolean updateFriendship(Friendship fr);
 }

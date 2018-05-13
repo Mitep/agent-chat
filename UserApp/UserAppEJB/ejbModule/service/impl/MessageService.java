@@ -1,12 +1,15 @@
 package service.impl;
 
-import java.util.Collection;
+import java.util.List;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
+import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
+import org.mongodb.morphia.query.Query;
+import org.mongodb.morphia.query.UpdateOperations;
 
 import com.google.gson.Gson;
 import com.mongodb.MongoClient;
@@ -22,15 +25,16 @@ import service.interfaces.MessageServiceLocal;
 public class MessageService implements MessageServiceLocal {
 
 	private Datastore datastore;
-	
-    /**
-     * Default constructor. 
-     */
-    public MessageService() {
-    	Morphia morphia = new Morphia();
-		datastore = morphia.createDatastore(new MongoClient(), GroupService.DB_NAME);
+
+	/**
+	 * Default constructor.
+	 */
+	public MessageService() {
+		Morphia morphia = new Morphia();
 		morphia.mapPackage("model");
-    }
+		datastore = morphia.createDatastore(new MongoClient(), GroupService.DB_NAME);
+		datastore.ensureIndexes();
+	}
 
 	@Override
 	public boolean createMessage(String str) {
@@ -46,20 +50,43 @@ public class MessageService implements MessageServiceLocal {
 
 	@Override
 	public Message getMessage(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		Message m = datastore.get(Message.class, new ObjectId(id));
+		return m;
 	}
 
 	@Override
-	public Collection<Message> readAll() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Message> readAll() {
+		return datastore.createQuery(Message.class).asList();
 	}
 
 	@Override
 	public boolean deleteMessage(String id) {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			final Query<Message> upit = datastore.createQuery(Message.class).filter("_id", new ObjectId(id));
+			datastore.delete(upit);
+
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public boolean updateMessage(Message msg) {
+		try {
+			Query<Message> query = datastore.createQuery(Message.class).field("_id").equal(msg.getId());
+			UpdateOperations<Message> ops = datastore.createUpdateOperations(Message.class);
+			ops.set("type", msg.getType());
+			ops.set("sender", msg.getSender());
+			ops.set("receiver", msg.getReceiver());
+			ops.set("timestamp", msg.getTimestamp());
+			ops.set("content", msg.getContent());
+
+			datastore.update(query, ops);
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
 	}
 
 }

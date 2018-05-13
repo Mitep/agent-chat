@@ -1,6 +1,6 @@
 package service.interfaces;
 
-import java.util.Collection;
+import java.util.List;
 
 import javax.ejb.Local;
 
@@ -11,6 +11,7 @@ public interface MessageServiceLocal {
 
 	public boolean createMessage(String str);
 	public Message getMessage(String id);
-	public Collection<Message> readAll();
+	public List<Message> readAll();
 	public boolean deleteMessage(String id);
+	public boolean updateMessage(Message msg);
 }

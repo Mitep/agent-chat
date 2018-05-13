@@ -1,6 +1,6 @@
 package service.interfaces;
 
-import java.util.Collection;
+import java.util.List;
 
 import javax.ejb.Local;
 
@@ -11,6 +11,8 @@ public interface UserServiceLocal {
 
 	public boolean createUser(String str);
 	public User getUser(String id);
-	public Collection<User> readAll();
+	public List<User> readAll();
 	public boolean deleteUser(String id);
+	public boolean updateUser(User user);
+	public User getUserByUsername(String username);
 }

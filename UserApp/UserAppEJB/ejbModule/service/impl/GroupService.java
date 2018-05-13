@@ -1,12 +1,15 @@
 package service.impl;
 
-import java.util.Collection;
+import java.util.List;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
+import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
+import org.mongodb.morphia.query.Query;
+import org.mongodb.morphia.query.UpdateOperations;
 
 import com.google.gson.Gson;
 import com.mongodb.MongoClient;
@@ -23,12 +26,12 @@ public class GroupService implements GroupServiceLocal {
 
 	public static final String DB_HOST = "127.0.0.1";
 	public static final int DB_PORT = 27017;
-	public static final String DB_NAME = "UserApp";
+	public static final String DB_NAME = "UserAppDB";
 	public static final String USERS = "Users";
 	public static final String MESSAGES = "Messages";
 	public static final String GROUPS = "Groups";
 	public static final String FRIENDSHIPS = "Friendships";
-	
+
 	private Datastore datastore;
 
 	/**
@@ -36,8 +39,9 @@ public class GroupService implements GroupServiceLocal {
 	 */
 	public GroupService() {
 		Morphia morphia = new Morphia();
-		datastore = morphia.createDatastore(new MongoClient(), DB_NAME);
 		morphia.mapPackage("model");
+		datastore = morphia.createDatastore(new MongoClient(), DB_NAME);
+		datastore.ensureIndexes();
 	}
 
 	@Override
@@ -54,19 +58,40 @@ public class GroupService implements GroupServiceLocal {
 
 	@Override
 	public Group getGroup(String id) {
-		return null;
+		Group g = datastore.get(Group.class, new ObjectId(id));
+		return g;
 	}
 
 	@Override
-	public Collection<Group> readAll() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Group> readAll() {
+		return datastore.createQuery(Group.class).asList();
 	}
 
 	@Override
 	public boolean deleteGroup(String id) {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			final Query<Group> upit = datastore.createQuery(Group.class)
+                    .filter("_id", new ObjectId(id));
+			datastore.delete(upit);
+			
+		}catch(Exception e) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public boolean updateGroup(Group group) {
+		try {
+			Query<Group> query = datastore.createQuery(Group.class).field("_id").equal(group.getId());
+			UpdateOperations<Group> ops = datastore.createUpdateOperations(Group.class);
+			ops.set("name", group.getName());
+
+			datastore.update(query, ops);
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
 	}
 
 }
