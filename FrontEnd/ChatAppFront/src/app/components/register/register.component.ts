@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { WebsocketService } from '../../services/websocket.service';
+import { AppComponent } from '../../app.component';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -11,7 +13,8 @@ export class RegisterComponent implements OnInit {
   private msg; 
   private date: Date;
 
-  constructor(private wsService:WebsocketService) { }
+
+  constructor(private ws:WebsocketService, private rt:Router) { }
 
   ngOnInit() {
   }
@@ -31,6 +34,6 @@ export class RegisterComponent implements OnInit {
              + "}";
     console.log(this.msg);
 
-    this.wsService.sendMsg(this.msg);
+    this.ws.sendMsg(this.msg);
   }
 }
