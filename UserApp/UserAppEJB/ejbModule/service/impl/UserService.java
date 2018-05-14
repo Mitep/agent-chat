@@ -41,7 +41,21 @@ public class UserService implements UserServiceLocal {
 		try {
 			Gson g = new Gson();
 			User u = g.fromJson(str, User.class);
-			datastore.save(u);
+			List<User> users = readAll();
+			boolean flag = true;
+			for(User user:users){
+				System.out.println(user.getUsername());	
+				if(u.getUsername().equals(user.getUsername())){
+					System.out.println("Username already exists!");
+					flag = false;
+					break;
+				}
+			}
+			if(flag==true){
+				datastore.save(u);
+				System.out.println("Registered.");
+			}
+			
 		} catch (Exception e) {
 			return false;
 		}

@@ -20,11 +20,7 @@ import org.json.JSONObject;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-
-import dto.LoginRequest;
-import dto.RegisterRequest;
 import jms.ChatMsgSender;
 
 
@@ -56,13 +52,13 @@ public class WS {
 				String type = (String)obj.get("type");
 				String data = obj.getJSONObject("data").toString();
 				
-				ObjectMapper mapper = new ObjectMapper();
+				//ObjectMapper mapper = new ObjectMapper();
 				
 				if(type.equals("register")){	
-					log.info(type);
-					log.info(data);
-					RegisterRequest rr = mapper.readValue(data, RegisterRequest.class);
-					log.info("--------------**************--------------");
+//					log.info(type);
+//					log.info(data);
+//					RegisterRequest rr = mapper.readValue(data, RegisterRequest.class);
+//					log.info("--------------**************--------------");
 //					log.info("timestamp: " + rr.getTimestamp());
 //					
 //					Calendar calendar = Calendar.getInstance();
@@ -76,37 +72,32 @@ public class WS {
 //					int seconds = calendar.get(Calendar.SECOND);
 //					
 //					log.info(day + "." + month + "." + year + " " + hour + ":" + minutes + ":" + seconds);
-					log.info("username: " + rr.getUsername());
-					log.info("first name: " + rr.getFirstName());
-					log.info("last name: " + rr.getLastName());
-					log.info("password: " + rr.getPassword());
-					log.info("--------------**************--------------");
-				} else if(type.equals("login")){
-					log.info(type);
-					log.info(data);				
-					LoginRequest lr = mapper.readValue(data, LoginRequest.class);
-					log.info("--------------**************--------------");
-					log.info("username: " + lr.getUsername());
-					log.info("password: " + lr.getPassword());
-					log.info("--------------**************--------------");
+//					log.info("username: " + rr.getUsername());
+//					log.info("first name: " + rr.getFirstName());
+//					log.info("last name: " + rr.getLastName());
+//					log.info("password: " + rr.getPassword());
+//					log.info("--------------**************--------------");
+					
+					Context context = new InitialContext();
+					//java:app[/module name]/enterprise bean name[/interface name]						
+					ChatMsgSender msgSender = (ChatMsgSender) context.lookup("java:app/ChatAppJAR/ChatMsgSenderBean!jms.ChatMsgSender");				
+					msgSender.sendMsg(data, "register");
+					
+				}else if(type.equals("login")){
+//					log.info(type);
+//					log.info(data);				
+//					LoginRequest lr = mapper.readValue(data, LoginRequest.class);
+//					log.info("--------------**************--------------");
+//					log.info("username: " + lr.getUsername());
+//					log.info("password: " + lr.getPassword());
+//					log.info("--------------**************--------------");
 					
 					
-					//odavde brisemo	
-					
-						log.info("hipiti hipiti hop");
-						System.out.println("uso u try");
-						Context context = new InitialContext();
-						//java:app[/module name]/enterprise bean name[/interface name]
-						
-						ChatMsgSender msgSender = (ChatMsgSender) context.lookup("java:app/ChatAppJAR/ChatMsgSenderBean!jms.ChatMsgSender");
-						System.out.println("ovo nece da raadi");
-						msgSender.sendMsg("Da li radi ovo aaasfasfdsafsesdsggs");
-						System.out.println("kraj u try");
-					
-					
-					
-					
-					//kraj
+					Context context = new InitialContext();
+					//java:app[/module name]/enterprise bean name[/interface name]				
+					ChatMsgSender msgSender = (ChatMsgSender) context.lookup("java:app/ChatAppJAR/ChatMsgSenderBean!jms.ChatMsgSender");					
+					msgSender.sendMsg(data, "login");
+
 				}				
 				
 			

@@ -23,10 +23,10 @@ export class RegisterComponent implements OnInit {
 
     this.msg = "{\"type\":\"register\","
              + " \"data\":{"
-             + " \"timestamp\":" + this.date.valueOf() + ","
+             //+ " \"timestamp\":" + this.date.valueOf() + ","
              + " \"username\":\"" + data.username + "\","
-             + " \"firstName\":\"" + data.firstname + "\","
-             + " \"lastName\":\"" + data.lastname + "\","                    
+             + " \"name\":\"" + data.firstname + "\","
+             + " \"surname\":\"" + data.lastname + "\","                    
              + " \"password\":\"" + data.password +"\"}"
              + "}";
     console.log(this.msg);
