@@ -112,4 +112,15 @@ public class UserService implements UserServiceLocal {
 		}
 	}
 
+	@Override
+	public boolean validateUser(String username, String password) {
+		// TODO Auto-generated method stub
+		List<User> lista = datastore.createQuery(User.class).filter("username == ", username).filter("password == ", password).asList();
+		if (lista.size() > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 }

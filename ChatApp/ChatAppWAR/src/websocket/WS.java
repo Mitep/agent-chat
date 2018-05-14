@@ -2,10 +2,13 @@ package websocket;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -20,18 +23,29 @@ import org.json.JSONObject;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import dto.LoginRequest;
 import jms.ChatMsgSender;
 
 
 @ServerEndpoint("/websocket/echo")
-public class WS {
+public class WS implements WSRemote {
 
 	Logger log = Logger.getLogger("Websockets endpoint");
 
 	static List<Session> sessions = new ArrayList<Session>();
 	
+	//key - username
+	private HashMap<String, Session> activeUsers;
+	
+	private HashMap<String, Session> loginAttempt;
+	private HashMap<String, Session> registerAttempt;
+	
 	public WS(){
+		activeUsers = new HashMap<String, Session>();
+		loginAttempt = new HashMap<String, Session>();
+		registerAttempt = new HashMap<String, Session>();
 		
 	}
 	
@@ -52,7 +66,7 @@ public class WS {
 				String type = (String)obj.get("type");
 				String data = obj.getJSONObject("data").toString();
 				
-				//ObjectMapper mapper = new ObjectMapper();
+				ObjectMapper mapper = new ObjectMapper();
 				
 				if(type.equals("register")){	
 //					log.info(type);
@@ -86,13 +100,13 @@ public class WS {
 				}else if(type.equals("login")){
 //					log.info(type);
 //					log.info(data);				
-//					LoginRequest lr = mapper.readValue(data, LoginRequest.class);
+					LoginRequest lr = mapper.readValue(data, LoginRequest.class);
 //					log.info("--------------**************--------------");
 //					log.info("username: " + lr.getUsername());
 //					log.info("password: " + lr.getPassword());
 //					log.info("--------------**************--------------");
 					
-					
+					loginAttempt.put(lr.getUsername(), session);
 					Context context = new InitialContext();
 					//java:app[/module name]/enterprise bean name[/interface name]				
 					ChatMsgSender msgSender = (ChatMsgSender) context.lookup("java:app/ChatAppJAR/ChatMsgSenderBean!jms.ChatMsgSender");					
@@ -132,5 +146,11 @@ public class WS {
 		sessions.remove(session);
 		log.log(Level.SEVERE, "Greska u sesiji: " + session.getId() + " u endpoint-u: " + this.hashCode() + ", tekst: " + t.getMessage());
 		t.printStackTrace();
+	}
+
+	@Override
+	public void sendMsg(String user, String content) {
+		// TODO Auto-generated method stub
+		
 	}
 }

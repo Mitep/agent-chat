@@ -15,4 +15,5 @@ public interface UserServiceLocal {
 	public boolean deleteUser(String id);
 	public boolean updateUser(User user);
 	public User getUserByUsername(String username);
+	public boolean validateUser(String username, String password);
 }
