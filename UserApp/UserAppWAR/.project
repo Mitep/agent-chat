@@ -3,6 +3,7 @@
 	<name>UserAppWAR</name>
 	<comment></comment>
 	<projects>
+		<project>UserAppEJB</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

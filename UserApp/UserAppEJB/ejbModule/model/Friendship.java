@@ -14,20 +14,34 @@ import org.mongodb.morphia.annotations.Id;
 @Entity
 public class Friendship {
 
-
 	public static final char FRIENDS = 'F';
 	public static final char PENDING = 'P';
 
 	@Id
 	private ObjectId id;
-	private ObjectId userId;
-	private ObjectId userId2;
+	private String userId;
+	private String userId2;
 	private char status;
 
 	public Friendship() {
 	}
 
-	public Friendship(ObjectId id, ObjectId userId, ObjectId userId2, char status) {
+	public Friendship(String userId, String userId2, char status) {
+		super();
+		this.userId = userId;
+		this.userId2 = userId2;
+		this.status = status;
+	}
+
+	public Friendship(String id, String userId, String userId2, char status) {
+		super();
+		this.id = new ObjectId(id);
+		this.userId = userId;
+		this.userId2 = userId2;
+		this.status = status;
+	}
+
+	public Friendship(ObjectId id, String userId, String userId2, char status) {
 		super();
 		this.id = id;
 		this.userId = userId;
@@ -43,19 +57,19 @@ public class Friendship {
 		this.id = id;
 	}
 
-	public ObjectId getUserId() {
+	public String getUserId() {
 		return userId;
 	}
 
-	public void setUserId(ObjectId userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 
-	public ObjectId getUserId2() {
+	public String getUserId2() {
 		return userId2;
 	}
 
-	public void setUserId2(ObjectId userId2) {
+	public void setUserId2(String userId2) {
 		this.userId2 = userId2;
 	}
 
@@ -65,6 +79,6 @@ public class Friendship {
 
 	public void setStatus(char status) {
 		this.status = status;
-}
+	}
 
 }

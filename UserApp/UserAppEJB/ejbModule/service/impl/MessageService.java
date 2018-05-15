@@ -13,6 +13,7 @@ import org.mongodb.morphia.query.UpdateOperations;
 
 import com.google.gson.Gson;
 import com.mongodb.MongoClient;
+import com.mongodb.WriteResult;
 
 import model.Message;
 import service.interfaces.MessageServiceLocal;
@@ -63,12 +64,17 @@ public class MessageService implements MessageServiceLocal {
 	public boolean deleteMessage(String id) {
 		try {
 			final Query<Message> upit = datastore.createQuery(Message.class).filter("_id", new ObjectId(id));
-			datastore.delete(upit);
+			WriteResult w = datastore.delete(upit);
+
+			if (w.getN() == 1) {
+				return true;
+			} else {
+				return false;
+			}
 
 		} catch (Exception e) {
 			return false;
 		}
-		return true;
 	}
 
 	@Override

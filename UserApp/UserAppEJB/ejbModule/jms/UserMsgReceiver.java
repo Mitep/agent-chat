@@ -70,7 +70,7 @@ public class UserMsgReceiver implements MessageListener {
 //			gf.updateGroup(grupa);
 //			log.info("Group get test: " + grupa.getName());
 			MessageServiceLocal cf = (MessageServiceLocal) context.lookup(LOOKUP + MESSAGE_SERVICE);
-			cf.deleteMessage("5af80d28fb97111e146ace6f");
+//			cf.deleteMessage("5af80d28fb97111e146ace6f");
 //			log.info("Poruka ima: " + cf.readAll().size());
 //			model.Message m = cf.getMessage("5af80d28fb97111e146ace6f");
 //			m.setContent("Dobra fora...");
