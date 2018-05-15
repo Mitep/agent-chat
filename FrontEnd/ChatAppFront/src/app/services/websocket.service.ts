@@ -1,20 +1,21 @@
 import { Injectable } from '@angular/core';
 //import * as Rx from 'rxjs/Rx';
 
+const url = 'ws://localhost:8080/ChatAppWAR/websocket/echo';
+
 @Injectable()
 export class WebsocketService {
+
+  public ws: WebSocket;
   constructor() { }
 
-  //private subject: Rx.Subject<MessageEvent>;
-  private ws:WebSocket;
- 
-
-  public connect(url) {
+  public connect(): void {
     this.ws = new WebSocket(url);
-    this.ws.onmessage = function(data){
-      console.log(data);   
-    }
+    //this.ws.onmessage = function(data){
+    //  console.log(data);   
+    //}
   }
+
 
   public receivedMsg(msg){
     console.log(msg);

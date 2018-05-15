@@ -6,7 +6,7 @@
       <input type="text" placeholder="last name" [(ngModel)]="data.lastname" name="lastname" required/>
       <input type="password" placeholder="password" [(ngModel)]="data.password" name="password" required/>
       <input type="submit" value="sign up" (click)="submitForm(data)">
-      <p class="message">Already registered? <a href="">Sign In</a></p>
+      <p class="message">Already registered? <a routerLink="">Sign In</a></p>
     </form>
   </div>
 </div>

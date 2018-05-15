@@ -19,7 +19,12 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     RegisterComponent,
+    LoginComponent
+  ],
+   exports: [
     LoginComponent,
+    RegisterComponent,
+    RouterModule
   ],
   imports: [
     FormsModule,

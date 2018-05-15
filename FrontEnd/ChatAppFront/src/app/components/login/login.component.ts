@@ -1,16 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { WebsocketService } from '../../services/websocket.service';
+import { AppComponent } from '../../app.component';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
+
 })
 export class LoginComponent implements OnInit {
 
   private msg; 
-
-  constructor(private wsService:WebsocketService) { }
+ 
+  constructor(private ws:WebsocketService) { }
   
   ngOnInit() {
   }
@@ -22,6 +25,6 @@ submitForm(data){
                + " \"password\":\"" + data.password +"\"}"
                + "}";
       console.log(this.msg);
-      this.wsService.sendMsg(this.msg);
+      this.ws.sendMsg(this.msg);
   }
 }
