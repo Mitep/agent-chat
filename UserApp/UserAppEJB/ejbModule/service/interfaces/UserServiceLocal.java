@@ -12,7 +12,7 @@ public interface UserServiceLocal {
 	public boolean createUser(String str);
 	public User getUser(String id);
 	public List<User> readAll();
-	public boolean deleteUser(String id);
+	public boolean deleteUser(String username);
 	public boolean updateUser(User user);
 	public User getUserByUsername(String username);
 	public boolean validateUser(String username, String password);

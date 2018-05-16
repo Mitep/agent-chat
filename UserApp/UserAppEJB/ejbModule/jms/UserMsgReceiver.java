@@ -54,8 +54,6 @@ public class UserMsgReceiver implements MessageListener {
 				System.out.println("LOGOVANJE");
 				log.info(msgContent);
 				
-				
-				
 				//JSONObject user = new JSONObject(msgContent);
 				
 				Gson g = new Gson();

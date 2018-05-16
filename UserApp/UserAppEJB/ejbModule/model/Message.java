@@ -17,8 +17,8 @@ public class Message {
 	@Id
 	private ObjectId id;
 	private int type;
-	private ObjectId sender;
-	private ObjectId receiver;
+	private String sender;
+	private String receiver;
 	private long timestamp;
 	private String content;
 
@@ -41,19 +41,19 @@ public class Message {
 		this.type = type;
 	}
 
-	public ObjectId getSender() {
+	public String getSender() {
 		return sender;
 	}
 
-	public void setSender(ObjectId sender) {
+	public void setSender(String sender) {
 		this.sender = sender;
 	}
 
-	public ObjectId getReceiver() {
+	public String getReceiver() {
 		return receiver;
 	}
 
-	public void setReceiver(ObjectId receiver) {
+	public void setReceiver(String receiver) {
 		this.receiver = receiver;
 	}
 
@@ -73,7 +73,7 @@ public class Message {
 		this.content = content;
 	}
 
-	public Message(ObjectId id, ObjectId sender, ObjectId receiver, long timestamp, String content) {
+	public Message(ObjectId id, String sender, String receiver, long timestamp, String content) {
 		super();
 		this.id = id;
 		this.sender = sender;
@@ -82,7 +82,7 @@ public class Message {
 		this.content = content;
 	}
 
-	public Message(ObjectId id, int type, ObjectId sender, ObjectId receiver, long timestamp, String content) {
+	public Message(ObjectId id, int type, String sender, String receiver, long timestamp, String content) {
 		super();
 		this.id = id;
 		this.type = type;

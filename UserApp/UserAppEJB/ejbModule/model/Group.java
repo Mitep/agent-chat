@@ -21,12 +21,12 @@ public class Group {
 	@Id
 	private ObjectId id;
 	private String name;
-	private ArrayList<ObjectId> members;
+	private ArrayList<String> members;
 
 	public Group() {
 	}
 
-	public Group(ObjectId id, String name, ArrayList<ObjectId> members) {
+	public Group(ObjectId id, String name, ArrayList<String> members) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -49,12 +49,20 @@ public class Group {
 		this.name = string;
 	}
 
-	public ArrayList<ObjectId> getMembers() {
+	public ArrayList<String> getMembers() {
 		return members;
 	}
 
-	public void setMembers(ArrayList<ObjectId> members) {
+	public void setMembers(ArrayList<String> members) {
 		this.members = members;
-}
+	}
+
+	public void addMember(String username) {
+		members.add(username);
+	}
+	
+	public void removeMember(String username) {
+		members.remove(username);
+	}
 
 }

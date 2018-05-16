@@ -15,6 +15,7 @@ import org.mongodb.morphia.query.UpdateOperations;
 
 import com.google.gson.Gson;
 import com.mongodb.MongoClient;
+import com.mongodb.WriteResult;
 
 import jms.UserMsgSender;
 import model.User;
@@ -80,23 +81,27 @@ public class UserService implements UserServiceLocal {
 	}
 
 	@Override
-	public boolean deleteUser(String id) {
+	public boolean deleteUser(String username) {
 		try {
-			final Query<User> upit = datastore.createQuery(User.class).filter("_id", new ObjectId(id));
-			datastore.delete(upit);
+			final Query<User> upit = datastore.createQuery(User.class).field("username").equal(username);
+			WriteResult w = datastore.delete(upit);
+
+			if (w.getN() == 1) {
+				return true;
+			} else {
+				return false;
+			}
 
 		} catch (Exception e) {
 			return false;
 		}
-		return true;
 	}
 
 	@Override
 	public boolean updateUser(User user) {
 		try {
-			Query<User> query = datastore.createQuery(User.class).field("_id").equal(user.getId());
+			Query<User> query = datastore.createQuery(User.class).field("username").equal(user.getUsername());
 			UpdateOperations<User> ops = datastore.createUpdateOperations(User.class);
-			ops.set("username", user.getUsername());
 			ops.set("name", user.getName());
 			ops.set("surname", user.getSurname());
 			ops.set("password", user.getPassword());
@@ -111,10 +116,10 @@ public class UserService implements UserServiceLocal {
 	@Override
 	public User getUserByUsername(String username) {
 		List<User> lista = datastore.createQuery(User.class).filter("username == ", username).asList();
-		if (lista.size() > 1) {
-			return null;
-		} else {
+		if (lista.size() == 1) {
 			return lista.get(0);
+		} else {
+			return null;
 		}
 	}
 

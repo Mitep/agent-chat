@@ -14,4 +14,6 @@ public interface FriendshipServiceLocal {
 	public List<Friendship> readAll();
 	public boolean deleteFriendship(String id);
 	public boolean updateFriendship(Friendship fr);
+	public boolean setFriends(String id);
+	public boolean setPending(String id);
 }

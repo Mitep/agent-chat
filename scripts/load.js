@@ -25,33 +25,33 @@ db.User.insert({
 
 db.Message.insert({
 	type : 0,
-	sender : ObjectId("5af33e3fc424068e1559ee12"),
-	receiver : ObjectId("5af33e3ec424068e1559ee10"),
+	sender : 'nikola',
+	receiver : 'mitep',
 	timestamp : 1525898183,
 	content : 'Tepicu macane nisi ti za bacanje!!'
 });
 
 db.Message.insert({
 	type : 0,
-	sender : ObjectId("5af33e3ec424068e1559ee10"),
-	receiver : ObjectId("5af33e3fc424068e1559ee12"),
+	sender : 'mitep',
+	receiver : 'nikola',
 	timestamp : 1525898303,
 	content : 'Dobra fora'
 });
 
 db.Group.insert({
 	name : "Agenti, xml, sbnz",
-	members : [ObjectId("5af33e3ec424068e1559ee10"), ObjectId("5af33e3fc424068e1559ee11"), ObjectId("5af33e3fc424068e1559ee11")]
+	members : ['nikola', 'masato', 'mitep']
 });
 
 db.Friendship.insert({
-	userId : ObjectId("5af33e3ec424068e1559ee10"),
-	userId2 : ObjectId("5af33e3fc424068e1559ee11"),
+	userId : 'masato',
+	userId2 : 'mitep',
 	status : 'F'
 });
 
 db.Friendship.insert({
-	userId : ObjectId("5af33e3ec424068e1559ee10"),
-	userId2 : ObjectId("5af33e3fc424068e1559ee12"),
+	userId : 'nikola',
+	userId2 : 'masato',
 	status : 'P'
 });

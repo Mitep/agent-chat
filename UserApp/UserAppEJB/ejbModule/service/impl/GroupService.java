@@ -1,5 +1,6 @@
 package service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.LocalBean;
@@ -13,6 +14,7 @@ import org.mongodb.morphia.query.UpdateOperations;
 
 import com.google.gson.Gson;
 import com.mongodb.MongoClient;
+import com.mongodb.WriteResult;
 
 import model.Group;
 import service.interfaces.GroupServiceLocal;
@@ -70,14 +72,18 @@ public class GroupService implements GroupServiceLocal {
 	@Override
 	public boolean deleteGroup(String id) {
 		try {
-			final Query<Group> upit = datastore.createQuery(Group.class)
-                    .filter("_id", new ObjectId(id));
-			datastore.delete(upit);
-			
-		}catch(Exception e) {
+			final Query<Group> upit = datastore.createQuery(Group.class).filter("_id", new ObjectId(id));
+			WriteResult w = datastore.delete(upit);
+
+			if (w.getN() == 1) {
+				return true;
+			} else {
+				return false;
+			}
+
+		} catch (Exception e) {
 			return false;
 		}
-		return true;
 	}
 
 	@Override
@@ -86,6 +92,44 @@ public class GroupService implements GroupServiceLocal {
 			Query<Group> query = datastore.createQuery(Group.class).field("_id").equal(group.getId());
 			UpdateOperations<Group> ops = datastore.createUpdateOperations(Group.class);
 			ops.set("name", group.getName());
+
+			datastore.update(query, ops);
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public boolean addMember(String group, String member) {
+		try {
+			Query<Group> query = datastore.createQuery(Group.class).field("_id").equal(new ObjectId(group));
+			UpdateOperations<Group> ops = datastore.createUpdateOperations(Group.class);
+			ops.addToSet("members", member);
+
+			datastore.update(query, ops);
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public boolean removeMember(String group, String member) {
+		try {
+			Query<Group> query = datastore.createQuery(Group.class).field("_id").equal(new ObjectId(group));
+			ArrayList<String> clanovi = query.get().getMembers();
+			for (String user : clanovi) {
+				if (user.equals(member)) {
+					query.get().removeMember(member);
+					break;
+				}
+			}
+
+			UpdateOperations<Group> ops = datastore.createUpdateOperations(Group.class);
+
+			ops.unset("memebers");
+			ops.set("memebers", clanovi);
 
 			datastore.update(query, ops);
 		} catch (Exception e) {

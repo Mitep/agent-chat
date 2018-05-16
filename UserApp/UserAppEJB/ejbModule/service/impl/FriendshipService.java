@@ -10,9 +10,11 @@ import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
+import org.mongodb.morphia.query.UpdateResults;
 
 import com.google.gson.Gson;
 import com.mongodb.MongoClient;
+import com.mongodb.WriteResult;
 
 import model.Friendship;
 import service.interfaces.FriendshipServiceLocal;
@@ -63,12 +65,17 @@ public class FriendshipService implements FriendshipServiceLocal {
 	public boolean deleteFriendship(String id) {
 		try {
 			final Query<Friendship> upit = datastore.createQuery(Friendship.class).filter("_id", new ObjectId(id));
-			datastore.delete(upit);
+			WriteResult w = datastore.delete(upit);
+
+			if (w.getN() == 1) {
+				return true;
+			} else {
+				return false;
+			}
 
 		} catch (Exception e) {
 			return false;
 		}
-		return true;
 	}
 
 	@Override
@@ -80,11 +87,40 @@ public class FriendshipService implements FriendshipServiceLocal {
 			ops.set("userId2", fr.getUserId2());
 			ops.set("status", fr.getStatus());
 
-			datastore.update(query, ops);
+			UpdateResults ur = datastore.update(query, ops);
+			return ur.getUpdatedCount() == 1;
 		} catch (Exception e) {
 			return false;
 		}
-		return true;
+	}
+
+	@Override
+	public boolean setFriends(String id) {
+
+		try {
+			Query<Friendship> query = datastore.createQuery(Friendship.class).field("_id").equal(new ObjectId(id));
+			UpdateOperations<Friendship> ops = datastore.createUpdateOperations(Friendship.class).set("status",
+					Friendship.FRIENDS);
+
+			UpdateResults ur = datastore.update(query, ops);
+			return ur.getUpdatedCount() == 1;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean setPending(String id) {
+		try {
+			Query<Friendship> query = datastore.createQuery(Friendship.class).field("_id").equal(new ObjectId(id));
+			UpdateOperations<Friendship> ops = datastore.createUpdateOperations(Friendship.class).set("status",
+					Friendship.PENDING);
+
+			UpdateResults ur = datastore.update(query, ops);
+			return ur.getUpdatedCount() == 1;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 }
