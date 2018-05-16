@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
@@ -14,6 +16,7 @@ import org.mongodb.morphia.query.UpdateOperations;
 import com.google.gson.Gson;
 import com.mongodb.MongoClient;
 
+import jms.UserMsgSender;
 import model.User;
 import service.interfaces.UserServiceLocal;
 
@@ -54,6 +57,9 @@ public class UserService implements UserServiceLocal {
 			if(flag==true){
 				datastore.save(u);
 				System.out.println("Registered.");
+				Context context = new InitialContext();
+				UserMsgSender msgSender = (UserMsgSender) context.lookup("java:app/UserAppEJB/UserMsgSenderBean!jms.UserMsgSender");
+				msgSender.sendMsg(u.getUsername());
 			}
 			
 		} catch (Exception e) {

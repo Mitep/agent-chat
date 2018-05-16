@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-//import * as Rx from 'rxjs/Rx';
+import * as Rx from 'rxjs/Rx';
 
 const url = 'ws://localhost:8080/ChatAppWAR/websocket/echo';
 
@@ -11,9 +11,9 @@ export class WebsocketService {
 
   public connect(): void {
     this.ws = new WebSocket(url);
-    //this.ws.onmessage = function(data){
-    //  console.log(data);   
-    //}
+    this.ws.onmessage = function(data){
+      console.log(data.data);  
+    }
   }
 
 

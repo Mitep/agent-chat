@@ -23,8 +23,8 @@ public class UserMsgSenderBean implements UserMsgSender {
 		// TODO Auto-generated method stub
 		try {
 			Context context = new InitialContext();
-			ConnectionFactory cf = (ConnectionFactory) context.lookup("jms/RemoteConnectionFactory");
-			final Queue queue = (Queue) context.lookup("jms/queue/chatAppQueue");
+			ConnectionFactory cf = (ConnectionFactory) context.lookup("java:jboss/exported/jms/RemoteConnectionFactory");
+			final Queue queue = (Queue) context.lookup("java:jboss/exported/jms/queue/chatAppQueue");
 			context.close();
 			Connection connection = cf.createConnection();
 			final Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
@@ -45,6 +45,7 @@ public class UserMsgSenderBean implements UserMsgSender {
 			producer.close();
 			// consumer.close();
 			connection.stop();
+			connection.close();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

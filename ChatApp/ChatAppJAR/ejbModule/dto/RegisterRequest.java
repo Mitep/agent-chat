@@ -2,21 +2,14 @@ package dto;
 
 public class RegisterRequest {
 	
-	private String username;
-	
-	private String firstName;
-	
-	private String lastName;
-	
 	private String password;
 	
-	private Long timestamp;
+	private String username;
 	
+	private String name;
 	
+	private String surname;
 
-	public RegisterRequest(){
-		
-	}
 	
 	public String getUsername() {
 		return username;
@@ -26,20 +19,20 @@ public class RegisterRequest {
 		this.username = username;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public String getName() {
+		return name;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getLastName() {
-		return lastName;
+	public String getSurname() {
+		return surname;
 	}
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setSurname(String surname) {
+		this.surname = surname;
 	}
 
 	public String getPassword() {
@@ -50,11 +43,5 @@ public class RegisterRequest {
 		this.password = password;
 	}
 	
-	public Long getTimestamp() {
-		return timestamp;
-	}
-
-	public void setTimestamp(Long timestamp) {
-		this.timestamp = timestamp;
-	}
+	
 }
