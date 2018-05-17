@@ -1,6 +1,5 @@
 package jms;
 
-import java.io.IOException;
 import java.util.logging.Logger;
 
 import javax.ejb.ActivationConfigProperty;
@@ -13,14 +12,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import org.json.JSONObject;
-
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
-import dto.LoginRequest;
 import model.User;
 import service.interfaces.LoginServiceLocal;
 import service.interfaces.UserServiceLocal;
