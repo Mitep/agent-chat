@@ -13,13 +13,12 @@ public class Message {
 
 	public static final int PRIVATE_MSG = 0;
 	public static final int GROUP_MSG = 1;
-	
+
 	@Id
 	private ObjectId id;
 	private int type;
 	private String sender;
 	private String receiver;
-	private long timestamp;
 	private String content;
 
 	public Message() {
@@ -57,14 +56,6 @@ public class Message {
 		this.receiver = receiver;
 	}
 
-	public long getTimestamp() {
-		return timestamp;
-	}
-
-	public void setTimestamp(long timestamp) {
-		this.timestamp = timestamp;
-	}
-
 	public String getContent() {
 		return content;
 	}
@@ -73,23 +64,21 @@ public class Message {
 		this.content = content;
 	}
 
-	public Message(ObjectId id, String sender, String receiver, long timestamp, String content) {
+	public Message(ObjectId id, String sender, String receiver, String content) {
 		super();
 		this.id = id;
 		this.sender = sender;
 		this.receiver = receiver;
-		this.timestamp = timestamp;
 		this.content = content;
 	}
 
-	public Message(ObjectId id, int type, String sender, String receiver, long timestamp, String content) {
+	public Message(ObjectId id, int type, String sender, String receiver, String content) {
 		super();
 		this.id = id;
 		this.type = type;
 		this.sender = sender;
 		this.receiver = receiver;
-		this.timestamp = timestamp;
 		this.content = content;
-}
+	}
 
 }

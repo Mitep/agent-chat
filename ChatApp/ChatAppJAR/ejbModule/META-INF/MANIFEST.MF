@@ -1,3 +1,8 @@
 Manifest-Version: 1.0
-Class-Path: ChatAppJarClient.jar
+Class-Path: ChatAppJarClient.jar 
+ json_lib/gson-2.8.4.jar 
+ json_lib/jackson-core-2.9.5.jar 
+ json_lib/jackson-databind-2.9.5.jar 
+ json_lib/json-20180130.jar 
+ rest_lib/commons-io-2.1.jar
 

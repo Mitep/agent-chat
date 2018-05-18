@@ -85,7 +85,6 @@ public class MessageService implements MessageServiceLocal {
 			ops.set("type", msg.getType());
 			ops.set("sender", msg.getSender());
 			ops.set("receiver", msg.getReceiver());
-			ops.set("timestamp", msg.getTimestamp());
 			ops.set("content", msg.getContent());
 
 			datastore.update(query, ops);

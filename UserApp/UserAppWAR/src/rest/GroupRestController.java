@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -65,5 +66,38 @@ public class GroupRestController {
 	public boolean deleteGroup(@PathParam("id") String id) {
 		return groupService.deleteGroup(id);
 	}
+	
 
+	@POST
+	@Path("/adduser")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.APPLICATION_JSON)
+	public boolean addUser(@FormParam("groupId") String groupId, @FormParam("user") String user) {
+		return groupService.addMember(groupId, user);
+	}
+	
+	@POST
+	@Path("/removeuser")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.APPLICATION_JSON)
+	public boolean removeUser(@FormParam("groupId") String groupId, @FormParam("user") String user) {
+		return groupService.removeMember(groupId, user);
+	}
+	
+	
+	@POST
+	@Path("/message/add")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.APPLICATION_JSON)
+	public boolean addMessage(@FormParam("group") String group, @FormParam("message") String message) {
+		return groupService.addMessage(group, message);
+	}
+	
+	@POST
+	@Path("/message/remove")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.APPLICATION_JSON)
+	public boolean removeMessage(@FormParam("group") String group, @FormParam("message") String message) {
+		return groupService.removeMessage(group, message);
+	}
 }

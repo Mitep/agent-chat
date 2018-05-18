@@ -56,7 +56,7 @@ public class MessageRestController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean updateMessage(MessageDTO dto) {
 		Message m = new Message(new ObjectId(dto.getId()), dto.getType(), dto.getSender(), dto.getReceiver(),
-				dto.getTimestamp(), dto.getContent());
+				dto.getContent());
 		return msgService.updateMessage(m);
 	}
 

@@ -109,6 +109,7 @@ public class GroupService implements GroupServiceLocal {
 
 			datastore.update(query, ops);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 		return true;
@@ -117,22 +118,75 @@ public class GroupService implements GroupServiceLocal {
 	@Override
 	public boolean removeMember(String group, String member) {
 		try {
-			Query<Group> query = datastore.createQuery(Group.class).field("_id").equal(new ObjectId(group));
-			ArrayList<String> clanovi = query.get().getMembers();
-			for (String user : clanovi) {
+			Group g = datastore.createQuery(Group.class).field("_id").equal(new ObjectId(group)).get();
+			for (String user : g.getMembers()) {
 				if (user.equals(member)) {
-					query.get().removeMember(member);
+					System.out.println("if");
+					g.getMembers().remove(member);
 					break;
 				}
 			}
 
-			UpdateOperations<Group> ops = datastore.createUpdateOperations(Group.class);
-
-			ops.unset("memebers");
-			ops.set("memebers", clanovi);
-
-			datastore.update(query, ops);
+			datastore.save(g);
 		} catch (Exception e) {
+			// e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public List<ObjectId> getMessages(String group) {
+		try {
+			Query<Group> query = datastore.createQuery(Group.class).field("_id").equal(new ObjectId(group));
+			ArrayList<ObjectId> poruke = query.get().getMessages();
+			return poruke;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	@Override
+	public boolean addMessage(String group, String message) {
+		System.out.println(group);
+		System.out.println(message);
+		try {
+			Query<Group> query = datastore.createQuery(Group.class).field("_id").equal(new ObjectId(group));
+			UpdateOperations<Group> ops = datastore.createUpdateOperations(Group.class);
+			ObjectId poruka = new ObjectId(message);
+			if (query.get().getMessages() == null) {
+				query.get().setMessages(new ArrayList<ObjectId>());
+			}
+
+			if (!query.get().getMessages().contains(poruka)) {
+				ops.addToSet("messages", new ObjectId(message));
+				datastore.update(query, ops);
+				return true;
+			} else {
+				return false;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	@Override
+	public boolean removeMessage(String group, String message) {
+		try {
+			Group g = datastore.createQuery(Group.class).field("_id").equal(new ObjectId(group)).get();
+			ObjectId poruka = new ObjectId(message);
+			for (ObjectId msg : g.getMessages()) {
+				if (msg.equals(poruka)) {
+					g.getMessages().remove(poruka);
+					break;
+				}
+			}
+
+			datastore.save(g);
+		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 		return true;

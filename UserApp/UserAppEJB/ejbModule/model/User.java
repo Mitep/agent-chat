@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Field;
@@ -22,6 +24,7 @@ public class User {
 	private String password;
 	private String name;
 	private String surname;
+	private ArrayList<ObjectId> groups;
 
 	public ObjectId getId() {
 		return id;
@@ -63,6 +66,14 @@ public class User {
 		this.surname = surname;
 	}
 
+	public ArrayList<ObjectId> getGroups() {
+		return groups;
+	}
+
+	public void setGroups(ArrayList<ObjectId> groups) {
+		this.groups = groups;
+	}
+
 	public User() {
 	}
 
@@ -72,6 +83,15 @@ public class User {
 		this.password = password;
 		this.name = name;
 		this.surname = surname;
+	}
+
+	public User(String username, String password, String name, String surname, ArrayList<ObjectId> groups) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.name = name;
+		this.surname = surname;
+		this.groups = groups;
 	}
 
 }

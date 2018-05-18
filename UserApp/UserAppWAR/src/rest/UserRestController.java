@@ -4,12 +4,15 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import org.bson.types.ObjectId;
 
 import com.google.gson.Gson;
 
@@ -38,6 +41,20 @@ public class UserRestController {
 	public User getUserByUsername(@PathParam("username") String username) {
 		return userService.getUserByUsername(username);
 	}
+	
+	@GET
+	@Path("/name/{name}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<User> getUsersByName(@PathParam("name") String name) {
+		return userService.getUserByName(name);
+	}
+
+	@GET
+	@Path("/surname/{surname}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<User> getUsersBySurname(@PathParam("surname") String surname) {
+		return userService.getUserBySurname(surname);
+	}
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -62,10 +79,21 @@ public class UserRestController {
 	}
 
 	@POST
-	@Path("/delete/{name}")
+	@Path("/delete")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
-	public boolean deleteUser(@PathParam("name") String name) {
+	public boolean deleteUser(@FormParam("name") String name) {
 		return userService.deleteUser(name);
+	}
+	
+	@POST
+	@Path("/addgroup")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ObjectId> addUserToGroup(@FormParam("username") String username, @FormParam("groupId") String groupId) {
+		System.out.println(username);
+		System.out.println(groupId);
+		return userService.addGroup(username, groupId);
 	}
 
 }

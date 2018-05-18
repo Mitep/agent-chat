@@ -1,5 +1,6 @@
 package service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.LocalBean;
@@ -125,12 +126,57 @@ public class UserService implements UserServiceLocal {
 
 	@Override
 	public boolean validateUser(String username, String password) {
-		// TODO Auto-generated method stub
 		List<User> lista = datastore.createQuery(User.class).filter("username == ", username).filter("password == ", password).asList();
 		if (lista.size() > 0) {
 			return true;
 		} else {
 			return false;
+		}
+	}
+
+	@Override
+	public List<User> getUserByName(String name) {
+		List<User> lista = datastore.createQuery(User.class).filter("name == ", name).asList();
+		if (lista.size() != 0) {
+			return lista;
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	public List<User> getUserBySurname(String surname) {
+		List<User> lista = datastore.createQuery(User.class).filter("surname == ", surname).asList();
+		if (lista.size() != 0) {
+			return lista;
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	public List<ObjectId> getUsersGroups(String username) {
+		Query<User> query = datastore.createQuery(User.class);
+		User user = query.field("username").equal(username).get();
+		return user.getGroups();
+	}
+
+	@Override
+	public List<ObjectId> addGroup(String username, String groupId) {
+		User u = getUserByUsername(username);
+		if(u != null) {
+			System.out.println("not null");
+			if(u.getGroups() == null) {
+				u.setGroups(new ArrayList<ObjectId>());
+			}
+			u.getGroups().add(new ObjectId(groupId));
+			
+			datastore.save(u);
+
+			return u.getGroups();
+		}else {
+			System.out.println("ipak je null");
+			return null;
 		}
 	}
 

@@ -10,20 +10,18 @@ public class MessageDTO {
 	private int type;
 	private String sender;
 	private String receiver;
-	private long timestamp;
 	private String content;
 
 	public MessageDTO() {
 		super();
 	}
 
-	public MessageDTO(String id, int type, String sender, String receiver, long timestamp, String content) {
+	public MessageDTO(String id, int type, String sender, String receiver, String content) {
 		super();
 		this.id = id;
 		this.type = type;
 		this.sender = sender;
 		this.receiver = receiver;
-		this.timestamp = timestamp;
 		this.content = content;
 	}
 
@@ -57,14 +55,6 @@ public class MessageDTO {
 
 	public void setReceiver(String receiver) {
 		this.receiver = receiver;
-	}
-
-	public long getTimestamp() {
-		return timestamp;
-	}
-
-	public void setTimestamp(long timestamp) {
-		this.timestamp = timestamp;
 	}
 
 	public String getContent() {

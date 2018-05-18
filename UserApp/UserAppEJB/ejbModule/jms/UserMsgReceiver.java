@@ -86,55 +86,7 @@ public class UserMsgReceiver implements MessageListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-//		try {
-//			Context context = new InitialContext();
-//			GroupServiceLocal gf = (GroupServiceLocal) context.lookup(LOOKUP + GROUP_SERVICE);
-//			gf.deleteGroup("5af80d29fb97111e146ace71");
-////			log.info("Grupa ima: " + gf.readAll().size());
-////			Group grupa = gf.getGroup("5af80d29fb97111e146ace71");
-////			grupa.setName("Za*ebani momci");
-////			gf.updateGroup(grupa);
-////			log.info("Group get test: " + grupa.getName());
-//			MessageServiceLocal cf = (MessageServiceLocal) context.lookup(LOOKUP + MESSAGE_SERVICE);
-//			cf.deleteMessage("5af80d28fb97111e146ace6f");
-////			log.info("Poruka ima: " + cf.readAll().size());
-////			model.Message m = cf.getMessage("5af80d28fb97111e146ace6f");
-////			m.setContent("Dobra fora...");
-////			cf.updateMessage(m);
-////			log.info("Message get test: " + m.getContent());
-////			Gson gs = new Gson();
-////			cf.createMessage(gs.toJson(m));
-////			gf.createGroup(gs.toJson(g));
-//
-//			FriendshipServiceLocal fs = (FriendshipServiceLocal) context.lookup(LOOKUP + FRIENDSHIP_SERVICE);
-////			Friendship fr = new Friendship(new ObjectId("5af80d29fb97111e146ace75"),
-////					new ObjectId("5af33e3ec424068e1559ee10"), new ObjectId("5af33e3fc424068e1559ee12"),
-////					Friendship.FRIENDS);
-//			fs.deleteFriendship("5af80d29fb97111e146ace75");
-////			fs.updateFriendship(fr);
-////			log.info("Prijateljstava ima: " + fs.readAll().size());
-////			Friendship f = fs.getFriendship("5af80d29fb97111e146ace75");
-////			log.info("Friendship get test: " + f.getStatus());
-////			fs.createFriendship(gs.toJson(f));
-//			UserServiceLocal uf = (UserServiceLocal) context.lookup(LOOKUP + USER_SERVICE);
-//			User u = uf.getUserByUsername("M1T3P");
-//			uf.deleteUser(u.getId().toHexString());
-////			log.info("Korisnika ima: " + uf.readAll().size());
-////			User u  = uf.getUser("5af80d29fb97111e146ace77");
-////			u.setUsername("M1T3P");
-////			uf.updateUser(u);
-////			log.info("Friendship get test: " + u.getUsername());
-////			uf.createUser(gs.toJson(u));
-////			log.info("Kreirao prvog korisnika, testiranje duplikata");
-////			uf.createUser(gs.toJson(u2));
-//		} catch (NamingException e) {
-//			e.printStackTrace();
-//		} catch (NullPointerException ne) {
-//			ne.getMessage();
-//			ne.printStackTrace();
-//		}
-//		log.info("UserMsgReceiver -> kraj onMessage metode");
+		log.info("UserMsgReceiver -> kraj onMessage metode");
 	}
 
 }
