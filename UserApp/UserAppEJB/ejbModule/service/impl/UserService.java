@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import javax.naming.Context;
-import javax.naming.InitialContext;
 
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
@@ -18,7 +16,6 @@ import com.google.gson.Gson;
 import com.mongodb.MongoClient;
 import com.mongodb.WriteResult;
 
-import jms.UserMsgSender;
 import model.User;
 import service.interfaces.UserServiceLocal;
 
@@ -42,32 +39,23 @@ public class UserService implements UserServiceLocal {
 	}
 
 	@Override
-	public boolean createUser(String str) {
+	public User createUser(String str) {
 		try {
 			Gson g = new Gson();
 			User u = g.fromJson(str, User.class);
 			List<User> users = readAll();
-			boolean flag = true;
-			for(User user:users){
-				System.out.println(user.getUsername());	
-				if(u.getUsername().equals(user.getUsername())){
-					System.out.println("Username already exists!");
-					flag = false;
-					break;
+			for (User user : users) {
+				if (u.getUsername().equals(user.getUsername())) {
+					System.out.println("Username " + u.getUsername() + " already exists!");
+					return null;
 				}
 			}
-			if(flag==true){
-				datastore.save(u);
-				System.out.println("Registered.");
-				Context context = new InitialContext();
-				UserMsgSender msgSender = (UserMsgSender) context.lookup("java:app/UserAppEJB/UserMsgSenderBean!jms.UserMsgSender");
-				msgSender.sendMsg(u.getUsername());
-			}
-			
+
+			datastore.save(u);
+			return u;
 		} catch (Exception e) {
-			return false;
+			return null;
 		}
-		return true;
 	}
 
 	@Override
@@ -126,7 +114,8 @@ public class UserService implements UserServiceLocal {
 
 	@Override
 	public boolean validateUser(String username, String password) {
-		List<User> lista = datastore.createQuery(User.class).filter("username == ", username).filter("password == ", password).asList();
+		List<User> lista = datastore.createQuery(User.class).filter("username == ", username)
+				.filter("password == ", password).asList();
 		if (lista.size() > 0) {
 			return true;
 		} else {
@@ -164,20 +153,28 @@ public class UserService implements UserServiceLocal {
 	@Override
 	public List<ObjectId> addGroup(String username, String groupId) {
 		User u = getUserByUsername(username);
-		if(u != null) {
+		if (u != null) {
 			System.out.println("not null");
-			if(u.getGroups() == null) {
+			if (u.getGroups() == null) {
 				u.setGroups(new ArrayList<ObjectId>());
 			}
 			u.getGroups().add(new ObjectId(groupId));
-			
+
 			datastore.save(u);
 
 			return u.getGroups();
-		}else {
+		} else {
 			System.out.println("ipak je null");
 			return null;
 		}
+	}
+
+	@Override
+	public List<User> findUsers(String username, String name, String surname) {
+		List<User> lista = datastore.createQuery(User.class).filter("username == ", ".*" + username + ".*")
+				.filter("name == ", ".*" + name + ".*").filter("surname == ", ".*" + surname + ".*").asList();
+		System.out.println(lista.size());
+		return lista;
 	}
 
 }

@@ -148,8 +148,6 @@ public class GroupService implements GroupServiceLocal {
 
 	@Override
 	public boolean addMessage(String group, String message) {
-		System.out.println(group);
-		System.out.println(message);
 		try {
 			Query<Group> query = datastore.createQuery(Group.class).field("_id").equal(new ObjectId(group));
 			UpdateOperations<Group> ops = datastore.createUpdateOperations(Group.class);

@@ -5,5 +5,5 @@ import javax.ejb.Remote;
 @Remote
 public interface UserMsgSender {
 
-	public void sendMsg(String msgContent);
+	public void sendMsg(String msgContent, String msgType);
 }

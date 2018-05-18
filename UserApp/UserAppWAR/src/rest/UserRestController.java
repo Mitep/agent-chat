@@ -41,7 +41,7 @@ public class UserRestController {
 	public User getUserByUsername(@PathParam("username") String username) {
 		return userService.getUserByUsername(username);
 	}
-	
+
 	@GET
 	@Path("/name/{name}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -59,7 +59,7 @@ public class UserRestController {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public boolean createUser(User u) {
+	public User createUser(User u) {
 		return userService.createUser(new Gson().toJson(u));
 	}
 
@@ -85,15 +85,24 @@ public class UserRestController {
 	public boolean deleteUser(@FormParam("name") String name) {
 		return userService.deleteUser(name);
 	}
-	
+
 	@POST
 	@Path("/addgroup")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<ObjectId> addUserToGroup(@FormParam("username") String username, @FormParam("groupId") String groupId) {
-		System.out.println(username);
-		System.out.println(groupId);
 		return userService.addGroup(username, groupId);
+	}
+
+	@GET
+	@Path("/search/{username}/{name}/{surname}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<User> search(@PathParam("username") String username, @PathParam("name") String name,
+			@PathParam("surname") String surname) {
+		System.out.println(username);
+		System.out.println(name);
+		System.out.println(surname);
+		return userService.findUsers(username, name, surname);
 	}
 
 }

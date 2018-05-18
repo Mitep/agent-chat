@@ -12,33 +12,30 @@ import javax.naming.InitialContext;
 
 @Stateless
 public class UserMsgSenderBean implements UserMsgSender {
+	
+	public static final String REMOTE_FACTORY = "java:jboss/exported/jms/RemoteConnectionFactory";
+	public static final String CHATAPP_QUEUE = "java:jboss/exported/jms/queue/chatAppQueue";
 
 	@Override
-	public void sendMsg(String msgContent) {
-		// TODO Auto-generated method stub
+	public void sendMsg(String msgContent, String msgType) {
 		try {
 			Context context = new InitialContext();
-			ConnectionFactory cf = (ConnectionFactory) context.lookup("java:jboss/exported/jms/RemoteConnectionFactory");
-			final Queue queue = (Queue) context.lookup("java:jboss/exported/jms/queue/chatAppQueue");
+			ConnectionFactory cf = (ConnectionFactory) context.lookup(REMOTE_FACTORY);
+			final Queue queue = (Queue) context.lookup(CHATAPP_QUEUE);
 			context.close();
 			Connection connection = cf.createConnection();
 			final Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
 			connection.start();
 
-			// MessageConsumer consumer = session.createConsumer(queue);
-			// consumer.setMessageListener(this);
-
 			TextMessage msg = session.createTextMessage(msgContent);
 			// The sent timestamp acts as the message's ID
 			long sent = System.currentTimeMillis();
 			msg.setLongProperty("sent", sent);
-
+			msg.setStringProperty("type", msgType);
 			MessageProducer producer = session.createProducer(queue);
 			producer.send(msg);
-			// Thread.sleep(1000);
 			producer.close();
-			// consumer.close();
 			connection.stop();
 			connection.close();
 		} catch (Exception ex) {
