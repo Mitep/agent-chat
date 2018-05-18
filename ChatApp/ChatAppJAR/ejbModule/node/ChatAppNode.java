@@ -1,10 +1,109 @@
 package node;
 
-import javax.ejb.Remote;
+import javax.websocket.Session;
 
-@Remote
-public interface ChatAppNode {
+import java.util.HashMap;
 
-	public boolean amIMaster();
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
+
+@Singleton
+@Startup
+public class ChatAppNode implements ChatAppNodeLocal {
+
+	// key - alias, value - ip_addr:port
+	private HashMap<String, String> nodes;
+	
+	// sesije online korisnika na ovom nodu
+	private HashMap<String, Session> onlineUsersThisNode;
+	
+	// hostovi online korisnika u celoj aplikaciji
+	private HashMap<String, String> onlineUsersApp;
+	
+	private String hostname;
+
+	public ChatAppNode() {
+		nodes = new HashMap<String, String>();
+		onlineUsersThisNode = new HashMap<String, Session>();
+		onlineUsersApp = new HashMap<String, String>();
+	}
+	
+	@PostConstruct
+	public void initNode() {
+		if(isThisMaster()){
+			setHostname("master");
+		} else {
+			//pozivamo node service za dodavanje u klaster
+		}
+	}
+	
+	@PreDestroy
+	public void removeNode() {
+		//saljemo zahtev za uklanjanje iz klastera
+		if(!isThisMaster()){
+			//pozivamo node service za uklanjanje iz klastera
+		}
+	}
+	
+	public void setHostname(String hostname) {
+		this.hostname = hostname;
+	}
+	
+	public String getHostname() {
+		return hostname;
+	}
+	
+	public void addNode(String alias, String address) {
+		nodes.put(alias, address);
+	}
+	
+	public void addNodes(HashMap<String, String> newNodes) {
+		nodes.putAll(newNodes);
+	}
+	
+	public void removeNode(String alias) {
+		nodes.remove(alias);
+	}
+	
+	public HashMap<String, String> getNodes() {
+		return nodes;
+	}
+	
+	public void addOnlineUserApp(String username, String host){
+		onlineUsersApp.put(username, host);
+	}
+	
+	public void addOnlineUsersAppAll(HashMap<String, String> users) {
+		onlineUsersApp.putAll(users);
+	}
+	
+	@Override
+	public void addOnlineUserThisNode(String username, Session session) {
+		onlineUsersThisNode.put(username, session);
+	}
+	
+	public void removeOnlineUserApp(String username) {
+		onlineUsersApp.remove(username);
+	}
+	
+	public void removeOnlineUserThisNode(String username) {
+		onlineUsersThisNode.remove(username);
+	}
+
+	@Override
+	public boolean isThisMaster() {
+		//proveravamo jel ovo master da bi znali da li da saljemo zahtev za registrovanje u klaster
+		
+		//treba napraviti metodu koja ispituje
+		
+		return true;
+	}
+
+	@Override
+	public Session getUserSession(String username) {
+		return onlineUsersThisNode.get(username);
+	}
 	
 }
