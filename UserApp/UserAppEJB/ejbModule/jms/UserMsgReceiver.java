@@ -1,5 +1,6 @@
 package jms;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.ejb.ActivationConfigProperty;
@@ -15,6 +16,7 @@ import javax.naming.NamingException;
 import com.google.gson.Gson;
 
 import dtos.JmsDTO;
+import dtos.UserSearchDTO;
 import model.User;
 import service.interfaces.LoginServiceLocal;
 import service.interfaces.UserServiceLocal;
@@ -98,18 +100,23 @@ public class UserMsgReceiver implements MessageListener {
 
 			case "user_search": {
 				log.info("---------------PRETRAGA---------------");
-
 				log.info(msgContent);
 				
 				Context ctx = new InitialContext();
 				UserServiceLocal uf = (UserServiceLocal) ctx.lookup(LOOKUP + USER_SERVICE);
-				User retVal = uf.createUser(msgContent);
-				
-				
+				UserSearchDTO src = new Gson().fromJson(msgContent, UserSearchDTO.class);
+				List<User> retVal = uf.findUsers(src.getUsername(), src.getName(), src.getSurname());
 				
 				String retMsg;
-				String retType = "register";
-				JmsDTO dto;
+				if(retVal != null) {
+					retMsg = new Gson().toJson(retVal);
+				}else {
+					retMsg = "";
+				}
+				
+				String retType = "user_search";
+				UserMsgSender msgSender = (UserMsgSender) ctx.lookup(SENDER_BEAN);
+				msgSender.sendMsg(retMsg, retType);
 			}
 				break;
 
@@ -119,6 +126,10 @@ public class UserMsgReceiver implements MessageListener {
 
 			case "group": {
 
+			}
+			
+			case "logout": {
+				
 			}
 			}
 		} catch (JMSException e) {

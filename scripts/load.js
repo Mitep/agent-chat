@@ -1,6 +1,6 @@
 db.dropDatabase();
 
-db.User.createIndex( { "username" : 1 }, { unique : true } );
+//db.User.createIndex( { "username" : 1 }, { unique : true } );
 
 db.User.insert({
 	username : 'mitep',

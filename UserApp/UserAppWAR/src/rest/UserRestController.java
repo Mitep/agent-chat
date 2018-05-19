@@ -3,6 +3,9 @@ package rest;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -16,7 +19,12 @@ import org.bson.types.ObjectId;
 
 import com.google.gson.Gson;
 
+import dtos.JmsDTO;
+import dtos.UserSearchDTO;
+import jms.UserMsgReceiver;
+import jms.UserMsgSender;
 import model.User;
+import service.interfaces.LoginServiceLocal;
 import service.interfaces.UserServiceLocal;
 
 /**
@@ -25,6 +33,9 @@ import service.interfaces.UserServiceLocal;
  */
 @Path("/user")
 public class UserRestController {
+
+	@EJB
+	private LoginServiceLocal loginService;
 
 	@EJB
 	private UserServiceLocal userService;
@@ -94,15 +105,40 @@ public class UserRestController {
 		return userService.addGroup(username, groupId);
 	}
 
-	@GET
-	@Path("/search/{username}/{name}/{surname}")
+	@POST
+	@Path("/search")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<User> search(@PathParam("username") String username, @PathParam("name") String name,
-			@PathParam("surname") String surname) {
-		System.out.println(username);
-		System.out.println(name);
-		System.out.println(surname);
-		return userService.findUsers(username, name, surname);
+	public List<User> search(UserSearchDTO dto) {
+		return userService.findUsers(dto.getUsername(), dto.getName(), dto.getSurname());
+	}
+
+	@POST
+	@Path("/login")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public User login(User u) {
+		String retMsg;
+		String retType = "login";
+		JmsDTO dto = new JmsDTO();
+		if (loginService.validUser(u.getUsername(), u.getSurname())) {
+			dto = new JmsDTO("login", u.getUsername(), "success", "Uspesno ste se prijavili!");
+			System.out.println("Prijava uspesna.");
+		} else {
+			dto = new JmsDTO("login", u.getUsername(), "fail", "Neuspesna prijava.");
+			System.out.println("Prijava neuspesna.");
+		}
+
+		try {
+			Context context = new InitialContext();
+			UserMsgSender msgSender = (UserMsgSender) context.lookup(UserMsgReceiver.SENDER_BEAN);
+			retMsg = new Gson().toJson(dto);
+			msgSender.sendMsg(retMsg, retType);
+		} catch (NamingException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return u;
 	}
 
 }

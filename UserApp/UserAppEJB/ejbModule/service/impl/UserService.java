@@ -171,10 +171,22 @@ public class UserService implements UserServiceLocal {
 
 	@Override
 	public List<User> findUsers(String username, String name, String surname) {
-		List<User> lista = datastore.createQuery(User.class).filter("username == ", ".*" + username + ".*")
-				.filter("name == ", ".*" + name + ".*").filter("surname == ", ".*" + surname + ".*").asList();
-		System.out.println(lista.size());
-		return lista;
+		List<User> listUsrNames = new ArrayList<User>();
+		List<User> listNames = new ArrayList<User>();
+		List<User> listSurnames = new ArrayList<User>();
+
+		if (username != null && username != "")
+			listUsrNames = datastore.createQuery(User.class).field("username").containsIgnoreCase(username).asList();
+		if (name != null && name != "")
+			listNames = datastore.createQuery(User.class).field("name").containsIgnoreCase(name).asList();
+		if (surname != null && surname != "")
+			listSurnames = datastore.createQuery(User.class).field("surname").containsIgnoreCase(surname).asList();
+
+		ArrayList<User> korisnici = new ArrayList<>();
+		korisnici.addAll(listUsrNames);
+		korisnici.addAll(listNames);
+		korisnici.addAll(listSurnames);
+		return korisnici;
 	}
 
 }

@@ -9,13 +9,15 @@ import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Index;
 import org.mongodb.morphia.annotations.IndexOptions;
 import org.mongodb.morphia.annotations.Indexes;
+import org.mongodb.morphia.utils.IndexType;
 
 /**
  * @author Nikola
  *
  */
 @Entity
-@Indexes(@Index(fields = { @Field("username") }, options = @IndexOptions(unique = true)))
+@Indexes({ @Index(fields = { @Field("username") }, options = @IndexOptions(unique = true, name = "PK_USER")),
+		@Index(fields = {@Field(value = "$**", type = IndexType.TEXT)}, options = @IndexOptions(name = "SEARCH_INDEX")) })
 public class User {
 
 	@Id
