@@ -9,7 +9,9 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import websocket.WSLocal;
+import service.interfaces.LoginServiceLocal;
+import service.interfaces.RegisterServiceLocal;
+import util.LookupConst;
 
 @MessageDriven(activationConfig = { 
         @ActivationConfigProperty(propertyName = "destinationType", 
@@ -19,15 +21,36 @@ import websocket.WSLocal;
         })
 public class ChatMsgReceiver implements MessageListener {
 
-
+	private Context context;
+	
+	public ChatMsgReceiver() throws NamingException {
+		context = new InitialContext();
+	}
+	
 	@Override
 	public void onMessage(Message msg) {
 		// TODO Auto-generated method stub
 		try {
-			System.out.println(msg.getBody(String.class));
-			Context context = new InitialContext();
-			WSLocal ws = (WSLocal) context.lookup("java:module/WSBean!websocket.WSLocal");
-			ws.sendMsg(msg.getBody(String.class), "REGISTERED!");
+			String msgType = msg.getStringProperty("type");
+		    switch (msgType) {
+	            case "register": {
+	            	RegisterServiceLocal rsl = (RegisterServiceLocal) context.lookup(LookupConst.CHAT_REGISTER_SERVICE);
+					rsl.response(msg.getBody(String.class));
+	            };
+	            	break;
+	            case "login": {
+	            	LoginServiceLocal lsl = (LoginServiceLocal) context.lookup(LookupConst.CHAT_LOGIN_SERVICE);
+					lsl.response(msg.getBody(String.class));
+	            };
+	            	break;
+	            case "logout": {
+	            	
+	            };
+	            	break;
+				default:
+					break;
+		    	}
+			
 		} catch (JMSException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
