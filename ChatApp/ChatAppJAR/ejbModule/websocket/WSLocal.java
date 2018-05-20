@@ -16,7 +16,7 @@ public interface WSLocal {
 	
 	public void onOpen(Session session);
 	
-	public void echoTextMessage(Session session, String msg, boolean last) throws NamingException, JsonParseException, JsonMappingException, IOException;
+	public void echoTextMessage(Session session, String msg, boolean last) throws NamingException, JsonParseException, JsonMappingException, IOException, Exception;
 	
 	public void close(Session session);
 	

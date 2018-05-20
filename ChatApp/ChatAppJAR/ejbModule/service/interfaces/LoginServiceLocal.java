@@ -7,8 +7,10 @@ import javax.websocket.Session;
 @Local
 public interface LoginServiceLocal {
 
-	public void loginUser(String userLogin, Session session) throws NamingException;
+	public void loginUser(String userLogin, Session session) throws NamingException, Exception;
 	
-	public void response(String response) throws NamingException;
+	public void masterResponse(String response) throws NamingException;
+	
+	public void slaveResponse(String response) throws NamingException;
 	
 }

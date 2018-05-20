@@ -52,7 +52,7 @@ public class WSBean implements WSLocal {
 	}
 
 	@Override
-	public void echoTextMessage(Session session, String msg, boolean last) throws NamingException, JsonParseException, JsonMappingException, IOException {
+	public void echoTextMessage(Session session, String msg, boolean last) throws NamingException, JsonParseException, JsonMappingException, IOException, Exception {
 		if(session.isOpen()){
 			JSONObject obj = new JSONObject(msg);
 			String type = obj.getString("type");
@@ -60,8 +60,8 @@ public class WSBean implements WSLocal {
 			
 			switch (type) {
 	            case "register": {
-						RegisterServiceLocal rsl = (RegisterServiceLocal) context.lookup(LookupConst.CHAT_REGISTER_SERVICE);
-						rsl.registerUser(data, session);
+					RegisterServiceLocal rsl = (RegisterServiceLocal) context.lookup(LookupConst.CHAT_REGISTER_SERVICE);
+					rsl.registerUser(data, session);
 	            };
 	            	break;
 	            case "login": {

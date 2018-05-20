@@ -40,7 +40,7 @@ public class ChatMsgReceiver implements MessageListener {
 	            	break;
 	            case "login": {
 	            	LoginServiceLocal lsl = (LoginServiceLocal) context.lookup(LookupConst.CHAT_LOGIN_SERVICE);
-					lsl.response(msg.getBody(String.class));
+					lsl.masterResponse(msg.getBody(String.class));
 	            };
 	            	break;
 	            case "logout": {

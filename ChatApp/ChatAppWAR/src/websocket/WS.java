@@ -1,7 +1,5 @@
 package websocket;
 
-import java.io.IOException;
-
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -11,9 +9,6 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
-
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 
 import util.LookupConst;
 
@@ -28,7 +23,7 @@ public class WS {
 	}
 	
 	@OnMessage
-	public void echoTextMessage(Session session, String msg, boolean last) throws NamingException, JsonParseException, JsonMappingException, IOException {		
+	public void echoTextMessage(Session session, String msg, boolean last) throws Exception {		
 		Context context = new InitialContext();
 		WSLocal ws = (WSLocal) context.lookup(LookupConst.CHAT_WEB_SOCKET_WAR);
 		ws.echoTextMessage(session, msg, last);

@@ -14,7 +14,6 @@ import jms.ChatMsgSenderLocal;
 import node.ChatAppNodeLocal;
 import service.interfaces.LoginServiceLocal;
 import util.LookupConst;
-import websocket.WSLocal;
 
 @Singleton
 public class LoginService implements LoginServiceLocal {
@@ -29,42 +28,76 @@ public class LoginService implements LoginServiceLocal {
 	}
 	
 	@Override
-	public void loginUser(String userParams, Session session) throws NamingException {
+	public void loginUser(String userParams, Session session) throws NamingException, Exception {
 		JSONObject obj = new JSONObject(userParams);
 		String username = obj.getString("username");
 		
 		ChatAppNodeLocal node = (ChatAppNodeLocal) context.lookup(LookupConst.CHAT_APP_NODE_LOCAL);
 		loginAttempt.put(username, session);
 		
+		obj.put("host", node.getHost());
+		
 		if(node.isThisMaster()) {
-			ChatMsgSenderLocal msgSender = (ChatMsgSenderLocal) context.lookup(LookupConst.CHAT_JMS_SENDER);				
-			try {
-				msgSender.sendMsg(userParams , "login");
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}			
+			ChatMsgSenderLocal msgSender = (ChatMsgSenderLocal) context.lookup(LookupConst.CHAT_JMS_SENDER);
+			msgSender.sendMsg(obj.toString() , "login");
 		} else {
-			//salje se rest zahtev
+			// rest zahtev 2
+			// slanje userappu zahtev za logovanje
 		}
 	}
 
 	@Override
-	public void response(String response) throws NamingException {
+	public void masterResponse(String response) throws NamingException {
+		
+		ChatAppNodeLocal node = (ChatAppNodeLocal) context.lookup(LookupConst.CHAT_APP_NODE_LOCAL);
+		
+		slaveResponse(response);
+		
+		for(String hostname : node.getAllNodes().keySet()) {
+			if(!hostname.equals("master")) {
+				// saljemo rest zahtev
+				// login response
+				// koji gadja slaveResponse
+			}
+		}
+	
+	}
+
+	@Override
+	public void slaveResponse(String response) throws NamingException {
 		JSONObject obj = new JSONObject(response);
 		String status = obj.getString("status");
 		String username = obj.getString("username");
+		String host = obj.getString("host");
+		
+		ChatAppNodeLocal node = (ChatAppNodeLocal) context.lookup(LookupConst.CHAT_APP_NODE_LOCAL);
 		
 		if(status.equals("login_success")) {
-			ChatAppNodeLocal node = (ChatAppNodeLocal) context.lookup(LookupConst.CHAT_APP_NODE_LOCAL);
-			node.addOnlineUserThisNode(username, loginAttempt.get(username));
-			loginAttempt.remove(username);
+			node.addOnlineUserApp(username, host);	
+		}
+		
+		if(host.equals(node.getHost())) {
 			
-			WSLocal webSocket = (WSLocal) context.lookup(LookupConst.CHAT_WEB_SOCKET);
-			webSocket.sendMsg(username, new JSONObject(response).toString());
-		} else {
+			if(status.equals("login_success")) {
+				HashMap<String, Session> thisNodeSessions = node.getAllUserSessions();
+				for(String userSes : thisNodeSessions.keySet()) {
+					thisNodeSessions.get(userSes).getAsyncRemote().sendText("{ 'type':'online_user', 'username':'"+userSes+"' }");
+				}
+				node.addOnlineUserThisNode(username, loginAttempt.get(username));
+			} 
 			loginAttempt.get(username).getAsyncRemote().sendText(response);
 			loginAttempt.remove(username);
+		
+		} else {
+			
+			if(status.equals("login_success")) {
+				HashMap<String, Session> thisNodeSessions = node.getAllUserSessions();
+				for(String userSes : thisNodeSessions.keySet()) {
+					thisNodeSessions.get(userSes).getAsyncRemote().sendText("{ 'type':'online_user', 'username':'"+userSes+"' }");
+				}
+				
+			} 
+			
 		}
 		
 	}

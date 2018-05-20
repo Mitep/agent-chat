@@ -47,11 +47,11 @@ public class ChatAppNode implements ChatAppNodeLocal {
 		}
 	}
 	
-	public void setHostname(String hostname) {
+	private void setHostname(String hostname) {
 		this.hostname = hostname;
 	}
 	
-	public String getHostname() {
+	private String getHostname() {
 		return hostname;
 	}
 	
@@ -71,10 +71,6 @@ public class ChatAppNode implements ChatAppNodeLocal {
 		return nodes;
 	}
 	
-	public void addOnlineUserApp(String username, String host){
-		onlineUsersApp.put(username, host);
-	}
-	
 	public void addOnlineUsersAppAll(HashMap<String, String> users) {
 		onlineUsersApp.putAll(users);
 	}
@@ -83,21 +79,11 @@ public class ChatAppNode implements ChatAppNodeLocal {
 	public void addOnlineUserThisNode(String username, Session session) {
 		onlineUsersThisNode.put(username, session);
 	}
-	
-	public void removeOnlineUserApp(String username) {
-		onlineUsersApp.remove(username);
-	}
-	
-	public void removeOnlineUserThisNode(String username) {
-		onlineUsersThisNode.remove(username);
-	}
 
 	@Override
 	public boolean isThisMaster() {
 		//proveravamo jel ovo master da bi znali da li da saljemo zahtev za registrovanje u klaster
-		
 		//treba napraviti metodu koja ispituje
-		
 		return true;
 	}
 
@@ -105,5 +91,35 @@ public class ChatAppNode implements ChatAppNodeLocal {
 	public Session getUserSession(String username) {
 		return onlineUsersThisNode.get(username);
 	}
-	
+
+	@Override
+	public String getHost() {
+		return getHostname();
+	}
+
+	@Override
+	public void addOnlineUserApp(String username, String host) {
+		onlineUsersApp.put(username, host);
+	}
+
+	@Override
+	public HashMap<String, Session> getAllUserSessions() {
+		return onlineUsersThisNode;
+	}
+
+	@Override
+	public HashMap<String, String> getAllNodes() {
+		return nodes;
+	}
+
+	@Override
+	public void removeOnlineUserThisNode(String username) {
+		onlineUsersThisNode.remove(username);
+	}
+
+	@Override
+	public void removeOnlineUserApp(String username) {
+		onlineUsersApp.remove(username);
+	}
+
 }
