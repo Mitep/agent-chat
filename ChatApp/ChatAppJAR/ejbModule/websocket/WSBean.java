@@ -76,14 +76,14 @@ public class WSBean implements WSLocal {
 	            	lsl.logoutUser(data);
 	            };
 	            	break;
-	            case "group": {
-	            	
-	            };
-	            	break;
-	            case "search": {
+	            case "user_search": {
 	            	UserSearchServiceLocal ussl = (UserSearchServiceLocal) context.lookup(LookupConst.USER_SEARCH_SERVICE);
 	            	ussl.searchUser(data, session);
 	            };
+	            	break;
+				case "group": {
+					
+				};
 	            	break;
 	            default:
 	            	break;

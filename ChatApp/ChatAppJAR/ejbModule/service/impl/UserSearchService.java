@@ -50,6 +50,8 @@ public class UserSearchService implements UserSearchServiceLocal {
 		String searcher = obj.getString("searcher");
 		
 		searchers.get(searcher).getAsyncRemote().sendText(response);
+		searchers.remove(searcher);
+		
 	}
 
 }

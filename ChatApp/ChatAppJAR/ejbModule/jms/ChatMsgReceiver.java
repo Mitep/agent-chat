@@ -1,5 +1,7 @@
 package jms;
 
+import java.util.logging.Logger;
+
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.jms.JMSException;
@@ -23,6 +25,9 @@ import util.LookupConst;
         })
 public class ChatMsgReceiver implements MessageListener {
 
+	Logger log = Logger.getLogger("Websockets endpoint");
+
+	
 	private Context context;
 	
 	public ChatMsgReceiver() throws NamingException {
@@ -46,10 +51,11 @@ public class ChatMsgReceiver implements MessageListener {
 	            };
 	            	break;
 	            case "logout": {
-	            	
+	            	LogoutServiceLocal lsl = (LogoutServiceLocal) context.lookup(LookupConst.CHAT_LOGOUT_SERVICE);
+	            	lsl.masterResponse(msg.getBody(String.class));
 	            };
 	            	break;
-	            case "search": {
+	            case "user_search": {
 	            	UserSearchServiceLocal ussl = (UserSearchServiceLocal) context.lookup(LookupConst.USER_SEARCH_SERVICE);
 	            	ussl.response(msg.getBody(String.class));
 	            };
