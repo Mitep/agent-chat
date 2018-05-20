@@ -10,6 +10,7 @@ public class JmsDTO {
 	private String username;
 	private String status;
 	private String info;
+	private String host;
 
 	public JmsDTO() {
 		super();
@@ -54,4 +55,13 @@ public class JmsDTO {
 	public void setInfo(String info) {
 		this.info = info;
 	}
+
+	public String getHost() {
+		return host;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
+	}
+	
 }

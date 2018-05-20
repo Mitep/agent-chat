@@ -13,11 +13,15 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import com.google.gson.Gson;
 
 import dtos.JmsDTO;
 import dtos.UserSearchDTO;
 import model.User;
+import node.UserAppNodeLocal;
 import service.interfaces.LoginServiceLocal;
 import service.interfaces.UserServiceLocal;
 
@@ -34,6 +38,7 @@ public class UserMsgReceiver implements MessageListener {
 	public static final String MESSAGE_SERVICE = "MessageService!service.interfaces.MessageServiceLocal";
 	public static final String LOGIN_SERVICE = "LoginService!service.interfaces.LoginServiceLocal";
 	public static final String SENDER_BEAN = "java:module/UserMsgSenderBean!jms.UserMsgSender";
+	public static final String USER_APP_NODE = "java:module/UserAppNode!node.UserAppNodeLocal";
 	Logger log = Logger.getLogger("UserAppReceiver");
 
 	@Override
@@ -54,6 +59,9 @@ public class UserMsgReceiver implements MessageListener {
 				String username = u.getUsername();
 				String password = u.getPassword();
 
+				JSONObject o = new JSONObject(msgContent);
+				String host = o.getString("host");
+				
 				Context context = new InitialContext();
 				LoginServiceLocal lsl = (LoginServiceLocal) context.lookup(LOOKUP + LOGIN_SERVICE);
 				String retMsg;
@@ -63,13 +71,21 @@ public class UserMsgReceiver implements MessageListener {
 					// vrati korisniku da mu je logovanje uspesno
 					dto = new JmsDTO("login", username, "success", "Uspesno ste se prijavili!");
 					log.info("Prijava uspesna.");
+					
+					UserAppNodeLocal uanl = (UserAppNodeLocal) context.lookup(LOOKUP + USER_APP_NODE);
+					uanl.addUser(username, host);
+					
 				} else {
 					// vrati korisniku da mu je logovanje neuspesno
 					dto = new JmsDTO("login", username, "fail", "Neuspesna prijava.");
 					log.info("Prijava neuspesna.");
 				}
 				UserMsgSender msgSender = (UserMsgSender) context.lookup(SENDER_BEAN);
+				
+				
+				dto.setHost(host);
 				retMsg = g.toJson(dto);
+				
 				msgSender.sendMsg(retMsg, retType);
 			}
 				break;
@@ -105,18 +121,27 @@ public class UserMsgReceiver implements MessageListener {
 				Context ctx = new InitialContext();
 				UserServiceLocal uf = (UserServiceLocal) ctx.lookup(LOOKUP + USER_SERVICE);
 				UserSearchDTO src = new Gson().fromJson(msgContent, UserSearchDTO.class);
-				List<User> retVal = uf.findUsers(src.getUsername(), src.getName(), src.getSurname());
+				
+				List<UserSearchDTO> retVal = uf.findUsersDTO(src.getUsername(), src.getName(), src.getSurname());
 				
 				String retMsg;
-				if(retVal != null) {
-					retMsg = new Gson().toJson(retVal);
-				}else {
-					retMsg = "";
-				}
+				
+				JSONObject requestMsg = new JSONObject(msgContent);
+				
+				JSONObject responseMsg = new JSONObject();
+				responseMsg.put("searcher", requestMsg.getString("searcher"));
+				responseMsg.put("type", "user_search");
+				responseMsg.put("data", new JSONArray(retVal));
+				
+//				if(retVal != null) {
+//					retMsg = new Gson().toJson(retVal);
+//				}else {
+//					retMsg = "";
+//				}
 				
 				String retType = "user_search";
 				UserMsgSender msgSender = (UserMsgSender) ctx.lookup(SENDER_BEAN);
-				msgSender.sendMsg(retMsg, retType);
+				msgSender.sendMsg(responseMsg.toString(), retType);
 			}
 				break;
 

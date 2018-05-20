@@ -2,6 +2,7 @@ package service.impl;
 
 import java.util.HashMap;
 
+import javax.ejb.Stateless;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -14,6 +15,7 @@ import node.ChatAppNodeLocal;
 import service.interfaces.LogoutServiceLocal;
 import util.LookupConst;
 
+@Stateless
 public class LogoutService implements LogoutServiceLocal {
 
 	private Context context;

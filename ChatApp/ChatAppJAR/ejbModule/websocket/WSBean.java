@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import node.ChatAppNodeLocal;
 import service.interfaces.LoginServiceLocal;
 import service.interfaces.LogoutServiceLocal;
+import service.interfaces.MessageServiceLocal;
 import service.interfaces.RegisterServiceLocal;
 import service.interfaces.UserSearchServiceLocal;
 import util.LookupConst;
@@ -81,8 +82,9 @@ public class WSBean implements WSLocal {
 	            	ussl.searchUser(data, session);
 	            };
 	            	break;
-				case "group": {
-					
+				case "message": {
+					MessageServiceLocal msl = (MessageServiceLocal) context.lookup(LookupConst.MESSAGE_SERVICE);
+					msl.processMessage(data);
 				};
 	            	break;
 	            default:

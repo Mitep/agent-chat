@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.mongodb.MongoClient;
 import com.mongodb.WriteResult;
 
+import dtos.UserSearchDTO;
 import model.User;
 import service.interfaces.UserServiceLocal;
 
@@ -183,6 +184,26 @@ public class UserService implements UserServiceLocal {
 			listSurnames = datastore.createQuery(User.class).field("surname").containsIgnoreCase(surname).asList();
 
 		ArrayList<User> korisnici = new ArrayList<>();
+		korisnici.addAll(listUsrNames);
+		korisnici.addAll(listNames);
+		korisnici.addAll(listSurnames);
+		return korisnici;
+	}
+
+	@Override
+	public List<UserSearchDTO> findUsersDTO(String username, String name, String surname) {
+		List<UserSearchDTO> listUsrNames = new ArrayList<UserSearchDTO>();
+		List<UserSearchDTO> listNames = new ArrayList<UserSearchDTO>();
+		List<UserSearchDTO> listSurnames = new ArrayList<UserSearchDTO>();
+
+		if (username != null && username != "")
+			listUsrNames = datastore.createQuery(UserSearchDTO.class).field("username").containsIgnoreCase(username).asList();
+		if (name != null && name != "")
+			listNames = datastore.createQuery(UserSearchDTO.class).field("name").containsIgnoreCase(name).asList();
+		if (surname != null && surname != "")
+			listSurnames = datastore.createQuery(UserSearchDTO.class).field("surname").containsIgnoreCase(surname).asList();
+
+		ArrayList<UserSearchDTO> korisnici = new ArrayList<>();
 		korisnici.addAll(listUsrNames);
 		korisnici.addAll(listNames);
 		korisnici.addAll(listSurnames);

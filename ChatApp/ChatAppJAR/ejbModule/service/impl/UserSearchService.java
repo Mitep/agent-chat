@@ -36,7 +36,7 @@ public class UserSearchService implements UserSearchServiceLocal {
 		if(node.isThisMaster()) {
 			
 			ChatMsgSenderLocal msgSender = (ChatMsgSenderLocal) context.lookup(LookupConst.CHAT_JMS_SENDER);
-			msgSender.sendMsg(searchRequest , "search");
+			msgSender.sendMsg(searchRequest , "user_search");
 			
 		} else {
 			// rest request 
