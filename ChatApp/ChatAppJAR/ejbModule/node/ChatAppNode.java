@@ -122,4 +122,14 @@ public class ChatAppNode implements ChatAppNodeLocal {
 		onlineUsersApp.remove(username);
 	}
 
+	@Override
+	public String getSessionUsername(Session s) {
+		for(String user : onlineUsersThisNode.keySet()) {
+			if(s == getUserSession(user))
+				return user;
+		}
+		
+		return null;
+	}
+
 }

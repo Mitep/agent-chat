@@ -10,7 +10,9 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import service.interfaces.LoginServiceLocal;
+import service.interfaces.LogoutServiceLocal;
 import service.interfaces.RegisterServiceLocal;
+import service.interfaces.UserSearchServiceLocal;
 import util.LookupConst;
 
 @MessageDriven(activationConfig = { 
@@ -45,6 +47,11 @@ public class ChatMsgReceiver implements MessageListener {
 	            	break;
 	            case "logout": {
 	            	
+	            };
+	            	break;
+	            case "search": {
+	            	UserSearchServiceLocal ussl = (UserSearchServiceLocal) context.lookup(LookupConst.USER_SEARCH_SERVICE);
+	            	ussl.response(msg.getBody(String.class));
 	            };
 	            	break;
 				default:

@@ -8,6 +8,8 @@ public class LookupConst {
 	public static final String CHAT_WEB_SOCKET = "java:module/WSBean!websocket.WSLocal";
 	public static final String CHAT_REGISTER_SERVICE = "java:module/RegisterService!service.interfaces.RegisterServiceLocal";
 	public static final String CHAT_LOGIN_SERVICE = "java:module/LoginService!service.interfaces.LoginServiceLocal";
+	public static final String CHAT_LOGOUT_SERVICE = "java:module/LogoutService!service.interfaces.LogoutServiceLocal";
+	public static final String USER_SEARCH_SERVICE = "java:module/UserSearchService!service.interfaces.UserSearchServiceLocal";
 	
 	// za war
 	public static final String CHAT_WEB_SOCKET_WAR = "java:app/ChatAppJAR/WSBean!websocket.WSLocal";

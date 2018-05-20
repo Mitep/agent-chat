@@ -26,4 +26,6 @@ public interface ChatAppNodeLocal {
 	
 	public HashMap<String, String> getAllNodes();
 	
+	public String getSessionUsername(Session s);
+	
 }

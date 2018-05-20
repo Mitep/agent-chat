@@ -20,7 +20,9 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import node.ChatAppNodeLocal;
 import service.interfaces.LoginServiceLocal;
+import service.interfaces.LogoutServiceLocal;
 import service.interfaces.RegisterServiceLocal;
+import service.interfaces.UserSearchServiceLocal;
 import util.LookupConst;
 
 @Startup
@@ -70,11 +72,17 @@ public class WSBean implements WSLocal {
 	            };
 	            	break;
 	            case "logout": {
-	            	
+	            	LogoutServiceLocal lsl = (LogoutServiceLocal) context.lookup(LookupConst.CHAT_LOGOUT_SERVICE);
+	            	lsl.logoutUser(data);
 	            };
 	            	break;
 	            case "group": {
 	            	
+	            };
+	            	break;
+	            case "search": {
+	            	UserSearchServiceLocal ussl = (UserSearchServiceLocal) context.lookup(LookupConst.USER_SEARCH_SERVICE);
+	            	ussl.searchUser(data, session);
 	            };
 	            	break;
 	            default:
