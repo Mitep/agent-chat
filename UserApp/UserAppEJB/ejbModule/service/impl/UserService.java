@@ -1,10 +1,7 @@
 package service.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -207,31 +204,101 @@ public class UserService implements UserServiceLocal {
 			listSurnames = datastore.createQuery(User.class).field("surname").containsIgnoreCase(surname).asList();
 
 		ArrayList<UserSearchDTO> korisnici = new ArrayList<>();
-	
-		
+
 		ArrayList<String> usernames = new ArrayList<String>();
-		
-		for(User u : listUsrNames) {
+
+		for (User u : listUsrNames) {
 			UserSearchDTO utemp = new UserSearchDTO(u.getUsername(), u.getName(), u.getSurname());
-			if(!usernames.contains(u.getUsername()))
+			if (!usernames.contains(u.getUsername()))
 				korisnici.add(utemp);
 		}
-		for(User u : listNames) {
+		for (User u : listNames) {
 			UserSearchDTO utemp = new UserSearchDTO(u.getUsername(), u.getName(), u.getSurname());
-			if(!usernames.contains(u.getUsername()))
+			if (!usernames.contains(u.getUsername()))
 				korisnici.add(utemp);
 		}
-		for(User u : listSurnames) {
+		for (User u : listSurnames) {
 			UserSearchDTO utemp = new UserSearchDTO(u.getUsername(), u.getName(), u.getSurname());
-			if(!usernames.contains(u.getUsername()))
+			if (!usernames.contains(u.getUsername()))
 				korisnici.add(utemp);
 		}
-		
-		//korisnici.addAll(listUsrNames);
-		//korisnici.addAll(listNames);
-		//korisnici.addAll(listSurnames);
-		
+
+		// korisnici.addAll(listUsrNames);
+		// korisnici.addAll(listNames);
+		// korisnici.addAll(listSurnames);
+
 		return korisnici;
+	}
+
+	@Override
+	public boolean addFriend(String user, String friend) {
+		try {
+			User u = getUserByUsername(user);
+			u.getFriends().add(friend);
+			datastore.save(u);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean removeFriend(String user, String friend) {
+		try {
+			User u = getUserByUsername(user);
+			u.getFriends().remove(friend);
+			datastore.save(u);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean sendFriendRequest(String user, String friend) {
+		try {
+			User sender = getUserByUsername(user);
+			User recipient = getUserByUsername(friend);
+			sender.getSentRequests().add(friend);
+			recipient.getReceivedRequests().add(user);
+			datastore.save(sender);
+			datastore.save(recipient);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean acceptFriendRequest(String user, String friend) {
+		try {
+			User accepter = getUserByUsername(user);
+			User initiator = getUserByUsername(friend);
+			accepter.getReceivedRequests().remove(friend);
+			accepter.getFriends().add(friend);
+			initiator.getSentRequests().remove(user);
+			initiator.getFriends().add(user);
+			datastore.save(accepter);
+			datastore.save(initiator);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean rejectFriendRequest(String user, String friend) {
+		try {
+			User accepter = getUserByUsername(user);
+			User initiator = getUserByUsername(friend);
+			accepter.getReceivedRequests().remove(friend);
+			initiator.getSentRequests().remove(user);
+			datastore.save(accepter);
+			datastore.save(initiator);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 }

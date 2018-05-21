@@ -17,7 +17,8 @@ import org.mongodb.morphia.utils.IndexType;
  */
 @Entity
 @Indexes({ @Index(fields = { @Field("username") }, options = @IndexOptions(unique = true, name = "PK_USER")),
-		@Index(fields = {@Field(value = "$**", type = IndexType.TEXT)}, options = @IndexOptions(name = "SEARCH_INDEX")) })
+		@Index(fields = {
+				@Field(value = "$**", type = IndexType.TEXT) }, options = @IndexOptions(name = "SEARCH_INDEX")) })
 public class User {
 
 	@Id
@@ -27,6 +28,9 @@ public class User {
 	private String name;
 	private String surname;
 	private ArrayList<ObjectId> groups;
+	private ArrayList<String> friends;
+	private ArrayList<String> sentRequests;
+	private ArrayList<String> receivedRequests;
 
 	public ObjectId getId() {
 		return id;
@@ -76,7 +80,35 @@ public class User {
 		this.groups = groups;
 	}
 
+	public ArrayList<String> getFriends() {
+		return friends;
+	}
+
+	public void setFriends(ArrayList<String> friends) {
+		this.friends = friends;
+	}
+
+	public ArrayList<String> getSentRequests() {
+		return sentRequests;
+	}
+
+	public void setSentRequests(ArrayList<String> sentRequests) {
+		this.sentRequests = sentRequests;
+	}
+
+	public ArrayList<String> getReceivedRequests() {
+		return receivedRequests;
+	}
+
+	public void setReceivedRequests(ArrayList<String> receivedRequests) {
+		this.receivedRequests = receivedRequests;
+	}
+
 	public User() {
+		this.friends = new ArrayList<>();
+		this.groups = new ArrayList<>();
+		this.receivedRequests = new ArrayList<>();
+		this.sentRequests = new ArrayList<>();
 	}
 
 	public User(String username, String password, String name, String surname) {
