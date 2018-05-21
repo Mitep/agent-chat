@@ -2,7 +2,7 @@ package service.impl;
 
 import java.util.HashMap;
 
-import javax.ejb.Stateless;
+import javax.ejb.Singleton;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -15,7 +15,7 @@ import node.ChatAppNodeLocal;
 import service.interfaces.UserSearchServiceLocal;
 import util.LookupConst;
 
-@Stateless
+@Singleton
 public class UserSearchService implements UserSearchServiceLocal {
 	
 	private HashMap<String, Session> searchers;

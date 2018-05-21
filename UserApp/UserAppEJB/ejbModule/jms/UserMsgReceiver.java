@@ -20,8 +20,10 @@ import com.google.gson.Gson;
 
 import dtos.JmsDTO;
 import dtos.UserSearchDTO;
+import model.Friendship;
 import model.User;
 import node.UserAppNodeLocal;
+import service.interfaces.FriendshipServiceLocal;
 import service.interfaces.LoginServiceLocal;
 import service.interfaces.UserServiceLocal;
 
@@ -38,7 +40,10 @@ public class UserMsgReceiver implements MessageListener {
 	public static final String MESSAGE_SERVICE = "MessageService!service.interfaces.MessageServiceLocal";
 	public static final String LOGIN_SERVICE = "LoginService!service.interfaces.LoginServiceLocal";
 	public static final String SENDER_BEAN = "java:module/UserMsgSenderBean!jms.UserMsgSender";
+	
 	public static final String USER_APP_NODE = "java:module/UserAppNode!node.UserAppNodeLocal";
+	public static final String USER_SERVICE_LOCAL = "java:module/UserService!service.interfaces.UserServiceLocal";
+	public static final String FRIENDSHIP_SERVICE_LOCAL = "java:module/FriendshipService!service.interfaces.FriendshipServiceLocal";
 	Logger log = Logger.getLogger("UserAppReceiver");
 
 	@Override
@@ -64,29 +69,55 @@ public class UserMsgReceiver implements MessageListener {
 				
 				Context context = new InitialContext();
 				LoginServiceLocal lsl = (LoginServiceLocal) context.lookup(LOOKUP + LOGIN_SERVICE);
-				String retMsg;
+				//String retMsg;
 				String retType = "login";
-				JmsDTO dto = new JmsDTO();
+				//JmsDTO dto = new JmsDTO();
+				
+				JSONObject response = new JSONObject();
+				
 				if (lsl.validUser(username, password)) {
 					// vrati korisniku da mu je logovanje uspesno
-					dto = new JmsDTO("login", username, "success", "Uspesno ste se prijavili!");
+					//dto = new JmsDTO("login", username, "success", "Uspesno ste se prijavili!");
+					response.put("type", "login");
+					response.put("username", username);
+					response.put("info", "Uspesno ste se prijavili!");
+					response.put("status", "success");
 					log.info("Prijava uspesna.");
 					
-					UserAppNodeLocal uanl = (UserAppNodeLocal) context.lookup(LOOKUP + USER_APP_NODE);
+					UserAppNodeLocal uanl = (UserAppNodeLocal) context.lookup(USER_APP_NODE);
 					uanl.addUser(username, host);
+					
+					UserServiceLocal usl = (UserServiceLocal) context.lookup(USER_SERVICE_LOCAL);
+					User user = usl.getUserByUsername(username);
+					
+					FriendshipServiceLocal fsl = (FriendshipServiceLocal) context.lookup(FRIENDSHIP_SERVICE_LOCAL);
+					List<Friendship> friendships = fsl.readAll();
+					
+					for(Friendship f : friendships) {
+						
+					}
+					
+					
+					
+					
+					
+					
 					
 				} else {
 					// vrati korisniku da mu je logovanje neuspesno
-					dto = new JmsDTO("login", username, "fail", "Neuspesna prijava.");
+					//dto = new JmsDTO("login", username, "fail", "Neuspesna prijava.");
+					response.put("type", "login");
+					response.put("username", username);
+					response.put("info", "Neuspesna prijava.");
+					response.put("status", "fail");
+					
 					log.info("Prijava neuspesna.");
 				}
+				
 				UserMsgSender msgSender = (UserMsgSender) context.lookup(SENDER_BEAN);
+				response.put("host", host);
 				
-				
-				dto.setHost(host);
-				retMsg = g.toJson(dto);
-				
-				msgSender.sendMsg(retMsg, retType);
+				msgSender.sendMsg(response.toString(), retType);
 			}
 				break;
 

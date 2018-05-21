@@ -22,7 +22,8 @@ public class MessageService implements MessageServiceLocal {
 		
 		// proveriti jel receiver online
 		// ako je online proslediti mu poruku i upisati u bazu
-		// ako nije online samo je upisati 
+		// ako nije online samo je upisati
+		// a
 		
 	}
 

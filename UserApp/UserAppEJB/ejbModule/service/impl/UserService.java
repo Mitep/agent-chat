@@ -1,7 +1,10 @@
 package service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -192,21 +195,42 @@ public class UserService implements UserServiceLocal {
 
 	@Override
 	public List<UserSearchDTO> findUsersDTO(String username, String name, String surname) {
-		List<UserSearchDTO> listUsrNames = new ArrayList<UserSearchDTO>();
-		List<UserSearchDTO> listNames = new ArrayList<UserSearchDTO>();
-		List<UserSearchDTO> listSurnames = new ArrayList<UserSearchDTO>();
+		List<User> listUsrNames = new ArrayList<User>();
+		List<User> listNames = new ArrayList<User>();
+		List<User> listSurnames = new ArrayList<User>();
 
-		if (username != null && username != "")
-			listUsrNames = datastore.createQuery(UserSearchDTO.class).field("username").containsIgnoreCase(username).asList();
-		if (name != null && name != "")
-			listNames = datastore.createQuery(UserSearchDTO.class).field("name").containsIgnoreCase(name).asList();
-		if (surname != null && surname != "")
-			listSurnames = datastore.createQuery(UserSearchDTO.class).field("surname").containsIgnoreCase(surname).asList();
+		if (!username.equals("") && username != null)
+			listUsrNames = datastore.createQuery(User.class).field("username").containsIgnoreCase(username).asList();
+		if (!name.equals("") && name != null)
+			listNames = datastore.createQuery(User.class).field("name").containsIgnoreCase(name).asList();
+		if (!surname.equals("") && surname != null)
+			listSurnames = datastore.createQuery(User.class).field("surname").containsIgnoreCase(surname).asList();
 
 		ArrayList<UserSearchDTO> korisnici = new ArrayList<>();
-		korisnici.addAll(listUsrNames);
-		korisnici.addAll(listNames);
-		korisnici.addAll(listSurnames);
+	
+		
+		ArrayList<String> usernames = new ArrayList<String>();
+		
+		for(User u : listUsrNames) {
+			UserSearchDTO utemp = new UserSearchDTO(u.getUsername(), u.getName(), u.getSurname());
+			if(!usernames.contains(u.getUsername()))
+				korisnici.add(utemp);
+		}
+		for(User u : listNames) {
+			UserSearchDTO utemp = new UserSearchDTO(u.getUsername(), u.getName(), u.getSurname());
+			if(!usernames.contains(u.getUsername()))
+				korisnici.add(utemp);
+		}
+		for(User u : listSurnames) {
+			UserSearchDTO utemp = new UserSearchDTO(u.getUsername(), u.getName(), u.getSurname());
+			if(!usernames.contains(u.getUsername()))
+				korisnici.add(utemp);
+		}
+		
+		//korisnici.addAll(listUsrNames);
+		//korisnici.addAll(listNames);
+		//korisnici.addAll(listSurnames);
+		
 		return korisnici;
 	}
 
