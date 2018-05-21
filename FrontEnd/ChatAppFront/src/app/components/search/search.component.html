@@ -1,0 +1,35 @@
+<ul class="head-section">
+    <li><a routerLink="/home">Home</a></li>
+      <li><a routerLink="/chat">Chat</a></li>
+      <li><div class="search-section">
+        <form #data="ngForm" class="search-form">
+          <input type="text" placeholder="username" [(ngModel)]="data.username" name="username" required/>
+          <input type="text" placeholder="first name" [(ngModel)]="data.name" name="name" required/>
+          <input type="text" placeholder="last name" [(ngModel)]="data.surname" name="surname" required/>
+          <input type="submit" value="Search" (click)="searchUser(data)">
+        </form>
+      </div></li>
+      <li id="logout"><a routerLink="/" (click)="logout()">Log out</a></li>
+  </ul>
+
+  <div class = "search-request-section">
+      <p id="search-results-label">Search results:</p>
+        <ul>
+          <li>
+            Egipatski 
+            <form class="add-friend">
+              <input type="submit" value="Add">
+            </form>
+          </li>
+          <br>
+          <br>
+          <br>
+          <br>
+          <li>
+            Ivetic 
+              <form class="add-friend">
+                <input type="submit" value="Add">
+              </form>
+          </li>
+        </ul>
+    </div>

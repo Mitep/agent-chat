@@ -1,0 +1,115 @@
+
+<head>
+	<title>Chat</title>
+	<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.css">
+
+</head>
+
+	<div class="main-section">
+		<ul class="head-section">
+			<li><a routerLink="/home">Home</a></li>
+			<li><a routerLink="/chat">Chat</a></li>
+			<li><div class="search-section">
+				<form #data="ngForm" class="search-form">
+					<input type="text" placeholder="username" [(ngModel)]="data.username" name="username" required/>
+					<input type="text" placeholder="first name" [(ngModel)]="data.name" name="name" required/>
+					<input type="text" placeholder="last name" [(ngModel)]="data.surname" name="surname" required/>
+					<input type="submit" value="Search" (click)="searchUser(data)">
+				</form>
+			</div></li>
+			<li id="logout"><a routerLink="/" (click)="logout()">Log out</a></li>  
+		</ul>
+		<div class="body-section">
+			<div class="left-section mCustomScrollbar" data-mcs-theme="minimal-dark">
+				<ul>
+					<li>
+						<div class="chatList">
+							<div class="img">
+								<i class="fa fa-circle"></i>
+								<img src="../../../assets/man01.png">
+							</div>
+							<div class="desc">
+								<small class="time">05:30 am</small>
+								<h5>Luis Yankee</h5>
+								<small>Lorem ipsum dolor sit amet...</small>
+							</div>
+						</div>
+					</li>
+					<li>
+						
+					</li>
+					
+						
+					
+					<li>
+						
+					</li>
+					<li>
+							
+					</li>
+					<li>
+						
+					</li>
+					<li>
+						
+					</li>
+					<li>
+						
+					</li>
+					<li>
+						
+					</li>
+				</ul>
+			</div>
+			<div class="center-section">
+				<div class="message mCustomScrollbar" data-mcs-theme="minimal-dark">
+					<ul>
+						<li class="msg-left">
+							<div class="msg-left-sub">
+								<img src="../../../assets/man03.png">
+								<div class="msg-desc">
+									Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+									tempor incididunt ut labore et dolore magna aliqua.
+								</div>
+								<small>05:25 am</small>
+							</div>
+						</li>
+						<li class="msg-center">
+							<div class="msg-left-sub">
+								<img src="../../../assets/man04.png">
+								<div class="msg-desc">
+									Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+									tempor incididunt ut labore et dolore magna aliqua.
+								</div>
+								<small>05:25 am</small>
+							</div>
+						</li>
+						
+					</ul>
+				</div>
+				<div class="center-section-bottom">
+					<form>					
+						<input type="text" name="message" placeholder="type here...">
+						<button class="btn-send"><i class="fa fa-send"></i></button>
+					</form>
+				</div>
+			</div>
+			<div class="right-section">
+				<ul>
+					<li>
+						Julija Mirkovic
+					</li>
+					<li>
+						Jukela Mirkela
+					</li>
+					
+				</ul>
+			</div>
+		</div>
+  </div>
+
+	
+
+

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Injector } from '@angular/core';
 import { WebsocketService } from '../../services/websocket.service';
 import { AppComponent } from '../../app.component';
 import {Router} from '@angular/router';
@@ -12,11 +12,21 @@ export class RegisterComponent implements OnInit {
 
   private msg; 
   private date: Date;
-
-
-  constructor(private ws:WebsocketService, private rt:Router) { }
+  private router:Router;
+  private ws:WebsocketService;
+  //constructor(private ws:WebsocketService, private rt:Router) {
+      
+   //}
+   constructor(private rt:Router, private injector:Injector){
+      this.router = rt;
+      this.ws = injector.get(WebsocketService);
+      
+   }
 
   ngOnInit() {
+    if(this.ws["logged"]==true){
+      this.router.navigateByUrl('/home');
+    }
   }
 
   submitForm(data){
@@ -33,7 +43,8 @@ export class RegisterComponent implements OnInit {
              + " \"password\":\"" + data.password +"\"}"
              + "}";
     console.log(this.msg);
-
+    this.ws["username"] = data.username; //TODO: obrisati kad bude gotovo logovanje
     this.ws.sendMsg(this.msg);
+    
   }
 }

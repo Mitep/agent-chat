@@ -1,0 +1,110 @@
+html{
+	width:100%;
+    height:100%;
+    padding: 0;  
+    margin: 0;
+    border: none;
+}
+
+body{
+    margin:0;
+    font-family: 'Raleway', sans-serif;
+	background-color: #43A047;
+	width:100%;
+	height:100%;
+    padding: 0;
+    
+	border: none;     
+}
+
+.main-section small{
+	font-size: 12px;
+	border: none;
+}
+.main-section h3, .main-section h5{
+	margin: 0px;
+}
+.main-section{
+    width:100%;
+    height:100%;
+	background-color: #fff;  
+}
+
+ul.head-section{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #43A047;
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover {
+    background-color: #2492249d;
+}
+
+.head-section{
+	
+	clear: both;
+	height:8%;
+	width: 100%;
+}
+
+#logout {
+	float:right;
+}
+
+.search-section {
+	padding:12px;
+}
+
+
+.search-request-section{
+	width:300px;
+	float:left;	
+	margin:45px;
+	margin-right: 65px;
+	padding:20px;
+	padding-right: 20px;
+	list-style-type:none;
+	
+}
+
+.search-request-section ul{
+	list-style-type:none;
+}
+.add-friend input[type=submit] {
+	
+	font-family: "Roboto", sans-serif;
+	
+	outline: 0;
+	background:#4CAF50;
+	
+	text-align: center;
+
+	padding: 5px;
+
+	color: #FFFFFF;
+	line-height:10px;
+	-webkit-transition: all 0.3 ease;
+	transition: all 0.3 ease;
+	cursor: pointer;
+  }
+
+  #search-results-label{
+	  font-size: 20px;
+  }
+  #friendlist-label{
+	font-size: 20px;	
+  }

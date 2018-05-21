@@ -7,11 +7,17 @@ import { AppComponent } from './app.component';
 import { WebsocketService } from './services/websocket.service';
 import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
+import { ChatComponent } from './components/chat/chat.component';
+import { HomeComponent } from './components/home/home.component';
+import { SearchComponent } from './components/search/search.component';
 
 
 const appRoutes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'chat', component: ChatComponent },
+  { path: 'home', component: HomeComponent },
+  { path: 'search', component: SearchComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 
@@ -19,7 +25,10 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     RegisterComponent,
-    LoginComponent
+    LoginComponent,
+    ChatComponent,
+    HomeComponent,
+    SearchComponent
   ],
    exports: [
     LoginComponent,
