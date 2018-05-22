@@ -11,6 +11,8 @@ import model.User;
 
 @Local
 public interface UserServiceLocal {
+	
+	public static String LOOKUP_GLOBAL = "java:global/UserAppEAR/UserAppEJB/UserService!service.interfaces.UserServiceLocal";
 
 	public User createUser(String str);
 

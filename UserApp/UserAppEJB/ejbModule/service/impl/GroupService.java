@@ -32,7 +32,6 @@ public class GroupService implements GroupServiceLocal {
 	public static final String USERS = "Users";
 	public static final String MESSAGES = "Messages";
 	public static final String GROUPS = "Groups";
-	public static final String FRIENDSHIPS = "Friendships";
 
 	private Datastore datastore;
 

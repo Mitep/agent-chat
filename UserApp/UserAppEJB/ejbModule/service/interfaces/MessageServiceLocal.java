@@ -8,6 +8,8 @@ import model.Message;
 
 @Local
 public interface MessageServiceLocal {
+	
+	public static String LOOKUP_GLOBAL = "java:global/UserAppEAR/UserAppEJB/MessageService!service.interfaces.MessageServiceLocal";
 
 	public boolean createMessage(String str);
 
@@ -18,4 +20,6 @@ public interface MessageServiceLocal {
 	public boolean deleteMessage(String id);
 
 	public boolean updateMessage(Message msg);
+	
+	public List<Message> getMessagesBySender(String sender);
 }

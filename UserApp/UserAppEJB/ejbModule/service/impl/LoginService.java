@@ -10,7 +10,7 @@ import service.interfaces.UserServiceLocal;
 
 @Stateless
 public class LoginService implements LoginServiceLocal {
-
+	
 	@Override
 	public boolean validUser(String username, String password) {
 		// TODO Auto-generated method stub

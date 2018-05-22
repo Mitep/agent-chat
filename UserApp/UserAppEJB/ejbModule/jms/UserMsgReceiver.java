@@ -38,7 +38,8 @@ public class UserMsgReceiver implements MessageListener {
 	public static final String MESSAGE_SERVICE = "MessageService!service.interfaces.MessageServiceLocal";
 	public static final String LOGIN_SERVICE = "LoginService!service.interfaces.LoginServiceLocal";
 	public static final String SENDER_BEAN = "java:module/UserMsgSenderBean!jms.UserMsgSender";
-
+	public static final String SENDER_GLOBAL = "java:global/UserAppEAR/UserAppEJB/UserMsgSenderBean!jms.UserMsgSender";
+	
 	public static final String USER_APP_NODE = "java:module/UserAppNode!node.UserAppNodeLocal";
 	public static final String USER_SERVICE_LOCAL = "java:module/UserService!service.interfaces.UserServiceLocal";
 	public static final String FRIENDSHIP_SERVICE_LOCAL = "java:module/FriendshipService!service.interfaces.FriendshipServiceLocal";
@@ -89,7 +90,7 @@ public class UserMsgReceiver implements MessageListener {
 
 					JSONObject jsonUser = new JSONObject(user);
 					jsonUser.remove("password");
-					response.put("data", jsonUser.toString());
+					response.put("data", jsonUser);
 				} else {
 					// vrati korisniku da mu je logovanje neuspesno
 					response.put("type", "login");
@@ -102,7 +103,6 @@ public class UserMsgReceiver implements MessageListener {
 
 				UserMsgSender msgSender = (UserMsgSender) context.lookup(SENDER_BEAN);
 				response.put("host", host);
-
 				msgSender.sendMsg(response.toString(), retType);
 			}
 				break;

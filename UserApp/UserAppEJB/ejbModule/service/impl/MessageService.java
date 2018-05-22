@@ -94,4 +94,11 @@ public class MessageService implements MessageServiceLocal {
 		return true;
 	}
 
+	@Override
+	public List<Message> getMessagesBySender(String sender) {
+		Query<Message> query =  datastore.createQuery(Message.class);
+		query.criteria("sender").equal(sender);
+		return query.asList();
+	}
+
 }

@@ -11,6 +11,8 @@ import model.Group;
 @Local
 public interface GroupServiceLocal {
 
+	public static String LOOKUP_GLOBAL = "java:global/UserAppEAR/UserAppEJB/GroupService!service.interfaces.GroupServiceLocal";
+
 	public boolean createGroup(String str);
 
 	public Group getGroup(String id);

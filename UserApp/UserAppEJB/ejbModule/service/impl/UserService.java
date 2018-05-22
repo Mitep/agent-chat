@@ -26,7 +26,7 @@ import service.interfaces.UserServiceLocal;
 @Stateless
 @LocalBean
 public class UserService implements UserServiceLocal {
-
+	
 	private Datastore datastore;
 
 	/**

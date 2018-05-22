@@ -2,7 +2,9 @@ package rest;
 
 import java.util.List;
 
-import javax.ejb.EJB;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -27,28 +29,52 @@ import service.interfaces.GroupServiceLocal;
 @Path("/group")
 public class GroupRestController {
 
-	@EJB
-	private GroupServiceLocal groupService;
+	private Context ctx;
+
+	public GroupRestController() throws NamingException {
+		ctx = new InitialContext();
+	}
 
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Group getGroup(@PathParam("id") String id) {
-		return groupService.getGroup(id);
+		GroupServiceLocal groupService;
+		try {
+			groupService = (GroupServiceLocal) ctx.lookup(GroupServiceLocal.LOOKUP_GLOBAL);
+			return groupService.getGroup(id);
+		} catch (NamingException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean createGroup(Group g) {
-		return groupService.createGroup(new Gson().toJson(g));
+		GroupServiceLocal groupService;
+		try {
+			groupService = (GroupServiceLocal) ctx.lookup(GroupServiceLocal.LOOKUP_GLOBAL);
+			return groupService.createGroup(new Gson().toJson(g));
+		} catch (NamingException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	@GET
 	@Path("/all")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Group> readAllGroups() {
-		return groupService.readAll();
+		GroupServiceLocal groupService;
+		try {
+			groupService = (GroupServiceLocal) ctx.lookup(GroupServiceLocal.LOOKUP_GLOBAL);
+			return groupService.readAll();
+		} catch (NamingException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@POST
@@ -56,48 +82,88 @@ public class GroupRestController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean updateGroup(GroupDTO dto) {
-		Group g = new Group(new ObjectId(dto.getId()), dto.getName(), dto.getMembers());
-		return groupService.updateGroup(g);
+		GroupServiceLocal groupService;
+		try {
+			groupService = (GroupServiceLocal) ctx.lookup(GroupServiceLocal.LOOKUP_GLOBAL);
+			Group g = new Group(new ObjectId(dto.getId()), dto.getName(), dto.getMembers());
+			return groupService.updateGroup(g);
+		} catch (NamingException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	@POST
 	@Path("/delete/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean deleteGroup(@PathParam("id") String id) {
-		return groupService.deleteGroup(id);
+		GroupServiceLocal groupService;
+		try {
+			groupService = (GroupServiceLocal) ctx.lookup(GroupServiceLocal.LOOKUP_GLOBAL);
+			return groupService.deleteGroup(id);
+		} catch (NamingException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
-	
 
 	@POST
 	@Path("/adduser")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean addUser(@FormParam("groupId") String groupId, @FormParam("user") String user) {
-		return groupService.addMember(groupId, user);
+		GroupServiceLocal groupService;
+		try {
+			groupService = (GroupServiceLocal) ctx.lookup(GroupServiceLocal.LOOKUP_GLOBAL);
+			return groupService.addMember(groupId, user);
+		} catch (NamingException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
-	
+
 	@POST
 	@Path("/removeuser")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean removeUser(@FormParam("groupId") String groupId, @FormParam("user") String user) {
-		return groupService.removeMember(groupId, user);
+		GroupServiceLocal groupService;
+		try {
+			groupService = (GroupServiceLocal) ctx.lookup(GroupServiceLocal.LOOKUP_GLOBAL);
+			return groupService.removeMember(groupId, user);
+		} catch (NamingException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
-	
-	
+
 	@POST
 	@Path("/message/add")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean addMessage(@FormParam("group") String group, @FormParam("message") String message) {
-		return groupService.addMessage(group, message);
+		GroupServiceLocal groupService;
+		try {
+			groupService = (GroupServiceLocal) ctx.lookup(GroupServiceLocal.LOOKUP_GLOBAL);
+			return groupService.addMessage(group, message);
+		} catch (NamingException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
-	
+
 	@POST
 	@Path("/message/remove")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean removeMessage(@FormParam("group") String group, @FormParam("message") String message) {
-		return groupService.removeMessage(group, message);
+		GroupServiceLocal groupService;
+		try {
+			groupService = (GroupServiceLocal) ctx.lookup(GroupServiceLocal.LOOKUP_GLOBAL);
+			return groupService.removeMessage(group, message);
+		} catch (NamingException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 }

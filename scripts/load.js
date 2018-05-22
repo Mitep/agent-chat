@@ -43,15 +43,3 @@ db.Group.insert({
 	name : "Agenti, xml, sbnz",
 	members : ['nikola', 'masato', 'mitep']
 });
-
-db.Friendship.insert({
-	userId : 'masato',
-	userId2 : 'mitep',
-	status : 'F'
-});
-
-db.Friendship.insert({
-	userId : 'nikola',
-	userId2 : 'masato',
-	status : 'P'
-});
