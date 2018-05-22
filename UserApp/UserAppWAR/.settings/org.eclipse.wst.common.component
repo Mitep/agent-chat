@@ -2,9 +2,6 @@
     <wb-module deploy-name="UserAppWAR">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <dependent-module archiveName="UserAppEJB.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/UserAppEJB/UserAppEJB">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <property name="context-root" value="UserAppWAR"/>
         <property name="java-output-path" value="/UserAppWAR/build/classes"/>
     </wb-module>

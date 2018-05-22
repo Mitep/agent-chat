@@ -10,8 +10,12 @@ import model.Message;
 public interface MessageServiceLocal {
 
 	public boolean createMessage(String str);
+
 	public Message getMessage(String id);
+
 	public List<Message> readAll();
+
 	public boolean deleteMessage(String id);
+
 	public boolean updateMessage(Message msg);
 }

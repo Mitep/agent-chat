@@ -42,6 +42,7 @@ public class UserMsgReceiver implements MessageListener {
 	public static final String USER_APP_NODE = "java:module/UserAppNode!node.UserAppNodeLocal";
 	public static final String USER_SERVICE_LOCAL = "java:module/UserService!service.interfaces.UserServiceLocal";
 	public static final String FRIENDSHIP_SERVICE_LOCAL = "java:module/FriendshipService!service.interfaces.FriendshipServiceLocal";
+	public static final String LOGIN_SERVICE_LOCAL = "java:module/LoginService!service.interfaces.LoginServiceLocal";
 	Logger log = Logger.getLogger("UserAppReceiver");
 
 	@Override
@@ -67,9 +68,7 @@ public class UserMsgReceiver implements MessageListener {
 
 				Context context = new InitialContext();
 				LoginServiceLocal lsl = (LoginServiceLocal) context.lookup(LOOKUP + LOGIN_SERVICE);
-				// String retMsg;
 				String retType = "login";
-				// JmsDTO dto = new JmsDTO();
 
 				JSONObject response = new JSONObject();
 
@@ -84,8 +83,7 @@ public class UserMsgReceiver implements MessageListener {
 
 					UserAppNodeLocal uanl = (UserAppNodeLocal) context.lookup(USER_APP_NODE);
 					uanl.addUser(username, host);
-
-					UserServiceLocal usl = (UserServiceLocal) context.lookup(USER_SERVICE_LOCAL);
+					UserServiceLocal usl = (UserServiceLocal) context.lookup(LOOKUP + USER_SERVICE);
 
 					User user = usl.getUserByUsername(username);
 
@@ -150,12 +148,6 @@ public class UserMsgReceiver implements MessageListener {
 				responseMsg.put("type", "user_search");
 				responseMsg.put("data", new JSONArray(retVal));
 
-//				if(retVal != null) {
-//					retMsg = new Gson().toJson(retVal);
-//				}else {
-//					retMsg = "";
-//				}
-
 				String retType = "user_search";
 				UserMsgSender msgSender = (UserMsgSender) ctx.lookup(SENDER_BEAN);
 				msgSender.sendMsg(responseMsg.toString(), retType);
@@ -171,8 +163,33 @@ public class UserMsgReceiver implements MessageListener {
 			}
 
 			case "logout": {
+				log.info("---------------ODJAVA---------------");
+				log.info(msgContent);
 
+				Context ctx = new InitialContext();
+				UserAppNodeLocal node = (UserAppNodeLocal) ctx.lookup(USER_APP_NODE);
+				JSONObject requestMsg = new JSONObject(msgContent);
+				String username = requestMsg.getString("username");
+				String host = requestMsg.getString("host");
+
+				UserMsgSender msgSender = (UserMsgSender) ctx.lookup(SENDER_BEAN);
+				JSONObject response = new JSONObject();
+
+				response.put("host", host);
+				response.put("type", "logout");
+				response.put("username", username);
+				if (node.removeUser(username)) {
+					log.info("Odjava uspesna");
+					response.put("status", "success");
+					response.put("info", "Uspesno ste se odjavili.");
+				} else {
+					log.info("Odjava nije uspela.");
+					response.put("status", "fail");
+					response.put("info", "Odjava nije uspela.");
+				}
+				msgSender.sendMsg(response.toString(), "logout");
 			}
+
 			}
 		} catch (JMSException e) {
 			e.printStackTrace();

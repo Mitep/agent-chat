@@ -23,8 +23,11 @@ public class UserAppNode implements UserAppNodeLocal {
 	}
 
 	@Override
-	public void removeUser(String username) {
-		activeUsers.remove(username);
+	public boolean removeUser(String username) {
+		if (activeUsers.remove(username) != null) {
+			return true;
+		}
+		return false;
 	}
 
 	@Override
