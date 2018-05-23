@@ -11,10 +11,6 @@ public interface MessageServiceLocal {
 	
 	public void forwardMessage(String content) throws Exception;
 	
-	public void forwardGroupMessage(String content) throws Exception;
-	
 	public void showMessages(String content) throws Exception;
-	
-	public void showGroupMessages(String content) throws Exception;
 	
 }

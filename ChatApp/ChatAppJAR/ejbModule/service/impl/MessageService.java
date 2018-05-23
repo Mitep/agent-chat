@@ -36,6 +36,7 @@ public class MessageService implements MessageServiceLocal {
 			}
 		}
 		RestLocal rl = (RestLocal) context.lookup(LookupConst.REST);
+		//mozda bude trebalo nesto drugo da se salje
 		rl.saveMsg(msg.toString());
 	}
 	
@@ -44,7 +45,7 @@ public class MessageService implements MessageServiceLocal {
 		JSONObject msg = new JSONObject(content);
 		ChatAppNodeLocal node = (ChatAppNodeLocal) context.lookup(LookupConst.CHAT_APP_NODE_LOCAL);
 		msg.remove("type");
-		msg.put("put", "receive_message");
+		msg.put("type", "receive_message");
 		node.getUserSession(msg.getString("receiver")).getAsyncRemote().sendText(content);
 	}
 	
@@ -74,21 +75,7 @@ public class MessageService implements MessageServiceLocal {
 		
 		RestLocal rl = (RestLocal) context.lookup(LookupConst.REST);
 		ArrayList<String> groupUsers = rl.groupUsers(msg.getString("my_group_neki_id"));
-		
-		
-		
-	}
-
-	@Override
-	public void forwardGroupMessage(String content) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void showGroupMessages(String content) throws Exception {
-		// TODO Auto-generated method stub
-		
+			
 	}
 	
 }

@@ -12,20 +12,10 @@ import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 @Stateless
 public class Rest implements RestLocal {
 	
-	
 	@Override
 	public String showUserMessages(String content) {
-		ResteasyClient client = new ResteasyClientBuilder().build();
-        ResteasyWebTarget target = client.target("http://localhost:8080/UserAppWAR/userapp/all");
-        Response response = target.request().get();
-        return response.readEntity(String.class);
-	}
-
-	@Override
-	public String showUserGroupMessages(String content) throws Exception {
 //		ResteasyClient client = new ResteasyClientBuilder().build();
-//        // drugi url
-//		ResteasyWebTarget target = client.target("http://localhost:8080/UserAppWAR/userapp/all");
+//        ResteasyWebTarget target = client.target("http://localhost:8080/UserAppWAR/userapp/message/all");
 //        Response response = target.request().get();
 //        return response.readEntity(String.class);
 		return null;
@@ -35,7 +25,7 @@ public class Rest implements RestLocal {
 	public void saveMsg(String content) throws Exception {
 //		ResteasyClient client = new ResteasyClientBuilder().build();
 //		// drugi url
-//        ResteasyWebTarget target = client.target("http://localhost:8080/UserAppWAR/userapp/all");
+//        ResteasyWebTarget target = client.target("http://localhost:8080/UserAppWAR/userapp/message/all");
 //        Response response = target.request().get();
 //        System.out.println(response.readEntity(String.class));
 	}
