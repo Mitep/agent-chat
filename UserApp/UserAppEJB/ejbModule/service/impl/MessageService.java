@@ -1,5 +1,6 @@
 package service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.LocalBean;
@@ -15,7 +16,9 @@ import com.google.gson.Gson;
 import com.mongodb.MongoClient;
 import com.mongodb.WriteResult;
 
+import model.Group;
 import model.Message;
+import model.User;
 import service.interfaces.MessageServiceLocal;
 
 /**
@@ -96,9 +99,38 @@ public class MessageService implements MessageServiceLocal {
 
 	@Override
 	public List<Message> getMessagesBySender(String sender) {
-		Query<Message> query =  datastore.createQuery(Message.class);
+		Query<Message> query = datastore.createQuery(Message.class);
 		query.criteria("sender").equal(sender);
 		return query.asList();
+	}
+
+	@Override
+	public List<Message> getRelatedMessages(String user) {
+		Query<Message> query = datastore.createQuery(Message.class);
+		Query<Message> query2 = datastore.createQuery(Message.class);
+		query.criteria("sender").equal(user);
+		query2.criteria("receiver").equal(user);
+
+		ArrayList<Message> msgs = new ArrayList<>();
+		ArrayList<String> grupe = datastore.createQuery(User.class).filter("username == ", user).get().getGroups();
+		if (grupe != null) {
+			for (int i = 0; i < grupe.size(); i++) {
+				ObjectId id_grupe = new ObjectId(grupe.get(i));
+				Group g = datastore.createQuery(Group.class).field("_id").equal(id_grupe).get();
+				if (g.getMessages() != null) {
+					ArrayList<Message> listaPoruka = new ArrayList<>();
+					for (String poruka : g.getMessages()) {
+						ObjectId id_poruke = new ObjectId(poruka);
+						listaPoruka.add(datastore.createQuery(Message.class).field("_id").equal(id_poruke).get());
+					}
+					msgs.addAll(listaPoruka);
+				}
+			}
+		}
+
+		msgs.addAll(query.asList());
+		msgs.addAll(query2.asList());
+		return msgs;
 	}
 
 }

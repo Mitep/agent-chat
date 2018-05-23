@@ -22,7 +22,7 @@ public class Group {
 	private ObjectId id;
 	private String name;
 	private ArrayList<String> members;
-	private ArrayList<ObjectId> messages;
+	private ArrayList<String> messages;
 
 	public Group() {
 	}
@@ -34,7 +34,7 @@ public class Group {
 		this.members = members;
 	}
 
-	public Group(ObjectId id, String name, ArrayList<String> members, ArrayList<ObjectId> messages) {
+	public Group(ObjectId id, String name, ArrayList<String> members, ArrayList<String> messages) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -42,11 +42,11 @@ public class Group {
 		this.messages = messages;
 	}
 
-	public ArrayList<ObjectId> getMessages() {
+	public ArrayList<String> getMessages() {
 		return messages;
 	}
 
-	public void setMessages(ArrayList<ObjectId> messages) {
+	public void setMessages(ArrayList<String> messages) {
 		this.messages = messages;
 	}
 

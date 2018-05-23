@@ -166,4 +166,18 @@ public class GroupRestController {
 			return false;
 		}
 	}
+
+	@GET
+	@Path("/members/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<String> members(@PathParam("id") String id) {
+		GroupServiceLocal groupService;
+		try {
+			groupService = (GroupServiceLocal) ctx.lookup(GroupServiceLocal.LOOKUP_GLOBAL);
+			return groupService.getMembers(id);
+		} catch (NamingException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

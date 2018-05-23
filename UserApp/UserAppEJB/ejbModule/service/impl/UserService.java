@@ -26,7 +26,7 @@ import service.interfaces.UserServiceLocal;
 @Stateless
 @LocalBean
 public class UserService implements UserServiceLocal {
-	
+
 	private Datastore datastore;
 
 	/**
@@ -145,21 +145,21 @@ public class UserService implements UserServiceLocal {
 	}
 
 	@Override
-	public List<ObjectId> getUsersGroups(String username) {
+	public List<String> getUsersGroups(String username) {
 		Query<User> query = datastore.createQuery(User.class);
 		User user = query.field("username").equal(username).get();
 		return user.getGroups();
 	}
 
 	@Override
-	public List<ObjectId> addGroup(String username, String groupId) {
+	public List<String> addGroup(String username, String groupId) {
 		User u = getUserByUsername(username);
 		if (u != null) {
 			System.out.println("not null");
 			if (u.getGroups() == null) {
-				u.setGroups(new ArrayList<ObjectId>());
+				u.setGroups(new ArrayList<String>());
 			}
-			u.getGroups().add(new ObjectId(groupId));
+			u.getGroups().add(groupId);
 
 			datastore.save(u);
 
@@ -247,7 +247,10 @@ public class UserService implements UserServiceLocal {
 		try {
 			User u = getUserByUsername(user);
 			u.getFriends().remove(friend);
+			User rec = getUserByUsername(friend);
+			rec.getFriends().remove(user);
 			datastore.save(u);
+			datastore.save(rec);
 			return true;
 		} catch (Exception e) {
 			return false;

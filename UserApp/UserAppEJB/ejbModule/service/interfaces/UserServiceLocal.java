@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.ejb.Local;
 
-import org.bson.types.ObjectId;
-
 import dtos.UserSearchDTO;
 import model.User;
 
@@ -32,9 +30,9 @@ public interface UserServiceLocal {
 
 	public boolean validateUser(String username, String password);
 
-	public List<ObjectId> getUsersGroups(String username);
+	public List<String> getUsersGroups(String username);
 
-	public List<ObjectId> addGroup(String username, String groupId);
+	public List<String> addGroup(String username, String groupId);
 
 	public List<User> findUsers(String username, String name, String surname);
 
