@@ -132,4 +132,12 @@ public class ChatAppNode implements ChatAppNodeLocal {
 		return null;
 	}
 
+	@Override
+	public String isUserOnline(String username) {
+		if(onlineUsersApp.containsKey(username))
+			return onlineUsersApp.get(username);
+		else
+			return null;
+	}
+
 }

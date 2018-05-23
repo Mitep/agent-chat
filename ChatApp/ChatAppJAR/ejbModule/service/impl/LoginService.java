@@ -72,16 +72,16 @@ public class LoginService implements LoginServiceLocal {
 		
 		ChatAppNodeLocal node = (ChatAppNodeLocal) context.lookup(LookupConst.CHAT_APP_NODE_LOCAL);
 		
-		if(status.equals("login_success")) {
+		if(status.equals("success")) {
 			node.addOnlineUserApp(username, host);	
 		}
 		
 		if(host.equals(node.getHost())) {
 			
-			if(status.equals("login_success")) {
+			if(status.equals("success")) {
 				HashMap<String, Session> thisNodeSessions = node.getAllUserSessions();
 				for(String userSes : thisNodeSessions.keySet()) {
-					thisNodeSessions.get(userSes).getAsyncRemote().sendText("{ 'type':'online_user', 'username':'"+userSes+"' }");
+					thisNodeSessions.get(userSes).getAsyncRemote().sendText("{ \"type\":\"online_user\", \"username\":\""+userSes+"\" }");
 				}
 				node.addOnlineUserThisNode(username, loginAttempt.get(username));
 			} 
@@ -90,10 +90,10 @@ public class LoginService implements LoginServiceLocal {
 		
 		} else {
 			
-			if(status.equals("login_success")) {
+			if(status.equals("success")) {
 				HashMap<String, Session> thisNodeSessions = node.getAllUserSessions();
 				for(String userSes : thisNodeSessions.keySet()) {
-					thisNodeSessions.get(userSes).getAsyncRemote().sendText("{ 'type':'online_user', 'username':'"+userSes+"' }");
+					thisNodeSessions.get(userSes).getAsyncRemote().sendText("{ \"type\":\"online_user\", \"username\":\""+userSes+"\" }");
 				}
 				
 			} 

@@ -81,9 +81,6 @@ li a:hover {
 	
 }
 
-.search-request-section ul{
-	list-style-type:none;
-}
 .add-friend input[type=submit] {
 	
 	font-family: "Roboto", sans-serif;
@@ -104,6 +101,7 @@ li a:hover {
 
   #search-results-label{
 	  font-size: 20px;
+	  float: left;
   }
   #friendlist-label{
 	font-size: 20px;	

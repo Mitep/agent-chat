@@ -191,16 +191,19 @@ li a:hover {
 .message ul li.msg-left{
 	float: left;
 }
+
 .message ul li.msg-left img{
 	position: absolute;
 	width: 40px;
-	bottom: 30px;
+
+	left: 0px;
+	
 }
 .message ul li.msg-left .msg-desc{
-	margin-left: 70px;
+	margin-left: 50px;
 	font-size: 12px;
 	background: #E8E8E8;
-	padding:5px 10px;
+	padding:15px 10px;
 	border-radius: 5px 5px 5px 0px;
 	position: relative;
 }
@@ -213,23 +216,26 @@ li a:hover {
 	left: -10px;
 }
 .message ul li.msg-left small{
-	
+	float:right;
 	color: #c1c1c1;
 }
 
-
+.message ul li.msg-center{
+	float:right;
+}
 .message ul li.msg-center img{
 	position: absolute;
 	width: 40px;
 	right: 0px;
-	bottom: 30px;
+	
 }
 .message ul li.msg-center .msg-desc{
-	margin-right: 70px;
+	
+	margin-right: 50px;
 	font-size: 12px;
 	background: #cce5ff;
 	color: #004085;
-	padding:5px 10px;
+	padding:15px 10px;
 	border-radius: 5px 5px 5px 0px;
 	position: relative;
 }
@@ -242,7 +248,7 @@ li a:hover {
 	right: -10px;
 }
 .message ul li.msg-center small{
-	
+	float:left;
 	color: #c1c1c1;
 	margin-right: 70px;
 }
@@ -305,4 +311,19 @@ li a:hover {
 
 #logout {
 	float:right;
+}
+
+.online-friends td:hover{
+	cursor: pointer;
+}
+
+.online-friends{
+	width:100%;
+	height:20%;
+	border:1px solid #D8D8D8;
+}
+
+.online-friends td{
+	height: 20%;
+	border: 1px solid #F0F0F0;
 }

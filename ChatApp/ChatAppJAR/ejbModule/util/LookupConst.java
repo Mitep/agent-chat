@@ -18,6 +18,7 @@ public class LookupConst {
 	
 	public static final String MESSAGE_SERVICE = "java:module/MessageService!service.interfaces.MessageServiceLocal";
 	
+	public static final String REST = "java:module/Rest!rest.RestLocal";
 	
 	// za war
 	public static final String CHAT_WEB_SOCKET_WAR = "java:app/ChatAppJAR/WSBean!websocket.WSLocal";
