@@ -8,7 +8,10 @@ db.User.insert({
 	password : '123',
 	name : 'Milos',
 	surname : 'Tepic',
-	groups : ['5b055d2718066269ec047a26']
+	groups : ['5b055d2718066269ec047a26'],
+	friends : ['masato', 'nikola', 'nemiljenik'],
+	receivedRequests : ['egipatski', 'siva'],
+	sentRequests : []
 });
 
 db.User.insert({
@@ -17,7 +20,10 @@ db.User.insert({
 	password : '123',
 	name : 'Julija',
 	surname : 'Mirkovic',
-	groups : ['5b055d2718066269ec047a26']
+	groups : ['5b055d2718066269ec047a26'],
+	friends : ['mitep', 'nikola'],
+	receivedRequests : ['siva'],
+	sentRequests : []
 });
 
 db.User.insert({
@@ -26,7 +32,40 @@ db.User.insert({
 	password : '123',
 	name : 'Nikola',
 	surname : 'Stojanovic',
-	groups : ['5b055d2718066269ec047a26']
+	groups : ['5b055d2718066269ec047a26'],
+	friends : ['mitep', 'masato'],
+	receivedRequests : [],
+	sentRequests : []
+});
+
+db.User.insert({
+	username : 'nemiljenik',
+	password : '123',
+	name : 'Nemiljenik',
+	surname : 'Tepic',
+	friends : ['mitep'],
+	receivedRequests : [],
+	sentRequests : [],
+});
+
+db.User.insert({
+	username : 'siva',
+	password : '123',
+	name : 'Siva',
+	surname : 'Snezic',
+	friends : ['egipatski'],
+	receivedRequests : [],
+	sentRequests : ['mitep', 'masato'],
+});
+
+db.User.insert({
+	username : 'egipatski',
+	password : '123',
+	name : 'Egipatski',
+	surname : 'Tepic',
+	friends : ['siva'],
+	receivedRequests : [],
+	sentRequests : ['mitep'],
 });
 
 db.Message.insert({

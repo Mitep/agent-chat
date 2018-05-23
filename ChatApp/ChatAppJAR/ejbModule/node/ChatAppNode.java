@@ -2,6 +2,7 @@ package node;
 
 import javax.websocket.Session;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.annotation.PostConstruct;
@@ -138,6 +139,14 @@ public class ChatAppNode implements ChatAppNodeLocal {
 			return onlineUsersApp.get(username);
 		else
 			return null;
+	}
+
+	@Override
+	public ArrayList<String> getOnlineUsersAsList() {
+		ArrayList<String> onlineUsers = new ArrayList<String>();
+		for(String user : onlineUsersApp.keySet())
+			onlineUsers.add(user);
+		return onlineUsers;
 	}
 
 }

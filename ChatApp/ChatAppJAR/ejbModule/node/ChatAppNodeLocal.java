@@ -1,5 +1,6 @@
 package node;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.ejb.Local;
@@ -29,5 +30,7 @@ public interface ChatAppNodeLocal {
 	public String getSessionUsername(Session s);
 	
 	public String isUserOnline(String username);
+
+	public ArrayList<String> getOnlineUsersAsList();
 	
 }

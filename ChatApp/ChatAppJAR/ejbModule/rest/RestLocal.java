@@ -1,6 +1,6 @@
 package rest;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.ejb.Local;
 
@@ -11,6 +11,6 @@ public interface RestLocal {
 	
 	public void saveMsg(String content) throws Exception;
 	
-	public ArrayList<String> groupUsers(String groupId) throws Exception;
+	public List<String> groupUsers(String groupId) throws Exception;
 	
 }

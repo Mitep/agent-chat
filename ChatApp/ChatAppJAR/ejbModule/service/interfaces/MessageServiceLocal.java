@@ -11,6 +11,4 @@ public interface MessageServiceLocal {
 	
 	public void forwardMessage(String content) throws Exception;
 	
-	public void showMessages(String content) throws Exception;
-	
 }

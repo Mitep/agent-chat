@@ -92,11 +92,6 @@ public class WSBean implements WSLocal {
 					msl.processGroupMessage(data);
 				};
 	            	break;
-				case "show_messages": {
-					MessageServiceLocal msl = (MessageServiceLocal) context.lookup(LookupConst.MESSAGE_SERVICE);
-					msl.showMessages(data);
-				};
-	            	break;
 	            default:
 	            	break;
 			}				

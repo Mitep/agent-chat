@@ -1,5 +1,6 @@
 package service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.ejb.Singleton;
@@ -8,10 +9,12 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.websocket.Session;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import jms.ChatMsgSenderLocal;
 import node.ChatAppNodeLocal;
+import rest.RestLocal;
 import service.interfaces.LoginServiceLocal;
 import util.LookupConst;
 
@@ -47,7 +50,7 @@ public class LoginService implements LoginServiceLocal {
 	}
 
 	@Override
-	public void masterResponse(String response) throws NamingException {
+	public void masterResponse(String response) throws Exception {
 		
 		ChatAppNodeLocal node = (ChatAppNodeLocal) context.lookup(LookupConst.CHAT_APP_NODE_LOCAL);
 		
@@ -64,8 +67,9 @@ public class LoginService implements LoginServiceLocal {
 	}
 
 	@Override
-	public void slaveResponse(String response) throws NamingException {
+	public void slaveResponse(String response) throws Exception {
 		JSONObject obj = new JSONObject(response);
+		
 		String status = obj.getString("status");
 		String username = obj.getString("username");
 		String host = obj.getString("host");
@@ -73,7 +77,17 @@ public class LoginService implements LoginServiceLocal {
 		ChatAppNodeLocal node = (ChatAppNodeLocal) context.lookup(LookupConst.CHAT_APP_NODE_LOCAL);
 		
 		if(status.equals("success")) {
-			node.addOnlineUserApp(username, host);	
+			RestLocal rl = (RestLocal) context.lookup(LookupConst.REST);
+			
+			JSONArray msgs = new JSONArray(rl.showUserMessages(username));
+			
+			obj.put("messages", msgs);
+			obj.put("online_users", node.getOnlineUsersAsList());
+			
+			System.out.println("LOBOGANAIANIAINA");
+			System.out.println(obj.toString());
+			
+			node.addOnlineUserApp(username, host);
 		}
 		
 		if(host.equals(node.getHost())) {
@@ -85,7 +99,8 @@ public class LoginService implements LoginServiceLocal {
 				}
 				node.addOnlineUserThisNode(username, loginAttempt.get(username));
 			} 
-			loginAttempt.get(username).getAsyncRemote().sendText(response);
+			
+			loginAttempt.get(username).getAsyncRemote().sendText(obj.toString());
 			loginAttempt.remove(username);
 		
 		} else {
