@@ -81,8 +81,10 @@ public class LoginService implements LoginServiceLocal {
 			
 			JSONArray msgs = new JSONArray(rl.showUserMessages(username));
 			
-			obj.put("messages", msgs);
-			obj.put("online_users", node.getOnlineUsersAsList());
+			JSONObject msgData = obj.getJSONObject("data");
+			
+			msgData.put("messages", msgs);
+			msgData.put("online_users", node.getOnlineUsersAsList());
 			
 			System.out.println("LOBOGANAIANIAINA");
 			System.out.println(obj.toString());

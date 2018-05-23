@@ -37,7 +37,7 @@ public class MessageService implements MessageServiceLocal {
 		}
 		RestLocal rl = (RestLocal) context.lookup(LookupConst.REST);
 		//mozda bude trebalo nesto drugo da se salje
-		rl.saveMsg(msg.toString());
+		rl.saveMsg(content);
 	}
 	
 	@Override
@@ -70,7 +70,7 @@ public class MessageService implements MessageServiceLocal {
 		}
 		
 		//mozda bude trebalo nesto drugo da se salje
-		rl.saveMsg(msg.toString());	
+		rl.saveMsg(content);	
 	}
 	
 }

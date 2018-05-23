@@ -1,9 +1,10 @@
 package rest;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
@@ -24,12 +25,10 @@ public class Rest implements RestLocal {
 
 	@Override
 	public void saveMsg(String content) throws Exception {
-//		ResteasyClient client = new ResteasyClientBuilder().build();
-//		// drugi url
-//        ResteasyWebTarget target = client.target("http://localhost:8080/UserAppWAR/userapp/message/all");
-//        Response response = target.request().get();
-//        System.out.println(response.readEntity(String.class));
-	}
+		ResteasyClient client = new ResteasyClientBuilder().build();
+        ResteasyWebTarget target = client.target("http://localhost:8080/UserAppWAR/userapp/message");
+        target.request().post(Entity.entity(content, MediaType.APPLICATION_JSON));
+  	}
 
 	@Override
 	public ArrayList<String> groupUsers(String groupId) throws Exception {
