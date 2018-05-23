@@ -82,9 +82,24 @@ public class WSBean implements WSLocal {
 	            	ussl.searchUser(data, session);
 	            };
 	            	break;
-				case "message": {
+				case "send_message": {
 					MessageServiceLocal msl = (MessageServiceLocal) context.lookup(LookupConst.MESSAGE_SERVICE);
 					msl.processMessage(data);
+				};
+	            	break;
+				case "send_group_message": {
+					MessageServiceLocal msl = (MessageServiceLocal) context.lookup(LookupConst.MESSAGE_SERVICE);
+					msl.processGroupMessage(data);
+				};
+	            	break;
+				case "show_messages": {
+					MessageServiceLocal msl = (MessageServiceLocal) context.lookup(LookupConst.MESSAGE_SERVICE);
+					msl.showMessages(data);
+				};
+	            	break;
+				case "show_group_messages": {
+					MessageServiceLocal msl = (MessageServiceLocal) context.lookup(LookupConst.MESSAGE_SERVICE);
+					msl.showGroupMessages(data);
 				};
 	            	break;
 	            default:

@@ -28,4 +28,6 @@ public interface ChatAppNodeLocal {
 	
 	public String getSessionUsername(Session s);
 	
+	public String isUserOnline(String username);
+	
 }
