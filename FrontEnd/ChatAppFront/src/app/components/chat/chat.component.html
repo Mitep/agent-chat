@@ -41,7 +41,8 @@
 			</div>
 			<div class="center-section">
 				<div class="message mCustomScrollbar" data-mcs-theme="minimal-dark" >
-					<div *ngFor="let message of myMessagesFromFriend">
+						<h5>{{friend}}</h5>
+					<div *ngFor="let message of ws.myMessagesDate">
 					<ul>
 						
 							<li class="msg-left" *ngIf="message.sender!=ws.username" >
@@ -71,8 +72,8 @@
 				</div>
 				<div class="center-section-bottom">
 					<form #data="ngForm">					
-						<input type="text" [(ngModel)]="data.message_content"  name="message" placeholder="type here...">
-						<button class="btn-send" (click) = "sendMessage(data); data.reset()"><i class="fa fa-send"></i></button>
+						<input type="text" [disabled]="!isFriendSelected()" [(ngModel)]="data.message_content"  name="message" placeholder="type here...">
+						<button class="btn-send" [disabled]="!isFriendSelected()" (click) = "sendMessage(data); data.reset()"><i class="fa fa-send"></i></button>
 					</form>
 				</div>
 			</div>

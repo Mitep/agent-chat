@@ -97,6 +97,14 @@ export class SearchComponent implements OnInit {
     return flag;
   }
 
+  isMe(username): Boolean{
+     var flag = false;
+     if(this.ws["username"] == username){
+       flag = true;
+     }
+     return flag;
+  }
+
   deleteFriend(username){
     this.msg = "{\"type\":\"delete_friend\","
     + " \"data\":{"

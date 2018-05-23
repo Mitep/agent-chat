@@ -21,29 +21,10 @@ export class WebsocketService {
   public myReceivedRequests:Array<String>;
   public mySentRequests:Array<String>;
   public myAllMessages:Array<{"sender": String, "receiver":String, "content":String, "timestamp":number}>=[];
- 
+  public friend;
 
   constructor(rt:Router) { 
       this.router = rt;
-   /*    this.myMessagesMilli = [{sender:"mitep", receiver:"masato", content:"halo halo", timestamp:123123123299}, //1973
-                         {sender:"masato", receiver:"mitep", content:"halo da li se cujemo", timestamp:1231231232121}, //2009
-                         {sender:"mitep", receiver:"masato", content:"cujemo se", timestamp:1531231200000}, 
-                         {sender:"masato", receiver:"masato", content:"haloo sss solo eskuca", timestamp:1530000}, //2018
-                         {sender:"mitep", receiver:"masato", content:"sta ima", timestamp:1551231200000} //2019
-                        ]; 
-      this.myMessagesDate = [];
-      this.myMessagesMilli.sort(function(a, b) { return a.timestamp - b.timestamp; });
-      var myTimestamps:Array<number> = new Array<number>();
-
-      for(var i = 0; i < this.myMessagesMilli.length; i++){
-            myTimestamps.push(this.myMessagesMilli[i].timestamp);
-      }
-      for(var i = 0; i< this.myMessagesMilli.length; i++){
-            var o = {"sender": this.myMessagesMilli[i].sender, "receiver":this.myMessagesMilli[i].receiver, "content":this.myMessagesMilli[i].content, "date":new Date(myTimestamps[i])};
-            this.myMessagesDate.push(o);
-      }
-      console.log(this.myMessagesDate); */
-
   }
 
   public connect(): void {
@@ -110,14 +91,15 @@ export class WebsocketService {
               break;
           }
           case("show_messages"):{
-               // console.log("jedna poruka: " + json.data[0].content);
-                //myMessages = json.data; 
-        
-               // w.myMessagesMilli = myMessages;
+               
                 break;
           }
           case("receive_message"):{
-                console.log("stigla poruka");
+                var time = parseInt(json.timestamp);
+                var message = {sender:json.sender, receiver:json.receiver, content:json.content, timestamp:time};             
+                w.myAllMessages.push(message);
+                w.updateMsg();
+
                 break;
           }
       }      
@@ -126,11 +108,33 @@ export class WebsocketService {
   }
  
   public receivedMsg(msg){
-    console.log(msg);
+        console.log(msg);
   }
 
   public sendMsg(msg) {
-    this.ws.send(msg);
+        this.ws.send(msg);
+  }
+
+  public updateMsg(){
+        var f = this.friend
+        this.myMessagesMilli = [];
+        this.myMessagesDate = [];
+        
+        this.myMessagesMilli = this.myAllMessages.filter(function(item){
+            if(item.sender == f || item.receiver == f)
+                return item;
+        }); 
+
+        this.myMessagesMilli.sort(function(a, b) { return a.timestamp - b.timestamp; });
+        var myTimestamps:Array<number> = new Array<number>();
+
+        for(var i = 0; i < this.myMessagesMilli.length; i++){
+        myTimestamps.push(this.myMessagesMilli[i].timestamp);
+        }
+        for(var i = 0; i< this.myMessagesMilli.length; i++){
+            var o = {"sender": this.myMessagesMilli[i].sender, "receiver":this.myMessagesMilli[i].receiver, "content":this.myMessagesMilli[i].content, "date":new Date(myTimestamps[i])};
+            this.myMessagesDate.push(o);
+        }
   }
 
 }

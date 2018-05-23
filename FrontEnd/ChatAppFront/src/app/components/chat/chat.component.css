@@ -172,6 +172,7 @@ li a:hover {
 .message{
 	height: calc(100% - 75px);
 	font-family: sans-serif;
+	overflow: scroll;
 	
 	
 }
