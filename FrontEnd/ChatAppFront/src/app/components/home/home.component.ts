@@ -19,6 +19,9 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.ws.myMessagesMilli = [];
+    this.ws.myMessagesDate = [];
+    
     if(this.ws["logged"]==false){
       this.router.navigateByUrl('/');
     }
@@ -46,6 +49,8 @@ export class HomeComponent implements OnInit {
       //this.router.navigateByUrl('/search');
   }
 
+  
+
   logout(){
     this.msg = "{\"type\":\"logout\","
               + " \"data\":{"
@@ -54,5 +59,33 @@ export class HomeComponent implements OnInit {
     console.log(this.msg);
     this.ws["logged"]=false;
     this.ws.sendMsg(this.msg);
+  }
+
+  deleteFriend(username){
+    this.msg = "{\"type\":\"delete_friend\","
+    + " \"data\":{"
+    + "\"my_username\":\"" + this.ws["username"] + "\","
+    + " \"friends_username\":\"" + username + "\"}"
+    + "}";
+    console.log(this.msg);
+    //this.ws.sendMsg(this.msg);
+  }
+
+  acceptRequest(username){
+    this.msg = "{\"type\":\"accept_request\","
+    + " \"data\":{"
+    + "\"my_username\":\"" + this.ws["username"] + "\","
+    + " \"friends_username\":\"" + username + "\"}"
+    + "}";
+    //this.ws.sendMsg(this.msg);
+  }
+
+  declineRequest(username){
+    this.msg = "{\"type\":\"decline_request\","
+    + " \"data\":{"
+    + "\"my_username\":\"" + this.ws["username"] + "\","
+    + " \"friends_username\":\"" + username + "\"}"
+    + "}";
+    //this.ws.sendMsg(this.msg);
   }
 }

@@ -23,57 +23,34 @@
 			<div class = "friend-request-section">
 				<table>
 					<tr>
-						<th>Friend requests:</th>
+						<th id="request-label">Friend requests:</th>
 						<th></th>
 						<th></th>
 					</tr>
-					<tr>
-						<td>Egipatski</td>
-							<form class="request">
-								<td><input type="submit" value="Accept"></td>
-								<td><input type="submit" value="Decline"></td>
-							</form>						
+					<tr *ngFor="let request of ws.myReceivedRequests">
+						<td>{{request}}</td>
+						<form class="request">	
+							<td><input type="submit" value="Accept" (click)="acceptRequest(request)"></td>
+							<td><input type="submit" value="Decline" (click)="declineRequest(request)"></td>
+						</form>						
 					</tr>
 				</table>
-				<!-- <p id="request-label">Friend requests:</p>
-					<ul>
-						<li>
-							Egipatski 
-							<form class="request">
-								<input type="submit" value="Accept">
-								<input type="submit" value="Decline">
-							</form>
-						</li>
-						<br>
-						<br>
-						<br>
-						<br>
-						<li>
-							Ivetic 
-								<form class="request">
-									<input type="submit" value="Accept">
-									<input type="submit" value="Decline">
-								</form>
-						</li>
-					</ul> -->
+		
 			</div>
 			<div class = "friends-section">
-				<p id="friendlist-label">Friends:</p>
-				<ul>
-					<li><form class="request">
-							<input type="submit" value="Delete">
-							Nemiljenik Tepic							
-						</form>
-					</li>
-					<br>
-					<br>
-					<li>
+				<table>
+					<tr>
+						<th id="friendlist-label">Friends:</th>
+						<th></th>
+						<th></th>
+					</tr>
+					<tr *ngFor="let friend of ws.myFriends">
+						<td>{{friend}}</td>
 						<form class="request">
-							<input type="submit" value="Delete">
-							Siva Snezic	
+							<td><input type="submit" value="Delete" (click)="deleteFriend(friend)"></td>
 						</form>
-					</li>				
-				</ul>
+					</tr>
+				</table>
 			</div>
 		
 

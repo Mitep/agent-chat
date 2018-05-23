@@ -13,23 +13,27 @@
   </ul>
 
   <div class = "search-request-section">
-      <p id="search-results-label">Search results:</p>
-        <ul>
-          <li>
-            Egipatski 
-            <form class="add-friend">
-              <input type="submit" value="Add">
-            </form>
-          </li>
-          <br>
-          <br>
-          <br>
-          <br>
-          <li>
-            Ivetic 
-              <form class="add-friend">
-                <input type="submit" value="Add">
-              </form>
-          </li>
-        </ul>
+    <table>
+      <tr>
+        <th id="search-results-label">Search results:</th>
+        <th></th>
+      </tr>
+      <tr *ngFor="let user of ws.searchResults">
+          <td>{{user.name}} {{user.surname}} ({{user.username}})</td>
+          <form class="add-friend" *ngIf="isFriend(user.username)">
+              <input type="submit" value="Delete" (click)="deleteFriend(user.username)">
+          </form>
+          <form class="add-friend" *ngIf="hasSentMeRequest(user.username)">
+              <input type="submit" value="Accept" (click)="acceptRequest(user.username)">
+              <input type="submit" value="Decline"(click)="declineRequest(user.username)">
+          </form>
+          <form class="add-friend" *ngIf="haveISentRequest(user.username)">
+              <input type="submit" value="Delete request" (click)="deleteRequest(user.username)">
+           
+          </form>
+          <form class="add-friend" *ngIf="!haveISentRequest(user.username) && !hasSentMeRequest(user.username) && !isFriend(user.username)">
+              <input type="submit" value="Add" (click)="addFriend(user.username)">      
+          </form>
+      </tr>
+    </table>
     </div>

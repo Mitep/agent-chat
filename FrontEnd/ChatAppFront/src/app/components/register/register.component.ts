@@ -43,7 +43,7 @@ export class RegisterComponent implements OnInit {
              + " \"password\":\"" + data.password +"\"}"
              + "}";
     console.log(this.msg);
-    this.ws["username"] = data.username; //TODO: obrisati kad bude gotovo logovanje
+    //this.ws["username"] = data.username; //TODO: obrisati kad bude gotovo logovanje
     this.ws.sendMsg(this.msg);
     
   }

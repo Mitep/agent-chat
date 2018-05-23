@@ -69,6 +69,7 @@ li a:hover {
 	margin-left: 65px;
 	padding:20px;
 	padding-left: 20px;
+	text-align: left;
 	
 }
 .friends-section ul{
@@ -121,10 +122,9 @@ li a:hover {
   }
 
   #request-label{
-	  font-size: 20px;
+	font-size: 20px;
 
   }
   #friendlist-label{
-	font-size: 20px;
-	
+	font-size: 20px;	
   }

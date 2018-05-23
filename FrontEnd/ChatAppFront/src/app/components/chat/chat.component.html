@@ -25,87 +25,74 @@
 			<div class="left-section mCustomScrollbar" data-mcs-theme="minimal-dark">
 				<ul>
 					<li>
-						<div class="chatList">
+						<div class="chatList" *ngFor="let friend of ws.myFriends">
 							<div class="img">
-								<i class="fa fa-circle"></i>
+									<i class="fa fa-circle"></i>
 								<img src="../../../assets/man01.png">
 							</div>
 							<div class="desc">
 								<small class="time">05:30 am</small>
-								<h5>Luis Yankee</h5>
+								<h5>{{friend}}</h5>
 								<small>Lorem ipsum dolor sit amet...</small>
 							</div>
 						</div>
-					</li>
-					<li>
-						
-					</li>
-					
-						
-					
-					<li>
-						
-					</li>
-					<li>
-							
-					</li>
-					<li>
-						
-					</li>
-					<li>
-						
-					</li>
-					<li>
-						
-					</li>
-					<li>
-						
-					</li>
+					</li>	
 				</ul>
 			</div>
 			<div class="center-section">
-				<div class="message mCustomScrollbar" data-mcs-theme="minimal-dark">
+				<div class="message mCustomScrollbar" data-mcs-theme="minimal-dark" >
+					<div *ngFor="let message of myMessagesFromFriend">
 					<ul>
-						<li class="msg-left">
-							<div class="msg-left-sub">
-								<img src="../../../assets/man03.png">
-								<div class="msg-desc">
-									Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-									tempor incididunt ut labore et dolore magna aliqua.
+						
+							<li class="msg-left" *ngIf="message.sender!=ws.username" >
+								<div class="msg-left-sub">
+									<img src="../../../assets/man02.png">
+									<div class="msg-desc" >
+										{{message.content}}
+									</div>
+									<small>{{message.date}}</small>
 								</div>
-								<small>05:25 am</small>
-							</div>
-						</li>
-						<li class="msg-center">
+							</li>
+						
+						
+						<li class="msg-center" *ngIf="message.sender==ws.username" >
 							<div class="msg-left-sub">
 								<img src="../../../assets/man04.png">
 								<div class="msg-desc">
-									Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-									tempor incididunt ut labore et dolore magna aliqua.
+									{{message.content}}
 								</div>
-								<small>05:25 am</small>
+								<small>{{message.date}}</small>
 							</div>
 						</li>
+					
 						
 					</ul>
 				</div>
+				</div>
 				<div class="center-section-bottom">
-					<form>					
-						<input type="text" name="message" placeholder="type here...">
-						<button class="btn-send"><i class="fa fa-send"></i></button>
+					<form #data="ngForm">					
+						<input type="text" [(ngModel)]="data.message_content"  name="message" placeholder="type here...">
+						<button class="btn-send" (click) = "sendMessage(data); data.reset()"><i class="fa fa-send"></i></button>
 					</form>
 				</div>
 			</div>
 			<div class="right-section">
-				<ul>
-					<li>
-						Julija Mirkovic
-					</li>
-					<li>
-						Jukela Mirkela
-					</li>
+				<table class="online-friends">
+					<tr>
+						<th>
+							Online friends:
+						</th>
+					</tr>
+					<!-- <tr *ngFor = "let friend of friends">
+						<td>{{friend.username}}</td>
+					</tr> -->
 					
-				</ul>
+					<tr *ngFor = "let friend of ws.myFriends">
+						
+						<td (click) = "showMessages(friend)">{{friend}}</td>
+					</tr>
+				
+				</table>
 			</div>
 		</div>
   </div>
