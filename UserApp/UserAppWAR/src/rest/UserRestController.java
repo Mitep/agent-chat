@@ -14,7 +14,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.bson.types.ObjectId;
 import org.json.JSONObject;
 
 import com.google.gson.Gson;
@@ -22,9 +21,11 @@ import com.google.gson.Gson;
 import dtos.UserSearchDTO;
 import jms.UserMsgReceiver;
 import jms.UserMsgSender;
+import model.Message;
 import model.User;
 import node.UserAppNodeLocal;
 import service.interfaces.LoginServiceLocal;
+import service.interfaces.MessageServiceLocal;
 import service.interfaces.UserServiceLocal;
 
 /**
@@ -150,7 +151,7 @@ public class UserRestController {
 	@Path("/addgroup")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<ObjectId> addUserToGroup(@FormParam("username") String username, @FormParam("groupId") String groupId) {
+	public List<String> addUserToGroup(@FormParam("username") String username, @FormParam("groupId") String groupId) {
 		UserServiceLocal userService;
 		try {
 			userService = (UserServiceLocal) ctx.lookup(UserServiceLocal.LOOKUP_GLOBAL);
@@ -218,6 +219,7 @@ public class UserRestController {
 	}
 
 	@POST
+	@Path("/friends/send")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean addFriendRequest(@FormParam("user") String user, @FormParam("friend") String friend) {
@@ -232,6 +234,7 @@ public class UserRestController {
 	}
 
 	@POST
+	@Path("/friends/accept")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean acceptFriend(@FormParam("user") String user, @FormParam("friend") String friend) {
@@ -246,6 +249,7 @@ public class UserRestController {
 	}
 
 	@POST
+	@Path("/friends/reject")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean rejectFriend(@FormParam("user") String user, @FormParam("friend") String friend) {
@@ -287,6 +291,19 @@ public class UserRestController {
 			UserMsgSender msgSender = (UserMsgSender) ctx.lookup(UserMsgReceiver.SENDER_GLOBAL);
 			msgSender.sendMsg(response.toString(), "logout");
 			return response.toString();
+		} catch (NamingException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@GET
+	@Path("/messages/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Message> getUsersMessages(@PathParam("username") String username) {
+		try {
+			MessageServiceLocal msl = (MessageServiceLocal) ctx.lookup(MessageServiceLocal.LOOKUP_GLOBAL);
+			return msl.getRelatedMessages(username);
 		} catch (NamingException e) {
 			e.printStackTrace();
 			return null;

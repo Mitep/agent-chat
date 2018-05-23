@@ -27,6 +27,7 @@ public class Message {
 	private String sender;
 	private String receiver;
 	private String content;
+	private long timestamp;
 
 	public Message() {
 	}
@@ -71,6 +72,14 @@ public class Message {
 		this.content = content;
 	}
 
+	public long getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
+	}
+
 	public Message(ObjectId id, String sender, String receiver, String content) {
 		super();
 		this.id = id;
@@ -86,6 +95,16 @@ public class Message {
 		this.sender = sender;
 		this.receiver = receiver;
 		this.content = content;
+	}
+
+	public Message(ObjectId id, int type, String sender, String receiver, String content, long timestamp) {
+		super();
+		this.id = id;
+		this.type = type;
+		this.sender = sender;
+		this.receiver = receiver;
+		this.content = content;
+		this.timestamp = timestamp;
 	}
 
 }

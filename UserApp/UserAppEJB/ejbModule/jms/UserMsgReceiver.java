@@ -39,7 +39,7 @@ public class UserMsgReceiver implements MessageListener {
 	public static final String LOGIN_SERVICE = "LoginService!service.interfaces.LoginServiceLocal";
 	public static final String SENDER_BEAN = "java:module/UserMsgSenderBean!jms.UserMsgSender";
 	public static final String SENDER_GLOBAL = "java:global/UserAppEAR/UserAppEJB/UserMsgSenderBean!jms.UserMsgSender";
-	
+
 	public static final String USER_APP_NODE = "java:module/UserAppNode!node.UserAppNodeLocal";
 	public static final String USER_SERVICE_LOCAL = "java:module/UserService!service.interfaces.UserServiceLocal";
 	public static final String FRIENDSHIP_SERVICE_LOCAL = "java:module/FriendshipService!service.interfaces.FriendshipServiceLocal";
@@ -155,6 +155,50 @@ public class UserMsgReceiver implements MessageListener {
 				break;
 
 			case "friendship": {
+				log.info("---------------PRIJATELJSTVA---------------");
+				log.info(msgContent);
+
+				JSONObject msgObj = new JSONObject(msgContent);
+				JSONObject data = msgObj.getJSONObject("data");
+				String operation = data.getString("operation");
+				String sender = data.getString("sender");
+				String receiver = data.getString("receiver");
+				Context ctx = new InitialContext();
+				UserServiceLocal service = (UserServiceLocal) ctx.lookup(LOOKUP + USER_SERVICE);
+				JSONObject response = new JSONObject();
+				if (operation.equals("add")) {
+					log.info("Operacija -> dodavanje zahteva za prijateljstvo");
+					if (service.sendFriendRequest(sender, receiver)) {
+						response.put("status", "success");
+					} else {
+						response.put("status", "fail");
+					}
+				} else if (operation.equals("remove")) {
+					log.info("Operacija -> brisanje prijatelja");
+					if (service.removeFriend(sender, receiver)) {
+						response.put("status", "success");
+					} else {
+						response.put("status", "fail");
+					}
+				} else if (operation.equals("accept")) {
+					log.info("Operacija -> prihvatanje zahteva");
+					if (service.acceptFriendRequest(sender, receiver)) {
+						response.put("status", "success");
+					} else {
+						response.put("status", "fail");
+					}
+				} else if (operation.equals("decline")) {
+					log.info("Operacija -> odbijanje zahteva");
+					if (service.rejectFriendRequest(sender, receiver)) {
+						response.put("status", "success");
+					} else {
+						response.put("status", "fail");
+					}
+				}
+				response.put("sender", sender);
+				response.put("receiver", receiver);
+				UserMsgSender msgSender = (UserMsgSender) ctx.lookup(SENDER_BEAN);
+				msgSender.sendMsg(response.toString(), "friendship");
 
 			}
 
@@ -188,6 +232,16 @@ public class UserMsgReceiver implements MessageListener {
 					response.put("info", "Odjava nije uspela.");
 				}
 				msgSender.sendMsg(response.toString(), "logout");
+			}
+			case "message" : {
+				log.info("---------------PORUKA---------------");
+				log.info(msgContent);
+				
+				Context ctx = new InitialContext();
+				JSONObject requestMsg = new JSONObject(msgContent);
+				String username = requestMsg.getString("username");
+				String host = requestMsg.getString("host");
+				
 			}
 
 			}

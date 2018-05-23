@@ -27,7 +27,7 @@ public class User {
 	private String password;
 	private String name;
 	private String surname;
-	private ArrayList<ObjectId> groups;
+	private ArrayList<String> groups;
 	private ArrayList<String> friends;
 	private ArrayList<String> sentRequests;
 	private ArrayList<String> receivedRequests;
@@ -72,11 +72,11 @@ public class User {
 		this.surname = surname;
 	}
 
-	public ArrayList<ObjectId> getGroups() {
+	public ArrayList<String> getGroups() {
 		return groups;
 	}
 
-	public void setGroups(ArrayList<ObjectId> groups) {
+	public void setGroups(ArrayList<String> groups) {
 		this.groups = groups;
 	}
 
@@ -119,7 +119,7 @@ public class User {
 		this.surname = surname;
 	}
 
-	public User(String username, String password, String name, String surname, ArrayList<ObjectId> groups) {
+	public User(String username, String password, String name, String surname, ArrayList<String> groups) {
 		super();
 		this.username = username;
 		this.password = password;
