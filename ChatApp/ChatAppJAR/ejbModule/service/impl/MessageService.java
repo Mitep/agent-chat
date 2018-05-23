@@ -46,7 +46,7 @@ public class MessageService implements MessageServiceLocal {
 		ChatAppNodeLocal node = (ChatAppNodeLocal) context.lookup(LookupConst.CHAT_APP_NODE_LOCAL);
 		msg.remove("type");
 		msg.put("type", "receive_message");
-		node.getUserSession(msg.getString("receiver")).getAsyncRemote().sendText(content);
+		node.getUserSession(msg.getString("receiver")).getAsyncRemote().sendText(msg.toString());
 	}
 	
 	@Override
