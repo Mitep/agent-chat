@@ -24,6 +24,12 @@ export class SearchComponent implements OnInit {
 
   ngOnInit() {
     //this.searchResults = this.ws["searchResults"];
+    this.ws.myMessagesMilli = [];
+    this.ws.myMessagesDate = [];
+    this.ws.myGroupMessagesMilli = [];
+    this.ws.myGroupMessagesDate = [];
+    this.ws["friend"] = null;
+    this.ws["group"] = null;
     if(this.ws["logged"]==false){
       this.router.navigateByUrl('/');
     }

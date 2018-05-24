@@ -2,6 +2,7 @@ import { Component, OnInit, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { WebsocketService } from '../../services/websocket.service';
 import { NgForm } from '@angular/forms';
+import { FromEventObservable } from 'rxjs/observable/FromEventObservable';
 
 @Component({
   selector: 'app-chat',
@@ -14,6 +15,8 @@ export class ChatComponent implements OnInit {
   private router:Router;
   private ws:WebsocketService;
   public friend;
+  public group;
+ 
  // private myMessagesFromFriend:Array<{"sender": String, "receiver":String, "content":String, "timestamp":number}> = [];
 
   constructor(private rt:Router, private injector:Injector) {
@@ -65,6 +68,18 @@ export class ChatComponent implements OnInit {
     this.friend = friend;
     this.ws["friend"] = friend;
     this.ws.updateMsg(); 
+    
+    this.ws["isGroup"] = false;
+    this.ws["group"] = null;
+  }
+
+  showGroupMessages(group){
+    this.group = group;
+    this.ws["group"] = group;
+    this.ws.updateGroupMsg();
+    
+    this.ws["isGroup"] = true;
+    this.ws["friend"] = null;
   }
 
   sendMessage(content){
@@ -82,8 +97,25 @@ export class ChatComponent implements OnInit {
     this.ws.sendMsg(this.msg);
     var message ={sender:this.ws["username"], receiver:this.friend, content:content.message_content, timestamp:time};
     this.ws.myAllMessages.push(message);
-    console.log("sendmsg timestamp: " + message.timestamp);
     this.showMessages(this.friend);
+    this.ws.updateLeftMsgList();
+  }
+
+  sendGroupMessage(content){
+    var time = new Date().valueOf();
+    this.msg = "{\"type\":\"send_group_message\","
+             + "\"data\":{"
+             + "\"content\":\"" + content.message_content + "\","
+             + "\"timestamp\":\"" + time + "\","
+             + "\"sender\":\"" + this.ws["username"] + "\","
+             + "\"receiver\":\"" + this.group + "\"}" 
+             + "}";
+    console.log(this.msg);
+    this.ws.sendMsg(this.msg);
+    var message ={sender:this.ws["username"], receiver:this.group, content:content.message_content, timestamp:time};
+    this.ws.myAllGroupMessages.push(message);
+    this.showGroupMessages(this.group);
+    this.ws.updateLeftGroupMsgList();
   }
 
   isFriendSelected(){
@@ -91,6 +123,32 @@ export class ChatComponent implements OnInit {
         return false;
       else
         return true;
+  }
+
+  isGroupSelected(){
+    if(this.group == undefined)
+      return false;
+    else
+      return true;
+  }
+
+  createGroup(data){
+    console.log("kreiranje grupe: " + data.members);
+    var members = data.members.split(" ");
+    var m = new Array<String>();
+
+    m = data.members.split(" ");
+   
+    this.msg = "{\"type\":\"create_group\","
+              + "\"data\":{"
+              + "\"name\":\"" + data.groupname + "\","
+              + "\"members\":[" + m + "]}" 
+              + "}";
+    console.log(this.msg);
+  }
+
+  friendOnline(friend){
+      return true;
   }
 
 }
