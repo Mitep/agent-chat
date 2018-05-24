@@ -19,7 +19,7 @@
 					<input type="submit" value="Search" (click)="searchUser(data)">
 				</form>
 			</div></li>
-			<li id="logout"><a routerLink="/" (click)="logout()">Log out</a></li>  
+			<li id="logout"><a href="/" (click)="logout()">Log out</a></li>  
 		</ul>
 		<div class="body-section">
 			<div class="left-section mCustomScrollbar" data-mcs-theme="minimal-dark">
@@ -27,7 +27,7 @@
 					<li>
 						<div class="chatList" *ngFor="let friend of ws.myLeftMsgsArray">
 							<div class="img">
-									<i *ngIf="friendOnline(friend)" class="fa fa-circle"></i>
+									<i *ngIf="friendOnline(friend[0])" class="fa fa-circle"></i>
 								<img src="../../../assets/man01.png">
 							</div>
 							<div class="desc" (click) = "showMessages(friend[0])">
@@ -132,7 +132,7 @@
 							Online friends:
 						</th>
 					</tr>
-					<tr *ngFor = "let friend of ws.myFriends">					
+					<tr *ngFor = "let friend of ws.onlineFriends">					
 						<td (click) = "showMessages(friend)">{{friend}}</td>
 					</tr>
 				</table>

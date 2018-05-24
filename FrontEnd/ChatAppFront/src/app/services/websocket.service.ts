@@ -37,6 +37,10 @@ export class WebsocketService {
   public myLeftGroupMsgsMap: Map<String,String>;
   public myLeftGroupMsgsArray: [String, String][];
 
+  public onlineUsers:Array<String> = [];
+  public onlineFriends:Array<String> = [];
+  public offlineFriends:Array<String> = [];
+
   constructor(rt:Router) { 
       this.router = rt;
       this.myLeftMsgsMap = new Map();
@@ -69,60 +73,69 @@ export class WebsocketService {
 
       switch(type){
           case("register"):{
-              if(status=='success'){
-                  l = false;
-                  rt.navigateByUrl('/login');
-              }else if(status=='fail'){
-                  l = false;
-                  rt.navigateByUrl('/register');
-                  alert(json.info);
-              }
-              break;
+                if(status=='success'){
+                    l = false;
+                    rt.navigateByUrl('/login');
+                }else if(status=='fail'){
+                    l = false;
+                    rt.navigateByUrl('/register');
+                    alert(json.info);
+                }
+                break;
           }
           case("login"):{
-              if(status=='success'){
-                  l = true;
-                  rt.navigateByUrl('/home');
-                  
-                  w.myFriends = json.data.friends;
-                  console.log("myFriends: " + w.myFriends);
-                  w.myReceivedRequests = json.data.receivedRequests;
-                  console.log("stigli zahtjevi: " + w.myReceivedRequests);
-                  w.mySentRequests = json.data.sentRequests;
-                  console.log("poslati zahtjevi: " + w.mySentRequests);
-                  
-                  var msgs = json.data.messages;
-                  for(var i = 0; i < msgs.length; i++){
-                      if(msgs[i].type==0){
+                if(status=='success'){
+                    l = true;
+                    rt.navigateByUrl('/home');
+                    
+                    w.myFriends = json.data.friends;
+                    console.log("myFriends: " + w.myFriends);
+                    w.myReceivedRequests = json.data.receivedRequests;
+                    console.log("stigli zahtjevi: " + w.myReceivedRequests);
+                    w.mySentRequests = json.data.sentRequests;
+                    console.log("poslati zahtjevi: " + w.mySentRequests);
+                    
+                    var msgs = json.data.messages;
+                    for(var i = 0; i < msgs.length; i++){
+                        if(msgs[i].type==0){
+                            var m = {sender:msgs[i].sender, receiver:msgs[i].receiver, content:msgs[i].content, timestamp:msgs[i].timestamp};
+                            w.myAllMessages.push(m);
+                        }
+                    } 
+                    for(var i = 0; i < msgs.length; i++){
+                        if(msgs[i].type==1){
                         var m = {sender:msgs[i].sender, receiver:msgs[i].receiver, content:msgs[i].content, timestamp:msgs[i].timestamp};
-                        w.myAllMessages.push(m);
-                      }
-                  } 
-                  for(var i = 0; i < msgs.length; i++){
-                    if(msgs[i].type==1){
-                      var m = {sender:msgs[i].sender, receiver:msgs[i].receiver, content:msgs[i].content, timestamp:msgs[i].timestamp};
-                      w.myAllGroupMessages.push(m);
+                        w.myAllGroupMessages.push(m);
+                        }
                     }
-                  }
 
-                  w.myGroups = json.data.groups;
-                
-                  w.updateLeftMsgList();   
-                  w.updateLeftGroupMsgList();
+                    w.myGroups = json.data.groups;
+                    w.onlineUsers = json.data.online_users;
+                   
+                    for(var i = 0; i < w.onlineUsers.length; i++){
+                        if(w.isMyFriend(w.onlineUsers[i])){
+                            w.onlineFriends.push(w.onlineUsers[i]);
+                        }
+                    }
+                    
+                    console.log("online useri: " + w.onlineUsers);
+                    console.log("online friends: " + w.onlineFriends);
+                    w.updateLeftMsgList();   
+                    w.updateLeftGroupMsgList();
 
-              }else if(status=='fail'){
-                  l = false;
-                  rt.navigateByUrl('/login');
-                  alert(json.info);
-              }           
-              break;
+                }else if(status=='fail'){
+                    l = false;
+                    rt.navigateByUrl('/login');
+                    alert(json.info);
+                }           
+                break;
           }
           case("user_search"):{            
-              searchResults = json.data;
-              w.searchResults = searchResults;
-              console.log(searchResults);
-              rt.navigateByUrl('/search');
-              break;
+                searchResults = json.data;
+                w.searchResults = searchResults;
+                console.log(searchResults);
+                rt.navigateByUrl('/search');
+                break;
           }
           case("receive_message"):{
                 var time = parseInt(json.timestamp);
@@ -135,6 +148,31 @@ export class WebsocketService {
           case("receive_group_message"):{
               console.log("stigla grupna porukica");
                 break;
+          }
+          case("online_user"):{
+                console.log("stigoo online " + json.username);
+                w.onlineUsers.push(json.username);
+                if(w.isMyFriend(json.username)){
+                    w.onlineFriends.push(json.username);
+                }
+                break;
+          }
+          case("offline_user"):{
+              for(var i = 0; i < w.onlineUsers.length; i++){
+                  if(w.onlineUsers[i] == json.username){                   
+                      w.onlineUsers.splice(i, 1);
+                      console.log(w.onlineUsers);
+                  }
+              }
+
+              if(w.isMyFriend(json.username)){
+                  for(var i = 0; i < w.onlineFriends.length; i++){
+                      if(w.onlineFriends[i] == json.username){
+                          w.onlineFriends.splice(i, 1);
+                      }
+                  }
+              }
+              break;
           }
       }      
       w.logged = l;
@@ -224,5 +262,16 @@ export class WebsocketService {
 
   public getEntries(map):[String, String][] {
         return Array.from(map.entries());
+  }
+
+  public isMyFriend(user): Boolean{
+      var flag = false;
+      for(var i = 0; i < this.myFriends.length; i++){
+            if(user == this.myFriends[i]){
+                flag = true;
+                break;
+            }
+      }
+      return flag;
   }
 }

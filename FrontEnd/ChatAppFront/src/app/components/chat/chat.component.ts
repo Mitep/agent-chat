@@ -148,7 +148,13 @@ export class ChatComponent implements OnInit {
   }
 
   friendOnline(friend){
-      return true;
+    var flag = false;
+      for(var i = 0; i < this.ws["onlineFriends"].length; i++){
+          if(this.ws["onlineFriends"][i] == friend){
+             flag = true;
+          }
+      }
+      return flag;
   }
 
 }

@@ -59,7 +59,6 @@ public class MessageService implements MessageServiceLocal {
 		JSONObject msg = new JSONObject(content);
 		ChatAppNodeLocal node = (ChatAppNodeLocal) context.lookup(LookupConst.CHAT_APP_NODE_LOCAL);
 		String groupId = msg.getString("receiver");
-		
 		RestLocal rl = (RestLocal) context.lookup(LookupConst.REST);
 		ArrayList<String> groupUsers = (ArrayList<String>) rl.groupUsers(groupId);
 		

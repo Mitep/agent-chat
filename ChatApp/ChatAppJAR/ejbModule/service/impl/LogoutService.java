@@ -61,9 +61,11 @@ public class LogoutService implements LogoutServiceLocal {
 		JSONObject obj = new JSONObject(response);
 		String status = obj.getString("status");
 		String username = obj.getString("username");
-		String host = obj.getString("host");
+		
 		
 		ChatAppNodeLocal node = (ChatAppNodeLocal) context.lookup(LookupConst.CHAT_APP_NODE_LOCAL);
+		
+		String host = node.isUserOnline(username);
 		
 		if(status.equals("success")) {
 			node.removeOnlineUserApp(username);
@@ -74,7 +76,7 @@ public class LogoutService implements LogoutServiceLocal {
 			if(status.equals("success")) {
 				HashMap<String, Session> thisNodeSessions = node.getAllUserSessions();
 				for(String userSes : thisNodeSessions.keySet()) {
-					thisNodeSessions.get(userSes).getAsyncRemote().sendText("{ 'type':'offline_user', 'username':'"+username+"' }");
+					thisNodeSessions.get(userSes).getAsyncRemote().sendText("{ \"type\":\"offline_user\", \"username\":\""+username+"\" }");
 				}
 			} 
 			node.getUserSession(username).getAsyncRemote().sendText(response);
@@ -85,7 +87,7 @@ public class LogoutService implements LogoutServiceLocal {
 			if(status.equals("success")) {
 				HashMap<String, Session> thisNodeSessions = node.getAllUserSessions();
 				for(String userSes : thisNodeSessions.keySet()) {
-					thisNodeSessions.get(userSes).getAsyncRemote().sendText("{ 'type':'offline_user', 'username':'"+username+"' }");
+					thisNodeSessions.get(userSes).getAsyncRemote().sendText("{ \"type\":\"offline_user\", \"username\":\""+username+"\" }");
 				}
 				
 			} 
@@ -99,12 +101,13 @@ public class LogoutService implements LogoutServiceLocal {
 		ChatAppNodeLocal node = (ChatAppNodeLocal) context.lookup(LookupConst.CHAT_APP_NODE_LOCAL);
 		
 		String username = node.getSessionUsername(session);
+		String host = node.isUserOnline(username);
 		
 		if(username != null) {
 			
 			if(node.isThisMaster()) {
 				ChatMsgSenderLocal msgSender = (ChatMsgSenderLocal) context.lookup(LookupConst.CHAT_JMS_SENDER);
-				msgSender.sendMsg("{ \"username\"="+username+" }", "logout");
+				msgSender.sendMsg("{ \"username\":\""+username+"\", \"host\":\""+host+"\" }", "logout");
 			} else {
 				// rest zahtev 2
 				// slanje userappu zahtev za logovanje
