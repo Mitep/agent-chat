@@ -42,12 +42,6 @@ public class UserRestController {
 	}
 
 	@GET
-	@Path("/test")
-	public String test() {
-		return "user test ok!";
-	}
-
-	@GET
 	@Path("/{username}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public User getUserByUsername(@PathParam("username") String username) {
@@ -148,7 +142,7 @@ public class UserRestController {
 	}
 
 	@POST
-	@Path("/addgroup")
+	@Path("/group/add")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<String> addUserToGroup(@FormParam("username") String username, @FormParam("groupId") String groupId) {
@@ -257,6 +251,21 @@ public class UserRestController {
 		try {
 			userService = (UserServiceLocal) ctx.lookup(UserServiceLocal.LOOKUP_GLOBAL);
 			return userService.rejectFriendRequest(user, friend);
+		} catch (NamingException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	@POST
+	@Path("/friends/delete")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.APPLICATION_JSON)
+	public boolean deleteFriend(@FormParam("user") String user, @FormParam("friend") String friend) {
+		UserServiceLocal userService;
+		try {
+			userService = (UserServiceLocal) ctx.lookup(UserServiceLocal.LOOKUP_GLOBAL);
+			return userService.removeFriend(user, friend);
 		} catch (NamingException e) {
 			e.printStackTrace();
 			return false;

@@ -46,15 +46,15 @@ public class GroupService implements GroupServiceLocal {
 	}
 
 	@Override
-	public boolean createGroup(String str) {
+	public Group createGroup(String str) {
 		try {
 			Gson g = new Gson();
 			Group grupa = g.fromJson(str, Group.class);
 			datastore.save(grupa);
+			return datastore.get(grupa);
 		} catch (Exception e) {
-			return false;
+			return null;
 		}
-		return true;
 	}
 
 	@Override

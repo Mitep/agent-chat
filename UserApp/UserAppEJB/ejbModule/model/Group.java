@@ -21,6 +21,7 @@ public class Group {
 	@Id
 	private ObjectId id;
 	private String name;
+	private String admin;
 	private ArrayList<String> members;
 	private ArrayList<String> messages;
 
@@ -34,10 +35,26 @@ public class Group {
 		this.members = members;
 	}
 
+	public Group(String name, String admin, ArrayList<String> members) {
+		super();
+		this.name = name;
+		this.admin = admin;
+		this.members = members;
+	}
+
 	public Group(ObjectId id, String name, ArrayList<String> members, ArrayList<String> messages) {
 		super();
 		this.id = id;
 		this.name = name;
+		this.members = members;
+		this.messages = messages;
+	}
+
+	public Group(ObjectId id, String name, String admin, ArrayList<String> members, ArrayList<String> messages) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.admin = admin;
 		this.members = members;
 		this.messages = messages;
 	}
@@ -80,6 +97,14 @@ public class Group {
 	
 	public void removeMember(String username) {
 		members.remove(username);
+	}
+
+	public String getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(String admin) {
+		this.admin = admin;
 	}
 
 }
