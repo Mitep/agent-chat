@@ -37,8 +37,9 @@ public class MessageService implements MessageServiceLocal {
 			}
 		}
 		RestLocal rl = (RestLocal) context.lookup(LookupConst.REST);
-		//mozda bude trebalo nesto drugo da se salje
-		rl.saveMsg(content);
+
+		msg.put("type", 0);
+		rl.saveMsg(msg.toString());
 	}
 	
 	@Override
@@ -74,9 +75,8 @@ public class MessageService implements MessageServiceLocal {
 			}
 		}
 		
-		System.out.println("radi dovde");
-		//mozda bude trebalo nesto drugo da se salje
-		rl.saveMsg(content);	
+		msg.put("type", 1);
+		rl.saveMsg(msg.toString());
 	}
 	
 }
