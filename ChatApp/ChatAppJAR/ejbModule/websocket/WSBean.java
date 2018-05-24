@@ -96,22 +96,22 @@ public class WSBean implements WSLocal {
 	            	break;
 				case "friend_add": {
 					UserServiceLocal usl = (UserServiceLocal) context.lookup(LookupConst.USER_SERVICE);
-					usl.addUser(data);
+					usl.addUser(msg);
 				};
 	            	break;
 				case "friend_remove": {
 					UserServiceLocal usl = (UserServiceLocal) context.lookup(LookupConst.USER_SERVICE);
-					usl.removeUser(data);
+					usl.removeUser(msg);
 				};
 	            	break;
 				case "friend_accept": {
 					UserServiceLocal usl = (UserServiceLocal) context.lookup(LookupConst.USER_SERVICE);
-					usl.acceptUser(data);
+					usl.acceptUser(msg);
 				};
 	            	break;
 				case "friend_reject": {
 					UserServiceLocal usl = (UserServiceLocal) context.lookup(LookupConst.USER_SERVICE);
-					usl.rejectUser(data);
+					usl.rejectUser(msg);
 				};
 	            	break;
 				case "group_new": {

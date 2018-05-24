@@ -118,7 +118,7 @@ public class MessageService implements MessageServiceLocal {
 	public List<Message> getRelatedMessages(String user) {
 		Query<Message> query = datastore.createQuery(Message.class);
 		Query<Message> query2 = datastore.createQuery(Message.class);
-		query.criteria("sender").equal(user);
+		query.criteria("sender").equal(user).criteria("type").equal(0);
 		query2.criteria("receiver").equal(user);
 
 		ArrayList<Message> msgs = new ArrayList<>();

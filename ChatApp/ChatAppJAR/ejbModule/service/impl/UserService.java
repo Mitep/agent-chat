@@ -76,7 +76,9 @@ public class UserService implements UserServiceLocal {
 		String receiver = obj.getString("receiver");
 		
 		ChatAppNodeLocal node = (ChatAppNodeLocal) context.lookup(LookupConst.CHAT_APP_NODE_LOCAL);
-		node.getUserSession(receiver).getAsyncRemote().sendText(content);
+		if(node.isUserOnline(receiver) != null){
+			node.getUserSession(receiver).getAsyncRemote().sendText(content);
+		}
 	}
 
 
@@ -86,7 +88,9 @@ public class UserService implements UserServiceLocal {
 		String receiver = obj.getString("receiver");
 		
 		ChatAppNodeLocal node = (ChatAppNodeLocal) context.lookup(LookupConst.CHAT_APP_NODE_LOCAL);
-		node.getUserSession(receiver).getAsyncRemote().sendText(content);	
+		if(node.isUserOnline(receiver) != null){
+			node.getUserSession(receiver).getAsyncRemote().sendText(content);
+		}
 	}
 
 
@@ -96,8 +100,9 @@ public class UserService implements UserServiceLocal {
 		String receiver = obj.getString("receiver");
 		
 		ChatAppNodeLocal node = (ChatAppNodeLocal) context.lookup(LookupConst.CHAT_APP_NODE_LOCAL);
-		node.getUserSession(receiver).getAsyncRemote().sendText(content);
-			
+		if(node.isUserOnline(receiver) != null){
+			node.getUserSession(receiver).getAsyncRemote().sendText(content);
+		}
 	}
 
 
@@ -107,7 +112,10 @@ public class UserService implements UserServiceLocal {
 		String receiver = obj.getString("receiver");
 		
 		ChatAppNodeLocal node = (ChatAppNodeLocal) context.lookup(LookupConst.CHAT_APP_NODE_LOCAL);
-		node.getUserSession(receiver).getAsyncRemote().sendText(content);	
+		
+		if(node.isUserOnline(receiver) != null){
+			node.getUserSession(receiver).getAsyncRemote().sendText(content);	
+		}
 	}
 
 	@Override

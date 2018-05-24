@@ -65,12 +65,19 @@ public class MessageService implements MessageServiceLocal {
 		ArrayList<String> groupUsers = rl.groupUsers(groupId);
 		
 		for(String user : groupUsers) {
-			String host = node.isUserOnline(user);
-			if(host != null) {
-				if(host.equals(node.getHost())) {
-					forwardMessage(user, content, true);
-				} else {
-					// rest forward message
+			System.out.println("==============================================");
+
+			System.out.println("user: " + user);
+			System.out.println(msg.getString("sender"));
+			System.out.println("==============================================");
+			if(!user.equals(msg.getString("sender"))){
+				String host = node.isUserOnline(user);
+				if(host != null) {
+					if(host.equals(node.getHost())) {
+						forwardMessage(user, content, true);
+					} else {
+						// rest forward message
+					}
 				}
 			}
 		}

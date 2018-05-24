@@ -104,8 +104,8 @@ export class WebsocketService {
                     } 
                     for(var i = 0; i < msgs.length; i++){
                         if(msgs[i].type==1){
-                        var m = {sender:msgs[i].sender, receiver:msgs[i].receiver, content:msgs[i].content, timestamp:msgs[i].timestamp};
-                        w.myAllGroupMessages.push(m);
+                            var m = {sender:msgs[i].sender, receiver:msgs[i].receiver, content:msgs[i].content, timestamp:msgs[i].timestamp};
+                            w.myAllGroupMessages.push(m);
                         }
                     }
 
@@ -117,9 +117,13 @@ export class WebsocketService {
                             w.onlineFriends.push(w.onlineUsers[i]);
                         }
                     }
-                    
-                    console.log("online useri: " + w.onlineUsers);
-                    console.log("online friends: " + w.onlineFriends);
+                    for(var i = 0; i < w.myFriends.length; i++){
+                        if(!w.onlineFriends.includes(w.myFriends[i])){
+                            w.offlineFriends.push(w.myFriends[i]);
+                        }
+                    }
+                   
+                    console.log("grupne poruke: " + w.myAllGroupMessages);
                     w.updateLeftMsgList();   
                     w.updateLeftGroupMsgList();
 
@@ -146,7 +150,15 @@ export class WebsocketService {
                 break;
           }
           case("receive_group_message"):{
-              console.log("stigla grupna porukica");
+                var time = parseInt(json.timestamp);
+                var message = {sender:json.sender, receiver:json.receiver, content:json.content, timestamp:time};             
+                console.log("message: " + message);
+                if(w.username != json.sender){
+                    w.myAllGroupMessages.push(message);
+                }
+                
+                w.updateGroupMsg();
+                w.updateLeftGroupMsgList();
                 break;
           }
           case("online_user"):{
@@ -154,18 +166,24 @@ export class WebsocketService {
                 w.onlineUsers.push(json.username);
                 if(w.isMyFriend(json.username)){
                     w.onlineFriends.push(json.username);
+                    for(var i = 0; i < w.offlineFriends.length; i++){
+                        if(json.username == w.offlineFriends[i]){
+                            w.offlineFriends.splice(i, 1);
+                        }
+                    }
                 }
                 break;
           }
           case("offline_user"):{
+              
               for(var i = 0; i < w.onlineUsers.length; i++){
                   if(w.onlineUsers[i] == json.username){                   
                       w.onlineUsers.splice(i, 1);
-                      console.log(w.onlineUsers);
                   }
               }
 
               if(w.isMyFriend(json.username)){
+                  w.offlineFriends.push(json.username);
                   for(var i = 0; i < w.onlineFriends.length; i++){
                       if(w.onlineFriends[i] == json.username){
                           w.onlineFriends.splice(i, 1);

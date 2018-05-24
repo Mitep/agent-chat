@@ -65,30 +65,52 @@ export class HomeComponent implements OnInit {
   }
 
   deleteFriend(username){
-    this.msg = "{\"type\":\"delete_friend\","
+    this.msg = "{\"type\":\"friend_remove\","
     + " \"data\":{"
-    + "\"my_username\":\"" + this.ws["username"] + "\","
-    + " \"friends_username\":\"" + username + "\"}"
+    + "\"sender\":\"" + this.ws["username"] + "\","
+    + "\"receiver\":\"" + username + "\"}"
     + "}";
     console.log(this.msg);
     //this.ws.sendMsg(this.msg);
   }
 
   acceptRequest(username){
-    this.msg = "{\"type\":\"accept_request\","
+    this.msg = "{\"type\":\"friend_accept\","
     + " \"data\":{"
-    + "\"my_username\":\"" + this.ws["username"] + "\","
-    + " \"friends_username\":\"" + username + "\"}"
+    + "\"sender\":\"" + this.ws["username"] + "\","
+    + "\"receiver\":\"" + username + "\"}"
     + "}";
-    //this.ws.sendMsg(this.msg);
+    console.log(this.msg);
+    this.ws.sendMsg(this.msg);
+
+    this.ws.myFriends.push(username);
+    for(var i = 0; i < this.ws.myReceivedRequests.length; i++){
+      if(this.ws.myReceivedRequests[i]==username){
+          this.ws.myReceivedRequests.splice(i,1);
+          break;
+      }
+    }
+    for(var i = 0; i < this.ws.onlineUsers.length; i++){
+        if(this.ws.onlineUsers[i]==username){
+          this.ws.onlineFriends.push(username);
+          break;
+        }
+    }
   }
 
   declineRequest(username){
-    this.msg = "{\"type\":\"decline_request\","
+    this.msg = "{\"type\":\"friend_reject\","
     + " \"data\":{"
-    + "\"my_username\":\"" + this.ws["username"] + "\","
-    + " \"friends_username\":\"" + username + "\"}"
+    + "\"sender\":\"" + this.ws["username"] + "\","
+    + "\"receiver\":\"" + username + "\"}"
     + "}";
-    //this.ws.sendMsg(this.msg);
+    console.log(this.msg);
+    this.ws.sendMsg(this.msg);
+
+    for(var i = 0; i < this.ws.myReceivedRequests.length; i++){
+      if(this.ws.myReceivedRequests[i]==username){
+        this.ws.myReceivedRequests.splice(i,1);
+      }
+    }
   }
 }

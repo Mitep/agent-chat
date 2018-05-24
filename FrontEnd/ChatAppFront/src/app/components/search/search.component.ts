@@ -112,47 +112,51 @@ export class SearchComponent implements OnInit {
   }
 
   deleteFriend(username){
-    this.msg = "{\"type\":\"delete_friend\","
+    this.msg = "{\"type\":\"friend_remove\","
     + " \"data\":{"
-    + "\"my_username\":\"" + this.ws["username"] + "\","
-    + " \"friends_username\":\"" + username + "\"}"
+    + "\"sender\":\"" + this.ws["username"] + "\","
+    + "\"receiver\":\"" + username + "\"}"
     + "}";
     console.log(this.msg);
     //this.ws.sendMsg(this.msg);
   }
 
   addFriend(username){
-    this.msg = "{\"type\":\"add_friend\","
+    this.msg = "{\"type\":\"friend_add\","
     + " \"data\":{"
-    + "\"my_username\":\"" + this.ws["username"] + "\","
-    + " \"friends_username\":\"" + username + "\"}"
+    + "\"sender\":\"" + this.ws["username"] + "\","
+    + " \"receiver\":\"" + username + "\"}"
     + "}";
+    console.log(this.msg);
     //this.ws.sendMsg(this.msg);
   }
 
+  
   acceptRequest(username){
-    this.msg = "{\"type\":\"accept_request\","
+    this.msg = "{\"type\":\"friend_accept\","
     + " \"data\":{"
-    + "\"my_username\":\"" + this.ws["username"] + "\","
-    + " \"friends_username\":\"" + username + "\"}"
+    + "\"sender\":\"" + this.ws["username"] + "\","
+    + "\"receiver\":\"" + username + "\"}"
     + "}";
+    console.log(this.msg);
     //this.ws.sendMsg(this.msg);
   }
 
   declineRequest(username){
-    this.msg = "{\"type\":\"decline_request\","
+    this.msg = "{\"type\":\"friend_reject\","
     + " \"data\":{"
-    + "\"my_username\":\"" + this.ws["username"] + "\","
-    + " \"friends_username\":\"" + username + "\"}"
+    + "\"sender\":\"" + this.ws["username"] + "\","
+    + "\"receiver\":\"" + username + "\"}"
     + "}";
+    console.log(this.msg);
     //this.ws.sendMsg(this.msg);
   }
 
   deleteRequest(username){
     this.msg = "{\"type\":\"delete_request\","
     + " \"data\":{"
-    + "\"my_username\":\"" + this.ws["username"] + "\","
-    + " \"friends_username\":\"" + username + "\"}"
+    + "\"sender\":\"" + this.ws["username"] + "\","
+    + " \"receiver\":\"" + username + "\"}"
     + "}";
     //this.ws.sendMsg(this.msg);
   }

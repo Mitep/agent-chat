@@ -138,6 +138,19 @@
 				</table>
 				<br>
 				<br>
+				
+				<table class="online-friends">
+					<tr>
+						<th>
+							Offline friends:
+						</th>
+					</tr>
+					<tr *ngFor = "let friend of ws.offlineFriends">					
+						<td (click) = "showMessages(friend)">{{friend}}</td>
+					</tr>
+				</table>
+				<br>
+				<br>
 
 				<table class="online-friends">
 					<tr>
