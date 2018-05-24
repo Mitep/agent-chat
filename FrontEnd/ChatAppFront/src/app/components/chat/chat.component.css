@@ -288,7 +288,7 @@ li a:hover {
 	
 	border-left:1px solid #E6E6E6;
 	
-
+	overflow: scroll;
 	position: relative;
 	text-align: center;
 	float:right;

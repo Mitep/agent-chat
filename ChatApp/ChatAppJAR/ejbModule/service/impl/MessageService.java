@@ -30,52 +30,52 @@ public class MessageService implements MessageServiceLocal {
 		String host = node.isUserOnline(msg.getString("receiver"));
 		if(host != null) {
 			if(host.equals(node.getHost())) {
-				forwardMessage(content);
+				forwardMessage(content, false);
 			} else {
 				// rest forward message
 			}
 		}
 		RestLocal rl = (RestLocal) context.lookup(LookupConst.REST);
 		//mozda bude trebalo nesto drugo da se salje
-		rl.saveMsg(msg.toString());
+		rl.saveMsg(content);
 	}
 	
 	@Override
-	public void forwardMessage(String content) throws Exception {
+	public void forwardMessage(String content, boolean groupMessage) throws Exception {
 		JSONObject msg = new JSONObject(content);
 		ChatAppNodeLocal node = (ChatAppNodeLocal) context.lookup(LookupConst.CHAT_APP_NODE_LOCAL);
 		msg.remove("type");
-		msg.put("type", "receive_message");
+		
+		if(groupMessage)
+			msg.put("type", "receive_group_message");
+		else
+			msg.put("type", "receive_message");
+		
 		node.getUserSession(msg.getString("receiver")).getAsyncRemote().sendText(msg.toString());
-	}
-	
-	@Override
-	public void showMessages(String content) throws Exception {
-		JSONObject msg = new JSONObject(content);
-		ChatAppNodeLocal node = (ChatAppNodeLocal) context.lookup(LookupConst.CHAT_APP_NODE_LOCAL);
-				
-		JSONObject response = new JSONObject();
-		response.put("type", msg.getString("type"));
-		response.put("my_username", msg.getString("my_username"));
-		response.put("friends_username", msg.getString("friends_username"));
-		
-		RestLocal rl = (RestLocal) context.lookup(LookupConst.REST);
-		String messages = rl.showUserMessages(content);
-		response.put("data", messages);
-		
-		node.getUserSession(msg.getString("my_username")).getAsyncRemote().sendText(response.toString());
 	}
 
 	@Override
 	public void processGroupMessage(String content) throws Exception {
 		JSONObject msg = new JSONObject(content);
 		ChatAppNodeLocal node = (ChatAppNodeLocal) context.lookup(LookupConst.CHAT_APP_NODE_LOCAL);
-		
 		String groupId = msg.getString("receiver");
 		
 		RestLocal rl = (RestLocal) context.lookup(LookupConst.REST);
-		ArrayList<String> groupUsers = rl.groupUsers(msg.getString("my_group_neki_id"));
-			
+		ArrayList<String> groupUsers = (ArrayList<String>) rl.groupUsers(groupId);
+		
+		for(String user : groupUsers) {
+			String host = node.isUserOnline(user);
+			if(host != null) {
+				if(host.equals(node.getHost())) {
+					forwardMessage(content, true);
+				} else {
+					// rest forward message
+				}
+			}
+		}
+		
+		//mozda bude trebalo nesto drugo da se salje
+		rl.saveMsg(content);	
 	}
 	
 }
