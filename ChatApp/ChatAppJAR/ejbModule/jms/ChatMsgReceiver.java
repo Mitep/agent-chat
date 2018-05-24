@@ -11,10 +11,12 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import service.interfaces.GroupServiceLocal;
 import service.interfaces.LoginServiceLocal;
 import service.interfaces.LogoutServiceLocal;
 import service.interfaces.RegisterServiceLocal;
 import service.interfaces.UserSearchServiceLocal;
+import service.interfaces.UserServiceLocal;
 import util.LookupConst;
 
 @MessageDriven(activationConfig = { 
@@ -59,6 +61,46 @@ public class ChatMsgReceiver implements MessageListener {
 	            	UserSearchServiceLocal ussl = (UserSearchServiceLocal) context.lookup(LookupConst.USER_SEARCH_SERVICE);
 	            	ussl.response(msg.getBody(String.class));
 	            };
+	            	break;
+	            case "friend_add": {
+					UserServiceLocal usl = (UserServiceLocal) context.lookup(LookupConst.USER_SERVICE);
+					usl.addUserResponse(msg.getBody(String.class));
+				};
+	            	break;
+				case "friend_remove": {
+					UserServiceLocal usl = (UserServiceLocal) context.lookup(LookupConst.USER_SERVICE);
+					usl.removeUserResponse(msg.getBody(String.class));
+				};
+	            	break;
+				case "friend_accept": {
+					UserServiceLocal usl = (UserServiceLocal) context.lookup(LookupConst.USER_SERVICE);
+					usl.acceptUserResponse(msg.getBody(String.class));
+				};
+	            	break;
+				case "friend_reject": {
+					UserServiceLocal usl = (UserServiceLocal) context.lookup(LookupConst.USER_SERVICE);
+					usl.rejectUserResponse(msg.getBody(String.class));
+				};
+	            	break;
+				case "group_new": {
+					GroupServiceLocal gsl = (GroupServiceLocal) context.lookup(LookupConst.CHAT_GROUP_SERVICE);
+					gsl.createGroupResponse(msg.getBody(String.class));
+				};
+	            	break;
+				case "group_delete": {
+					GroupServiceLocal gsl = (GroupServiceLocal) context.lookup(LookupConst.CHAT_GROUP_SERVICE);
+					gsl.removeGroupResponse(msg.getBody(String.class));
+				};
+	            	break;
+				case "group_add_user": {
+					GroupServiceLocal gsl = (GroupServiceLocal) context.lookup(LookupConst.CHAT_GROUP_SERVICE);
+					gsl.addUserToGroupResponse(msg.getBody(String.class));
+				};
+	            	break;
+				case "group_remove_user": {
+					GroupServiceLocal gsl = (GroupServiceLocal) context.lookup(LookupConst.CHAT_GROUP_SERVICE);
+					gsl.removeUserFromGroupResponse(msg.getBody(String.class));
+				};
 	            	break;
 				default:
 					break;

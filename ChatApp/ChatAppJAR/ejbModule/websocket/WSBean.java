@@ -19,11 +19,13 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import node.ChatAppNodeLocal;
+import service.interfaces.GroupServiceLocal;
 import service.interfaces.LoginServiceLocal;
 import service.interfaces.LogoutServiceLocal;
 import service.interfaces.MessageServiceLocal;
 import service.interfaces.RegisterServiceLocal;
 import service.interfaces.UserSearchServiceLocal;
+import service.interfaces.UserServiceLocal;
 import util.LookupConst;
 
 @Startup
@@ -92,7 +94,47 @@ public class WSBean implements WSLocal {
 					msl.processGroupMessage(data);
 				};
 	            	break;
-	            default:
+				case "friend_add": {
+					UserServiceLocal usl = (UserServiceLocal) context.lookup(LookupConst.USER_SERVICE);
+					usl.addUser(data);
+				};
+	            	break;
+				case "friend_remove": {
+					UserServiceLocal usl = (UserServiceLocal) context.lookup(LookupConst.USER_SERVICE);
+					usl.removeUser(data);
+				};
+	            	break;
+				case "friend_accept": {
+					UserServiceLocal usl = (UserServiceLocal) context.lookup(LookupConst.USER_SERVICE);
+					usl.acceptUser(data);
+				};
+	            	break;
+				case "friend_reject": {
+					UserServiceLocal usl = (UserServiceLocal) context.lookup(LookupConst.USER_SERVICE);
+					usl.rejectUser(data);
+				};
+	            	break;
+				case "group_new": {
+					GroupServiceLocal gsl = (GroupServiceLocal) context.lookup(LookupConst.CHAT_GROUP_SERVICE);
+					gsl.createGroup(data);
+				};
+	            	break;
+				case "group_delete": {
+					GroupServiceLocal gsl = (GroupServiceLocal) context.lookup(LookupConst.CHAT_GROUP_SERVICE);
+					gsl.removeGroup(data);
+				};
+	            	break;
+				case "group_add_user": {
+					GroupServiceLocal gsl = (GroupServiceLocal) context.lookup(LookupConst.CHAT_GROUP_SERVICE);
+					gsl.addUserToGroup(data);
+				};
+	            	break;
+				case "group_remove_user": {
+					GroupServiceLocal gsl = (GroupServiceLocal) context.lookup(LookupConst.CHAT_GROUP_SERVICE);
+					gsl.removeUserFromGroup(data);
+				};
+	            	break;
+				default:
 	            	break;
 			}				
 			

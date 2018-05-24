@@ -6,6 +6,8 @@ public class LookupConst {
 	public static final String CHAT_APP_NODE_LOCAL = "java:module/ChatAppNode!node.ChatAppNodeLocal";
 	public static final String CHAT_APP_NODE_SERVICE = "java:module/NodeService!service.interfaces.NodeServiceLocal";
 	
+	public static final String CHAT_GROUP_SERVICE = "java:module/GroupService!service.interfaces.GroupServiceLocal";
+	
 	public static final String CHAT_JMS_SENDER = "java:module/ChatMsgSender!jms.ChatMsgSenderLocal";
 	
 	public static final String CHAT_WEB_SOCKET = "java:module/WSBean!websocket.WSLocal";
@@ -16,6 +18,7 @@ public class LookupConst {
 	public static final String CHAT_LOGOUT_SERVICE = "java:module/LogoutService!service.interfaces.LogoutServiceLocal";
 	
 	public static final String USER_SEARCH_SERVICE = "java:module/UserSearchService!service.interfaces.UserSearchServiceLocal";
+	public static final String USER_SERVICE = "java:module/UserService!service.interfaces.UserServiceLocal";
 	
 	public static final String MESSAGE_SERVICE = "java:module/MessageService!service.interfaces.MessageServiceLocal";
 	
