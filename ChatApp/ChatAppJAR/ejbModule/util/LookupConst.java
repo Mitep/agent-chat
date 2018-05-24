@@ -4,6 +4,7 @@ public class LookupConst {
 
 	// za jar
 	public static final String CHAT_APP_NODE_LOCAL = "java:module/ChatAppNode!node.ChatAppNodeLocal";
+	public static final String CHAT_APP_NODE_SERVICE = "java:module/NodeService!service.interfaces.NodeServiceLocal";
 	
 	public static final String CHAT_JMS_SENDER = "java:module/ChatMsgSender!jms.ChatMsgSenderLocal";
 	
@@ -22,5 +23,9 @@ public class LookupConst {
 	
 	// za war
 	public static final String CHAT_WEB_SOCKET_WAR = "java:app/ChatAppJAR/WSBean!websocket.WSLocal";
+	
+	public static final String CHAT_APP_SERVICE_WAR = "java:app/ChatAppJAR/NodeService!service.interfaces.NodeServiceLocal";
+	
+	
 
 }

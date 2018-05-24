@@ -65,16 +65,16 @@ public class LogoutService implements LogoutServiceLocal {
 		
 		ChatAppNodeLocal node = (ChatAppNodeLocal) context.lookup(LookupConst.CHAT_APP_NODE_LOCAL);
 		
-		if(status.equals("logout_success")) {
+		if(status.equals("success")) {
 			node.removeOnlineUserApp(username);
 		}
 		
 		if(host.equals(node.getHost())) {
 			
-			if(status.equals("logout_success")) {
+			if(status.equals("success")) {
 				HashMap<String, Session> thisNodeSessions = node.getAllUserSessions();
 				for(String userSes : thisNodeSessions.keySet()) {
-					thisNodeSessions.get(userSes).getAsyncRemote().sendText("{ 'type':'offline_user', 'username':'"+userSes+"' }");
+					thisNodeSessions.get(userSes).getAsyncRemote().sendText("{ 'type':'offline_user', 'username':'"+username+"' }");
 				}
 			} 
 			node.getUserSession(username).getAsyncRemote().sendText(response);
@@ -82,16 +82,36 @@ public class LogoutService implements LogoutServiceLocal {
 			
 		} else {
 			
-			if(status.equals("logout_success")) {
+			if(status.equals("success")) {
 				HashMap<String, Session> thisNodeSessions = node.getAllUserSessions();
 				for(String userSes : thisNodeSessions.keySet()) {
-					thisNodeSessions.get(userSes).getAsyncRemote().sendText("{ 'type':'offline_user', 'username':'"+userSes+"' }");
+					thisNodeSessions.get(userSes).getAsyncRemote().sendText("{ 'type':'offline_user', 'username':'"+username+"' }");
 				}
 				
 			} 
 			
 		}
 
+	}
+
+	@Override
+	public void autoLogoutUser(Session session) throws Exception {		
+		ChatAppNodeLocal node = (ChatAppNodeLocal) context.lookup(LookupConst.CHAT_APP_NODE_LOCAL);
+		
+		String username = node.getSessionUsername(session);
+		
+		if(username != null) {
+			
+			if(node.isThisMaster()) {
+				ChatMsgSenderLocal msgSender = (ChatMsgSenderLocal) context.lookup(LookupConst.CHAT_JMS_SENDER);
+				msgSender.sendMsg("{ \"username\"="+username+" }", "logout");
+			} else {
+				// rest zahtev 2
+				// slanje userappu zahtev za logovanje
+			}
+			
+		}
+		
 	}
 
 }

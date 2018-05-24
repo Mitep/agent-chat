@@ -7,9 +7,13 @@ import javax.ejb.Local;
 @Local
 public interface NodeServiceLocal {
 
-	public HashMap<String, String> registerNode(String ipAddress);
+	public String registerNode(String ipAddress) throws Exception;
 	
-	public void deregisterNode(String alias);
+	public void deregisterNode(String alias) throws Exception;
+	
+	public HashMap<String, String> getOnlineUsers() throws Exception;
+	
+	public HashMap<String, String> getOnlineNodes() throws Exception;
 	
 	
 }

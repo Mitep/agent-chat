@@ -1,6 +1,5 @@
 package service.impl;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.ejb.Singleton;
@@ -97,7 +96,7 @@ public class LoginService implements LoginServiceLocal {
 			if(status.equals("success")) {
 				HashMap<String, Session> thisNodeSessions = node.getAllUserSessions();
 				for(String userSes : thisNodeSessions.keySet()) {
-					thisNodeSessions.get(userSes).getAsyncRemote().sendText("{ \"type\":\"online_user\", \"username\":\""+userSes+"\" }");
+					thisNodeSessions.get(userSes).getAsyncRemote().sendText("{ \"type\":\"online_user\", \"username\":\""+username+"\" }");
 				}
 				node.addOnlineUserThisNode(username, loginAttempt.get(username));
 			} 
@@ -110,7 +109,7 @@ public class LoginService implements LoginServiceLocal {
 			if(status.equals("success")) {
 				HashMap<String, Session> thisNodeSessions = node.getAllUserSessions();
 				for(String userSes : thisNodeSessions.keySet()) {
-					thisNodeSessions.get(userSes).getAsyncRemote().sendText("{ \"type\":\"online_user\", \"username\":\""+userSes+"\" }");
+					thisNodeSessions.get(userSes).getAsyncRemote().sendText("{ \"type\":\"online_user\", \"username\":\""+username+"\" }");
 				}
 				
 			} 

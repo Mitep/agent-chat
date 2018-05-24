@@ -102,7 +102,15 @@ public class WSBean implements WSLocal {
 
 	@Override
 	public void close(Session session) {
-		// logout servis treba ovde da se doda 
+		// logout servis treba ovde da se doda
+		LogoutServiceLocal lsl;
+		try {
+			lsl = (LogoutServiceLocal) context.lookup(LookupConst.CHAT_LOGOUT_SERVICE);
+			lsl.autoLogoutUser(session);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		sessions.remove(session);
 		log.info("Zatvorio: " + session.getId() + " u endpoint-u: " + this.hashCode());
 	}
