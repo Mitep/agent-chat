@@ -2,6 +2,7 @@ package rest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.ws.rs.client.Entity;
@@ -11,6 +12,7 @@ import javax.ws.rs.core.Response;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
+import org.json.JSONArray;
 
 @Stateless
 public class Rest implements RestLocal {
@@ -36,8 +38,15 @@ public class Rest implements RestLocal {
 		ResteasyClient client = new ResteasyClientBuilder().build();
         ResteasyWebTarget target = client.target("http://localhost:8080/UserAppWAR/userapp/group/members/" + groupId);
         Response response = target.request().get();
-        ArrayList<String> ret = (ArrayList<String>) response.getEntity();
-		return ret;
+        
+        JSONArray ret = new JSONArray(response.readEntity(String.class));
+        ArrayList<String> gus = new ArrayList<String>();
+        
+        for(int i = 0; i < ret.length(); i++) {
+        	gus.add(ret.getString(i));
+        }
+        
+        return gus;
 	}
 
 	@Override

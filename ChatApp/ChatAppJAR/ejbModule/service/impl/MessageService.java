@@ -28,9 +28,10 @@ public class MessageService implements MessageServiceLocal {
 		JSONObject msg = new JSONObject(content);
 		ChatAppNodeLocal node = (ChatAppNodeLocal) context.lookup(LookupConst.CHAT_APP_NODE_LOCAL);
 		String host = node.isUserOnline(msg.getString("receiver"));
+		String receiver = msg.getString("receiver");
 		if(host != null) {
 			if(host.equals(node.getHost())) {
-				forwardMessage(content, false);
+				forwardMessage(receiver, content, false);
 			} else {
 				// rest forward message
 			}
@@ -41,7 +42,7 @@ public class MessageService implements MessageServiceLocal {
 	}
 	
 	@Override
-	public void forwardMessage(String content, boolean groupMessage) throws Exception {
+	public void forwardMessage(String receiver, String content, boolean groupMessage) throws Exception {
 		JSONObject msg = new JSONObject(content);
 		ChatAppNodeLocal node = (ChatAppNodeLocal) context.lookup(LookupConst.CHAT_APP_NODE_LOCAL);
 		msg.remove("type");
@@ -51,7 +52,7 @@ public class MessageService implements MessageServiceLocal {
 		else
 			msg.put("type", "receive_message");
 		
-		node.getUserSession(msg.getString("receiver")).getAsyncRemote().sendText(msg.toString());
+		node.getUserSession(receiver).getAsyncRemote().sendText(msg.toString());
 	}
 
 	@Override
@@ -60,19 +61,20 @@ public class MessageService implements MessageServiceLocal {
 		ChatAppNodeLocal node = (ChatAppNodeLocal) context.lookup(LookupConst.CHAT_APP_NODE_LOCAL);
 		String groupId = msg.getString("receiver");
 		RestLocal rl = (RestLocal) context.lookup(LookupConst.REST);
-		ArrayList<String> groupUsers = (ArrayList<String>) rl.groupUsers(groupId);
+		ArrayList<String> groupUsers = rl.groupUsers(groupId);
 		
 		for(String user : groupUsers) {
 			String host = node.isUserOnline(user);
 			if(host != null) {
 				if(host.equals(node.getHost())) {
-					forwardMessage(content, true);
+					forwardMessage(user, content, true);
 				} else {
 					// rest forward message
 				}
 			}
 		}
 		
+		System.out.println("radi dovde");
 		//mozda bude trebalo nesto drugo da se salje
 		rl.saveMsg(content);	
 	}
