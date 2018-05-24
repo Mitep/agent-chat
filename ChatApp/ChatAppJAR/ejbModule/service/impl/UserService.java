@@ -74,10 +74,11 @@ public class UserService implements UserServiceLocal {
 	public void addUserResponse(String content) throws Exception {
 		JSONObject obj = new JSONObject(content);
 		String receiver = obj.getString("receiver");
+		obj.put("type", "friend_add");
 		
 		ChatAppNodeLocal node = (ChatAppNodeLocal) context.lookup(LookupConst.CHAT_APP_NODE_LOCAL);
 		if(node.isUserOnline(receiver) != null){
-			node.getUserSession(receiver).getAsyncRemote().sendText(content);
+			node.getUserSession(receiver).getAsyncRemote().sendText(obj.toString());
 		}
 	}
 
@@ -86,10 +87,12 @@ public class UserService implements UserServiceLocal {
 	public void removeUserResponse(String content) throws Exception {
 		JSONObject obj = new JSONObject(content);
 		String receiver = obj.getString("receiver");
+		obj.put("type", "friend_remove");
+		
 		
 		ChatAppNodeLocal node = (ChatAppNodeLocal) context.lookup(LookupConst.CHAT_APP_NODE_LOCAL);
 		if(node.isUserOnline(receiver) != null){
-			node.getUserSession(receiver).getAsyncRemote().sendText(content);
+			node.getUserSession(receiver).getAsyncRemote().sendText(obj.toString());
 		}
 	}
 
@@ -98,10 +101,12 @@ public class UserService implements UserServiceLocal {
 	public void acceptUserResponse(String content) throws Exception {
 		JSONObject obj = new JSONObject(content);
 		String receiver = obj.getString("receiver");
+		obj.put("type", "friend_accept");
+		
 		
 		ChatAppNodeLocal node = (ChatAppNodeLocal) context.lookup(LookupConst.CHAT_APP_NODE_LOCAL);
 		if(node.isUserOnline(receiver) != null){
-			node.getUserSession(receiver).getAsyncRemote().sendText(content);
+			node.getUserSession(receiver).getAsyncRemote().sendText(obj.toString());
 		}
 	}
 
@@ -110,11 +115,12 @@ public class UserService implements UserServiceLocal {
 	public void rejectUserResponse(String content) throws Exception {
 		JSONObject obj = new JSONObject(content);
 		String receiver = obj.getString("receiver");
+		obj.put("type", "friend_reject");
 		
 		ChatAppNodeLocal node = (ChatAppNodeLocal) context.lookup(LookupConst.CHAT_APP_NODE_LOCAL);
 		
 		if(node.isUserOnline(receiver) != null){
-			node.getUserSession(receiver).getAsyncRemote().sendText(content);	
+			node.getUserSession(receiver).getAsyncRemote().sendText(obj.toString());	
 		}
 	}
 
