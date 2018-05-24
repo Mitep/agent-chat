@@ -71,31 +71,56 @@ export class HomeComponent implements OnInit {
     + "\"receiver\":\"" + username + "\"}"
     + "}";
     console.log(this.msg);
-    //this.ws.sendMsg(this.msg);
+    this.ws.sendMsg(this.msg);
+    for(var i = 0; i < this.ws.myFriends.length; i++){
+      if(this.ws.myFriends[i]==username){
+        this.ws.myFriends.splice(i,1);
+        break;
+      }
+    }
+    for(var i = 0; i < this.ws.onlineFriends.length; i++){
+      if(this.ws.onlineFriends[i]==username){
+        this.ws.onlineFriends.splice(i,1);
+        break;
+      }
+    }
+
+    for(var i = 0; i < this.ws.offlineFriends.length; i++){
+      if(this.ws.offlineFriends[i]==username){
+        this.ws.offlineFriends.splice(i,1);
+        break;
+      }
+    }
   }
 
   acceptRequest(username){
-    this.msg = "{\"type\":\"friend_accept\","
-    + " \"data\":{"
-    + "\"sender\":\"" + this.ws["username"] + "\","
-    + "\"receiver\":\"" + username + "\"}"
-    + "}";
-    console.log(this.msg);
-    this.ws.sendMsg(this.msg);
+      this.msg = "{\"type\":\"friend_accept\","
+      + " \"data\":{"
+      + "\"sender\":\"" + this.ws["username"] + "\","
+      + "\"receiver\":\"" + username + "\"}"
+      + "}";
+      console.log(this.msg);
+      this.ws.sendMsg(this.msg);
 
-    this.ws.myFriends.push(username);
-    for(var i = 0; i < this.ws.myReceivedRequests.length; i++){
-      if(this.ws.myReceivedRequests[i]==username){
-          this.ws.myReceivedRequests.splice(i,1);
-          break;
-      }
-    }
-    for(var i = 0; i < this.ws.onlineUsers.length; i++){
-        if(this.ws.onlineUsers[i]==username){
-          this.ws.onlineFriends.push(username);
-          break;
+      this.ws.myFriends.push(username);
+      for(var i = 0; i < this.ws.myReceivedRequests.length; i++){
+        if(this.ws.myReceivedRequests[i]==username){
+            this.ws.myReceivedRequests.splice(i,1);
+            break;
         }
-    }
+      }
+      var flag = false;
+      for(var i = 0; i < this.ws.onlineUsers.length; i++){
+          if(this.ws.onlineUsers[i]==username){
+            this.ws.onlineFriends.push(username);
+            flag = true;
+            break;
+          }
+      }
+      if(!flag){
+        this.ws.offlineFriends.push(username);
+      }
+  
   }
 
   declineRequest(username){
@@ -110,6 +135,7 @@ export class HomeComponent implements OnInit {
     for(var i = 0; i < this.ws.myReceivedRequests.length; i++){
       if(this.ws.myReceivedRequests[i]==username){
         this.ws.myReceivedRequests.splice(i,1);
+        break;
       }
     }
   }

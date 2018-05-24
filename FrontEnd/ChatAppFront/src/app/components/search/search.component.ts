@@ -111,16 +111,6 @@ export class SearchComponent implements OnInit {
      return flag;
   }
 
-  deleteFriend(username){
-    this.msg = "{\"type\":\"friend_remove\","
-    + " \"data\":{"
-    + "\"sender\":\"" + this.ws["username"] + "\","
-    + "\"receiver\":\"" + username + "\"}"
-    + "}";
-    console.log(this.msg);
-    //this.ws.sendMsg(this.msg);
-  }
-
   addFriend(username){
     this.msg = "{\"type\":\"friend_add\","
     + " \"data\":{"
@@ -128,10 +118,37 @@ export class SearchComponent implements OnInit {
     + " \"receiver\":\"" + username + "\"}"
     + "}";
     console.log(this.msg);
-    //this.ws.sendMsg(this.msg);
+    this.ws.sendMsg(this.msg);
+    this.ws.mySentRequests.push(username);
   }
 
   
+  deleteFriend(username){
+    this.msg = "{\"type\":\"friend_remove\","
+    + " \"data\":{"
+    + "\"sender\":\"" + this.ws["username"] + "\","
+    + "\"receiver\":\"" + username + "\"}"
+    + "}";
+    console.log(this.msg);
+    this.ws.sendMsg(this.msg);
+    for(var i = 0; i < this.ws.myFriends.length; i++){
+      if(this.ws.myFriends[i]==username){
+        this.ws.myFriends.splice(i,1);
+      }
+    }
+    for(var i = 0; i < this.ws.onlineFriends.length; i++){
+      if(this.ws.onlineFriends[i]==username){
+        this.ws.onlineFriends.splice(i,1);
+      }
+    }
+
+    for(var i = 0; i < this.ws.offlineFriends.length; i++){
+      if(this.ws.offlineFriends[i]==username){
+        this.ws.offlineFriends.splice(i,1);
+      }
+    }
+  }
+
   acceptRequest(username){
     this.msg = "{\"type\":\"friend_accept\","
     + " \"data\":{"
@@ -139,7 +156,21 @@ export class SearchComponent implements OnInit {
     + "\"receiver\":\"" + username + "\"}"
     + "}";
     console.log(this.msg);
-    //this.ws.sendMsg(this.msg);
+    this.ws.sendMsg(this.msg);
+
+    this.ws.myFriends.push(username);
+    for(var i = 0; i < this.ws.myReceivedRequests.length; i++){
+      if(this.ws.myReceivedRequests[i]==username){
+          this.ws.myReceivedRequests.splice(i,1);
+          break;
+      }
+    }
+    for(var i = 0; i < this.ws.onlineUsers.length; i++){
+        if(this.ws.onlineUsers[i]==username){
+          this.ws.onlineFriends.push(username);
+          break;
+        }
+    }
   }
 
   declineRequest(username){
@@ -149,16 +180,15 @@ export class SearchComponent implements OnInit {
     + "\"receiver\":\"" + username + "\"}"
     + "}";
     console.log(this.msg);
-    //this.ws.sendMsg(this.msg);
+    this.ws.sendMsg(this.msg);
+
+    for(var i = 0; i < this.ws.myReceivedRequests.length; i++){
+      if(this.ws.myReceivedRequests[i]==username){
+        this.ws.myReceivedRequests.splice(i,1);
+      }
+    }
   }
 
-  deleteRequest(username){
-    this.msg = "{\"type\":\"delete_request\","
-    + " \"data\":{"
-    + "\"sender\":\"" + this.ws["username"] + "\","
-    + " \"receiver\":\"" + username + "\"}"
-    + "}";
-    //this.ws.sendMsg(this.msg);
-  }
+  
 
 }

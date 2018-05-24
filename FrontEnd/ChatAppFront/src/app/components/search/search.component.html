@@ -28,7 +28,7 @@
               <input type="submit" value="Decline"(click)="declineRequest(user.username)">
           </form>
           <form class="add-friend" *ngIf="haveISentRequest(user.username)">
-              <input type="submit" value="Delete request">
+              <input type="submit" value="Request sent" disabled>
            
           </form>
           <form class="add-friend" *ngIf="!haveISentRequest(user.username) && !hasSentMeRequest(user.username) && !isFriend(user.username) && !isMe(user.username)">

@@ -62,14 +62,13 @@ export class WebsocketService {
     
     this.ws.onmessage = function(data){
       
-      console.log("data: " + data);  
       console.log("data.data: " + data.data);
       var json = JSON.parse(data.data);
       var type = json.type;
       var status = json.status;
-      console.log("json(JSON.parse(data.data)): " + json);
+      //console.log("json(JSON.parse(data.data)): " + json);
       console.log("type(json.type): " + type);
-      console.log("status(json.status): " + status);
+      //console.log("status(json.status): " + status);
 
       switch(type){
           case("register"):{
@@ -89,11 +88,11 @@ export class WebsocketService {
                     rt.navigateByUrl('/home');
                     
                     w.myFriends = json.data.friends;
-                    console.log("myFriends: " + w.myFriends);
+                    //console.log("myFriends: " + w.myFriends);
                     w.myReceivedRequests = json.data.receivedRequests;
-                    console.log("stigli zahtjevi: " + w.myReceivedRequests);
+                    //console.log("stigli zahtjevi: " + w.myReceivedRequests);
                     w.mySentRequests = json.data.sentRequests;
-                    console.log("poslati zahtjevi: " + w.mySentRequests);
+                    //console.log("poslati zahtjevi: " + w.mySentRequests);
                     
                     var msgs = json.data.messages;
                     for(var i = 0; i < msgs.length; i++){
@@ -123,7 +122,6 @@ export class WebsocketService {
                         }
                     }
                    
-                    console.log("grupne poruke: " + w.myAllGroupMessages);
                     w.updateLeftMsgList();   
                     w.updateLeftGroupMsgList();
 
@@ -162,7 +160,6 @@ export class WebsocketService {
                 break;
           }
           case("online_user"):{
-                console.log("stigoo online " + json.username);
                 w.onlineUsers.push(json.username);
                 if(w.isMyFriend(json.username)){
                     w.onlineFriends.push(json.username);
@@ -192,6 +189,57 @@ export class WebsocketService {
               }
               break;
           }
+          case("friend_accept"):{
+              w.myFriends.push(json.sender);
+              var flag = false;
+              for(var i = 0; i < w.onlineUsers.length; i++){
+                  if(w.onlineUsers[i]==json.sender){
+                      w.onlineFriends.push(json.sender);
+                      flag = true;
+                  }
+              }
+              if(!flag){
+                  w.offlineFriends.push(json.sender);
+              }
+
+              for(var i = 0; i < w.mySentRequests.length; i++){
+                  if(w.mySentRequests[i]==json.sender){
+                      w.mySentRequests.splice(i,1);
+                  }
+              }
+              break;
+          }
+          case("friend_reject"):{
+              for(var i = 0; i < w.mySentRequests.length; i++){
+                if(w.mySentRequests[i]==json.sender){
+                    w.mySentRequests.splice(i,1);
+                }
+              }
+              break;
+          }
+          case("friend_remove"):{
+              for(var i = 0; i < w.myFriends.length; i++){
+                  if(w.myFriends[i]==json.sender){
+                      w.myFriends.splice(i,1);
+                  }
+              }
+              for(var i = 0; i < w.onlineFriends.length; i++){
+                if(w.onlineFriends[i]==json.sender){
+                    w.onlineFriends.splice(i,1);
+                }
+              }
+              for(var i = 0; i < w.offlineFriends.length; i++){
+                if(w.offlineFriends[i]==json.sender){
+                    w.offlineFriends.splice(i,1);
+                }
+              }
+              break;
+          }
+          case("friend_add"):{
+              w.myReceivedRequests.push(json.sender);
+              break;
+          }
+
       }      
       w.logged = l;
     }
