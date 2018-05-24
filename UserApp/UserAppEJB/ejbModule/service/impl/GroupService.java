@@ -69,19 +69,20 @@ public class GroupService implements GroupServiceLocal {
 	}
 
 	@Override
-	public boolean deleteGroup(String id) {
+	public List<String> deleteGroup(String id) {
 		try {
 			final Query<Group> upit = datastore.createQuery(Group.class).filter("_id", new ObjectId(id));
+			List<String> korisnici = upit.get().getMembers();
 			WriteResult w = datastore.delete(upit);
 
 			if (w.getN() == 1) {
-				return true;
+				return korisnici;
 			} else {
-				return false;
+				return null;
 			}
 
 		} catch (Exception e) {
-			return false;
+			return null;
 		}
 	}
 

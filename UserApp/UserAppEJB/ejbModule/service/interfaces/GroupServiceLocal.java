@@ -17,7 +17,7 @@ public interface GroupServiceLocal {
 
 	public List<Group> readAll();
 
-	public boolean deleteGroup(String id);
+	public List<String> deleteGroup(String id);
 
 	public boolean updateGroup(Group group);
 

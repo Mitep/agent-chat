@@ -305,7 +305,9 @@ public class UserMsgReceiver implements MessageListener {
 				String id = data.getString("id");
 
 				JSONObject response = new JSONObject();
-				if (gsl.deleteGroup(id)) {
+				List<String> users = gsl.deleteGroup(id);
+				response.put("users", users);
+				if (users != null) {
 					response.put("status", "success");
 					response.put("info", "Grupa je uspesno obrisana.");
 				} else {
@@ -372,7 +374,7 @@ public class UserMsgReceiver implements MessageListener {
 				msgSender.sendMsg(response.toString(), "group_remove_user");
 			}
 				break;
-				
+
 			case "logout": {
 				log.info("---------------ODJAVA---------------");
 				log.info(msgContent);

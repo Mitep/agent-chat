@@ -96,14 +96,14 @@ public class GroupRestController {
 	@POST
 	@Path("/delete/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public boolean deleteGroup(@PathParam("id") String id) {
+	public List<String> deleteGroup(@PathParam("id") String id) {
 		GroupServiceLocal groupService;
 		try {
 			groupService = (GroupServiceLocal) ctx.lookup(GroupServiceLocal.LOOKUP_GLOBAL);
 			return groupService.deleteGroup(id);
 		} catch (NamingException e) {
 			e.printStackTrace();
-			return false;
+			return null;
 		}
 	}
 
