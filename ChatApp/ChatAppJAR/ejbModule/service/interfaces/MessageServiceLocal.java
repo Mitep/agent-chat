@@ -9,6 +9,6 @@ public interface MessageServiceLocal {
 	
 	public void processGroupMessage(String content) throws Exception;
 	
-	public void forwardMessage(String content) throws Exception;
+	public void forwardMessage(String content, boolean groupMessage) throws Exception;
 	
 }
