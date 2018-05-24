@@ -52,14 +52,14 @@ public class GroupRestController {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public boolean createGroup(Group g) {
+	public Group createGroup(Group g) {
 		GroupServiceLocal groupService;
 		try {
 			groupService = (GroupServiceLocal) ctx.lookup(GroupServiceLocal.LOOKUP_GLOBAL);
 			return groupService.createGroup(new Gson().toJson(g));
 		} catch (NamingException e) {
 			e.printStackTrace();
-			return false;
+			return null;
 		}
 	}
 
@@ -108,7 +108,7 @@ public class GroupRestController {
 	}
 
 	@POST
-	@Path("/adduser")
+	@Path("/user/add")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean addUser(@FormParam("groupId") String groupId, @FormParam("user") String user) {
@@ -123,7 +123,7 @@ public class GroupRestController {
 	}
 
 	@POST
-	@Path("/removeuser")
+	@Path("/user/remove")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean removeUser(@FormParam("groupId") String groupId, @FormParam("user") String user) {

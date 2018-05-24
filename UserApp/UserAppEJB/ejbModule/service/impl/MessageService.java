@@ -46,7 +46,17 @@ public class MessageService implements MessageServiceLocal {
 			Gson g = new Gson();
 			Message poruka = g.fromJson(str, Message.class);
 			datastore.save(poruka);
+			ObjectId id_poruke = datastore.get(poruka).getId();
+			if (poruka.getType() == Message.GROUP_MSG) {
+				ObjectId id_grupe = new ObjectId(poruka.getReceiver());
+				
+				Group grupa = datastore.createQuery(Group.class).field("_id").equal(id_grupe).get();
+				grupa.getMessages().add(id_poruke.toHexString());
+				datastore.save(grupa);
+			}
+
 		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 		return true;

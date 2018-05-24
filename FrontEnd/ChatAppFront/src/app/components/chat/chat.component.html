@@ -25,55 +25,103 @@
 			<div class="left-section mCustomScrollbar" data-mcs-theme="minimal-dark">
 				<ul>
 					<li>
-						<div class="chatList" *ngFor="let friend of ws.myFriends">
+						<div class="chatList" *ngFor="let friend of ws.myLeftMsgsArray">
 							<div class="img">
-									<i class="fa fa-circle"></i>
+									<i *ngIf="friendOnline(friend)" class="fa fa-circle"></i>
 								<img src="../../../assets/man01.png">
 							</div>
-							<div class="desc">
-								<small class="time">05:30 am</small>
-								<h5>{{friend}}</h5>
-								<small>Lorem ipsum dolor sit amet...</small>
+							<div class="desc" (click) = "showMessages(friend[0])">
+								
+								<h5>{{friend[0]}}</h5>
+								<small>{{friend[1]}}</small>
 							</div>
 						</div>
+
+						<div class="chatList" *ngFor="let group of ws.myLeftGroupMsgsArray">
+							<div class="img">
+									
+								<img src="../../../assets/group.png">
+							</div>
+							<div class="desc" (click) = "showGroupMessages(group[0])">
+								
+								<h5>Group: {{group[0]}}</h5>
+								<small>{{group[1]}}</small>
+							</div>
+						</div>
+
 					</li>	
 				</ul>
 			</div>
 			<div class="center-section">
 				<div class="message mCustomScrollbar" data-mcs-theme="minimal-dark" >
-						<h5>{{friend}}</h5>
-					<div *ngFor="let message of ws.myMessagesDate">
-					<ul>
-						
-							<li class="msg-left" *ngIf="message.sender!=ws.username" >
-								<div class="msg-left-sub">
-									<img src="../../../assets/man02.png">
-									<div class="msg-desc" >
-										{{message.content}}
+						<h5 *ngIf="!ws.isGroup">{{friend}}</h5>
+						<h5 *ngIf="ws.isGroup">{{group}}</h5>
+					<div *ngIf="!ws.isGroup">
+						<div *ngFor="let message of ws.myMessagesDate">
+							<ul>
+								
+									<li class="msg-left" *ngIf="message.sender!=ws.username" >
+										<div class="msg-left-sub">
+											<img src="../../../assets/man02.png">
+											<div class="msg-desc" >
+												{{message.content}}
+											</div>
+											<small>{{message.date}}</small>
+											
+
+										</div>
+									</li>
+								
+								
+								<li class="msg-center" *ngIf="message.sender==ws.username" >
+									<div class="msg-left-sub">
+										<img src="../../../assets/man04.png">
+										<div class="msg-desc">
+											{{message.content}}
+										</div>
+										<small>{{message.date}}</small>
+										
 									</div>
-									<small>{{message.date}}</small>
-								</div>
-							</li>
-						
-						
-						<li class="msg-center" *ngIf="message.sender==ws.username" >
-							<div class="msg-left-sub">
-								<img src="../../../assets/man04.png">
-								<div class="msg-desc">
-									{{message.content}}
-								</div>
-								<small>{{message.date}}</small>
-							</div>
-						</li>
-					
-						
-					</ul>
-				</div>
+								</li>			
+							</ul>
+						</div>
+					</div>
+					<div *ngIf="ws.isGroup">
+						<div *ngFor="let message of ws.myGroupMessagesDate">
+							<ul>
+								
+									<li class="msg-left" *ngIf="message.sender!=ws.username" >
+										<div class="msg-left-sub">
+											<img src="../../../assets/man02.png">
+											<div class="msg-desc" >
+												{{message.content}}
+											</div>
+											<small>Sent by {{message.sender}} on {{message.date}}</small>
+											
+										</div>
+									</li>
+								
+								
+								<li class="msg-center" *ngIf="message.sender==ws.username" >
+									<div class="msg-left-sub">
+										<img src="../../../assets/man04.png">
+										<div class="msg-desc">
+											{{message.content}}
+										</div>
+										<small>Sent by {{message.sender}} on {{message.date}}</small>
+										
+									</div>
+								</li>			
+							</ul>
+						</div>
+					</div>
 				</div>
 				<div class="center-section-bottom">
 					<form #data="ngForm">					
-						<input type="text" [disabled]="!isFriendSelected()" [(ngModel)]="data.message_content"  name="message" placeholder="type here...">
-						<button class="btn-send" [disabled]="!isFriendSelected()" (click) = "sendMessage(data); data.reset()"><i class="fa fa-send"></i></button>
+						<input *ngIf="!ws.isGroup" type="text" [disabled]="!isFriendSelected()" [(ngModel)]="data.message_content"  name="message" placeholder="type here...">
+						<input *ngIf="ws.isGroup" type="text" [disabled]="!isGroupSelected()" [(ngModel)]="data.message_content"  name="message" placeholder="type here...">
+						<button *ngIf="!ws.isGroup" class="btn-send" [disabled]="!isFriendSelected()" (click) = "sendMessage(data); data.message_content = ''"><i class="fa fa-send"></i></button>
+						<button *ngIf="ws.isGroup" class="btn-send" [disabled]="!isGroupSelected()" (click) = "sendGroupMessage(data); data.message_content = ''"><i class="fa fa-send"></i></button>
 					</form>
 				</div>
 			</div>
@@ -84,16 +132,52 @@
 							Online friends:
 						</th>
 					</tr>
-					<!-- <tr *ngFor = "let friend of friends">
-						<td>{{friend.username}}</td>
-					</tr> -->
-					
-					<tr *ngFor = "let friend of ws.myFriends">
-						
+					<tr *ngFor = "let friend of ws.myFriends">					
 						<td (click) = "showMessages(friend)">{{friend}}</td>
+					</tr>
+				</table>
+				<br>
+				<br>
+
+				<table class="online-friends">
+					<tr>
+						<th>
+							My groups:
+						</th>
+					</tr>
+					<tr *ngFor = "let group of ws.myGroups">
+						<td (click) = "showGroupMessages(group)">{{group}}</td>
 					</tr>
 				
 				</table>
+				<br>
+				<br>
+				<form #data="ngForm">
+					<table class="online-friends">
+						<tr>
+							<th>
+								Create new group:
+							</th>
+						</tr>
+					 
+						<tr>
+							<td>
+								<input type="text" [(ngModel)]="data.groupname" name="group" placeholder="group name" required/>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="text" name="members" [(ngModel)]="data.members" placeholder="members" required/>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="submit" value="Create" [disabled]="!data.valid" (click)="createGroup(data)">
+							</td>
+						</tr>
+					
+					</table>
+				</form>
 			</div>
 		</div>
   </div>
